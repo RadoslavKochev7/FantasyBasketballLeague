@@ -5,6 +5,10 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FantasyBasketballLeague", "FantasyBasketballLeague\FantasyBasketballLeague.csproj", "{A49E0EE5-3C90-4625-98B0-25D46E215975}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FantasyBasketballLeague.Infrastructure", "FantasyBasketballLeague.Infrastructure\FantasyBasketballLeague.Infrastructure.csproj", "{9FD3C1B5-4958-4930-B0E9-A8998627DEE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FantasyBasketballLeague.Core", "FantasyBasketballLeague.Core\FantasyBasketballLeague.Core.csproj", "{BCA2934D-5409-4EE7-9F0F-2DE6E38078BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{A49E0EE5-3C90-4625-98B0-25D46E215975}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A49E0EE5-3C90-4625-98B0-25D46E215975}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A49E0EE5-3C90-4625-98B0-25D46E215975}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FD3C1B5-4958-4930-B0E9-A8998627DEE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FD3C1B5-4958-4930-B0E9-A8998627DEE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FD3C1B5-4958-4930-B0E9-A8998627DEE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FD3C1B5-4958-4930-B0E9-A8998627DEE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCA2934D-5409-4EE7-9F0F-2DE6E38078BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCA2934D-5409-4EE7-9F0F-2DE6E38078BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCA2934D-5409-4EE7-9F0F-2DE6E38078BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCA2934D-5409-4EE7-9F0F-2DE6E38078BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
