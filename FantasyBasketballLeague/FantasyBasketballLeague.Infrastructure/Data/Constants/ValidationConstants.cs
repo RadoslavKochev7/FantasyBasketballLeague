@@ -19,7 +19,7 @@
 
         public const int OpenPositionsDefaultValue = 10;
 
-        // Username
+        // User Name
         public const int UsernameMaxLength = 20;
         public const int UsernameMinLength = 5;
 

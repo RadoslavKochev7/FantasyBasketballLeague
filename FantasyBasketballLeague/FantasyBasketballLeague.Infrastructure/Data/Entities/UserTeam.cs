@@ -1,5 +1,4 @@
-﻿using FantasyBasketballLeague.Data.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FantasyBasketballLeague.Infrastructure.Data.Entities

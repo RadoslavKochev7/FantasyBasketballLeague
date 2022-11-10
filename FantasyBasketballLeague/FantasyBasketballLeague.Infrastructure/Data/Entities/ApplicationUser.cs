@@ -1,7 +1,6 @@
-﻿using FantasyBasketballLeague.Infrastructure.Data.Entities;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
-namespace FantasyBasketballLeague.Data.Entities
+namespace FantasyBasketballLeague.Infrastructure.Data.Entities
 {
     public class ApplicationUser : IdentityUser
     {

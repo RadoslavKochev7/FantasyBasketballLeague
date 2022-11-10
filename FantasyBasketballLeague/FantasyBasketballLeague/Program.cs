@@ -1,5 +1,5 @@
-using FantasyBasketballLeague.Data.Entities;
 using FantasyBasketballLeague.Infrastructure.Data;
+using FantasyBasketballLeague.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,9 +38,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapDefaultControllerRoute();
 app.MapRazorPages();
 
 app.Run();

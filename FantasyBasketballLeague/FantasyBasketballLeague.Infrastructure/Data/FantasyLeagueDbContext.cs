@@ -1,5 +1,4 @@
-﻿using FantasyBasketballLeague.Data.Entities;
-using FantasyBasketballLeague.Infrastructure.Data.Configurations;
+﻿using FantasyBasketballLeague.Infrastructure.Data.Configurations;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
