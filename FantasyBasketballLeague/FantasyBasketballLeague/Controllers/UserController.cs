@@ -27,7 +27,7 @@ namespace FantasyBasketballLeague.Controllers
         {
             if (User?.Identity?.IsAuthenticated ?? false)
             {
-                return RedirectToAction("All", "Books");
+                return RedirectToAction("Index", "Home");
             }
             var model = new RegisterViewModel();
 
@@ -71,7 +71,7 @@ namespace FantasyBasketballLeague.Controllers
         {
             if (User?.Identity?.IsAuthenticated ?? false)
             {
-                return RedirectToAction("All", "Books");
+                return RedirectToAction("Index", "Home");
             }
             var model = new LoginViewModel();
 
