@@ -71,7 +71,7 @@ namespace FantasyBasketballLeague.Controllers
         {
             if (User?.Identity?.IsAuthenticated ?? false)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("All", "Тeam");
             }
             var model = new LoginViewModel();
 
@@ -95,7 +95,7 @@ namespace FantasyBasketballLeague.Controllers
                 if (result.Succeeded)
                 {
                     await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("All", "Books");
+                    return RedirectToAction("All", "Тeam");
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid login");

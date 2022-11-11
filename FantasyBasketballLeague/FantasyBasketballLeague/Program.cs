@@ -1,3 +1,4 @@
+using FantasyBasketballLeague.Extensions;
 using FantasyBasketballLeague.Infrastructure.Data;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,9 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireUppercase = false; ;
 })
     .AddEntityFrameworkStores<FantasyLeagueDbContext>();
+
 builder.Services.AddControllersWithViews();
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 
