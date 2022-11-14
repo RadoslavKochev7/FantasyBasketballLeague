@@ -87,7 +87,7 @@ namespace FantasyBasketballLeague.Infrastructure.Data.Common
         void Detach<T>(T entity) where T : class;
 
         /// <summary>
-        /// Saves all made changes in trasaction
+        /// Saves all made changes in transaction
         /// </summary>
         /// <returns>Error code</returns>
         Task<int> SaveChangesAsync();

@@ -39,14 +39,13 @@ namespace FantasyBasketballLeague.Infrastructure.Data.Entities
         /// <summary>
         /// Team's league. One team can only play in one league.
         /// </summary>
-        [Required]
         [ForeignKey(nameof(LeagueId))]
-        public virtual League League { get; set; } = null!;
+        public virtual League? League { get; set; } = null!;
 
         /// <summary>
         /// League's id.
         /// </summary>
-        public int LeagueId { get; set; }
+        public int? LeagueId { get; set; }
 
         /// <summary>
         /// Team logo.Enter URL link.

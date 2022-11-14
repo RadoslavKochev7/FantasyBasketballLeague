@@ -1,5 +1,5 @@
 ﻿using FantasyBasketballLeague.Core.Contracts;
-using FantasyBasketballLeague.Core.Models;
+using FantasyBasketballLeague.Core.Models.Team;
 using FantasyBasketballLeague.Infrastructure.Data.Common;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -17,21 +17,46 @@ namespace FantasyBasketballLeague.Core.Services
             repo = _repo;
         }
 
+        public async Task AddAsync(TeamAddModel model)
+        {
+            if (await TeamExists(model.Id))
+            {
+                throw new ArgumentException("The team exist, try with another");
+            }
+
+            var team = new Team()
+            {
+                Id = model.Id,
+                Name = model.Name,
+                CoachId = model.CoachId.HasValue ? model.CoachId : null,
+                LeagueId = model.LeagueId.HasValue ? model.LeagueId : null,
+                LogoUrl = model.LogoUrl,
+            };
+
+            await repo.AddAsync(team);
+            await repo.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<TeamViewModel>> GetAllTeamsAsync()
         {
-            return await repo.AllReadonly<Team>()
+            var result = await repo.AllReadonly<Team>()
+                .Include(t => t.League)
+                .Include(t => t.Coach)
                 .OrderByDescending(t => t.Id)
                 .Select(t => new TeamViewModel()
                 {
-                    Id = t.Id,
                     Name = t.Name,
-                    OpenPositions = t.OpenPositions,
                     League = t.League.Name,
-                    LeagueId = t.LeagueId,
                     LogoUrl = t.LogoUrl,
+                    CoachName = $"{t.Coach.FirstName[0]}.{t.Coach.LastName}" ?? "No coach assigned",
+                    OpenPositions = t.OpenPositions - t.Players.Count()
                 })
                 .ToListAsync();
 
+            return result;
         }
+
+        public async Task<bool> TeamExists(int teamId)
+        => await repo.AllReadonly<Team>().AnyAsync(t => t.Id == teamId);
     }
 }

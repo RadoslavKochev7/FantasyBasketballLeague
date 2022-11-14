@@ -1,1 +1,29 @@
-﻿
+﻿@using FantasyBasketballLeague.Core.Models.Team
+@model IEnumerable<TeamViewModel>
+
+@{
+    ViewBag.Title = "All Teams";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="text-center row">
+    @foreach (var team in Model)
+    {
+        <div class="card col-4" style="width: 20rem; ">
+            <img class="card-img-top" style="width: 18rem;"
+             src="@team.LogoUrl" alt="Team logo Image">
+            <div class="card-body">
+
+                <h5 class="card-title mt-1">@team.Name</h5>
+                <p class="mb-0">Open positions: @team.OpenPositions</p>
+                <p class="mb-0">Team's league': @team.League</p>
+            </div>
+
+            <form class="input-group-sm" asp-controller="Teams" asp-action="All">
+            </form>
+        </div>
+    }
+</div>
+    
