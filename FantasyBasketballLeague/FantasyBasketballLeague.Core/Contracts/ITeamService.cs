@@ -1,4 +1,4 @@
-﻿using FantasyBasketballLeague.Core.Models.Team;
+﻿using FantasyBasketballLeague.Core.Models.Teams;
 
 namespace FantasyBasketballLeague.Core.Contracts
 {

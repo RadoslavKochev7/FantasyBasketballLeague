@@ -1,4 +1,4 @@
-﻿@using FantasyBasketballLeague.Core.Models.Team
+﻿@using FantasyBasketballLeague.Core.Models.Teams
 @model IEnumerable<TeamViewModel>
 
 @{
@@ -18,7 +18,8 @@
 
                 <h5 class="card-title mt-1">@team.Name</h5>
                 <p class="mb-0">Open positions: @team.OpenPositions</p>
-                <p class="mb-0">Team's league': @team.League</p>
+                <p class="mb-0">League: @team.League</p>
+                <p class="mb-0">Coach: @team.CoachName</p>
             </div>
 
             <form class="input-group-sm" asp-controller="Teams" asp-action="All">

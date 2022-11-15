@@ -1,5 +1,5 @@
 ﻿using FantasyBasketballLeague.Core.Contracts;
-using FantasyBasketballLeague.Core.Models.Team;
+using FantasyBasketballLeague.Core.Models.Teams;
 using FantasyBasketballLeague.Infrastructure.Data.Common;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -19,11 +19,6 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task AddAsync(TeamAddModel model)
         {
-            if (await TeamExists(model.Id))
-            {
-                throw new ArgumentException("The team exist, try with another");
-            }
-
             var team = new Team()
             {
                 Id = model.Id,

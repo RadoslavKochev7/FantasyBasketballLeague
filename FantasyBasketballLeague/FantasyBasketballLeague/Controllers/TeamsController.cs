@@ -1,5 +1,5 @@
 ﻿using FantasyBasketballLeague.Core.Contracts;
-using FantasyBasketballLeague.Core.Models.Team;
+using FantasyBasketballLeague.Core.Models.Teams;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FantasyBasketballLeague.Controllers
@@ -22,7 +22,7 @@ namespace FantasyBasketballLeague.Controllers
         }
 
         [HttpGet]
-        public  IActionResult Add()
+        public IActionResult Add()
         {
             var model = new TeamAddModel();
 
@@ -32,8 +32,13 @@ namespace FantasyBasketballLeague.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(TeamAddModel model)
         {
-            if (!ModelState.IsValid) return View(model);
-           
+            if (!ModelState.IsValid)
+                return View(model);
+
+            if (await teamService.TeamExists(model.Id))
+                throw new ArgumentException("The team exist, try with another");
+
+            await teamService.AddAsync(model);
 
             return RedirectToAction(nameof(All));
         }

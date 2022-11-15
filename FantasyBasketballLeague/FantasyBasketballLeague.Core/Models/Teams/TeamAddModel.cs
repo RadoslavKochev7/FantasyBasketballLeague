@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using static FantasyBasketballLeague.Infrastructure.Data.Constants.ValidationConstants;
 
-namespace FantasyBasketballLeague.Core.Models.Team
+namespace FantasyBasketballLeague.Core.Models.Teams
 {
     public class TeamAddModel
     {
