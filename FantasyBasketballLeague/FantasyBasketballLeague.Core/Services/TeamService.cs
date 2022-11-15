@@ -34,7 +34,7 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<IEnumerable<TeamViewModel>> GetAllTeamsAsync()
         {
-            var result = await repo.AllReadonly<Team>()
+            var result = await repo.All<Team>()
                 .Include(t => t.League)
                 .Include(t => t.Coach)
                 .OrderByDescending(t => t.Id)

@@ -8,6 +8,11 @@ namespace FantasyBasketballLeague.Controllers
     {
         public IActionResult Index()
         {
+            if (User?.Identity?.IsAuthenticated ?? false)
+            {
+                return Redirect("/Teams/All/");
+            }
+
             return View();
         }
 

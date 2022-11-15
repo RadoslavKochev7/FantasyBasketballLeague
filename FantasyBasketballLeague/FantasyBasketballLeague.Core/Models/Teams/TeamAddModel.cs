@@ -1,5 +1,4 @@
-﻿using FantasyBasketballLeague.Infrastructure.Data.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using static FantasyBasketballLeague.Infrastructure.Data.Constants.ValidationConstants;
 
 namespace FantasyBasketballLeague.Core.Models.Teams
@@ -14,6 +13,10 @@ namespace FantasyBasketballLeague.Core.Models.Teams
         public string Name { get; set; } = null!;
 
         public int? CoachId { get; set; }
+
+        public string? Coach { get; set; }
+
+        public string? League { get; set; }
 
         public int? LeagueId { get; set; }
 

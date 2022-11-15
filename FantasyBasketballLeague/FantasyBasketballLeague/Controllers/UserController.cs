@@ -95,7 +95,7 @@ namespace FantasyBasketballLeague.Controllers
                 if (result.Succeeded)
                 {
                     await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("All", "Тeams");
+                    return RedirectToAction("All", "Teams");
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid login");
