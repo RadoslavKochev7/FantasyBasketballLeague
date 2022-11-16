@@ -10,10 +10,12 @@ namespace FantasyBasketballLeague.Infrastructure.Data.Entities
 
         [Required]
         [MaxLength(FirstNameMaxLength)]
+        [MinLength(FirstNameMinLength)]
         public string FirstName { get; set; } = null!;
 
         [Required]
         [MaxLength(LastNameMaxLength)]
+        [MinLength(LastNameMinLength)]
         public string LastName { get; set; } = null!;
     }
 }

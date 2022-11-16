@@ -4,10 +4,10 @@
     {
         // Person 
         public const int FirstNameMaxLength = 50;
-        public const int FirstNameMinLength = 50;
+        public const int FirstNameMinLength = 3;
 
         public const int LastNameMaxLength = 50;
-        public const int LastNameMinLength = 50;
+        public const int LastNameMinLength = 3;
 
         // Basketball player
         public const int JerseyMaxNumer = 99;
@@ -20,8 +20,8 @@
         public const int OpenPositionsDefaultValue = 10;
 
         // Username
-        public const int UsernameMaxLength = 20;
-        public const int UsernameMinLength = 5;
+        public const int UsernameMaxLength = 30;
+        public const int UsernameMinLength = 6;
 
         // Email
         public const int EmailMaxLength = 60;
@@ -29,7 +29,7 @@
 
         // Password
         public const int PasswordMaxLength = 20;
-        public const int PasswordMinLength = 5;
+        public const int PasswordMinLength = 6;
 
         // League
         public const int LeagueNameMaxLength = 50;

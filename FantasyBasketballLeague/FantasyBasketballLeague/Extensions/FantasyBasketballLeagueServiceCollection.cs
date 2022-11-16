@@ -11,6 +11,7 @@ namespace FantasyBasketballLeague.Extensions
             services.AddScoped<IRepository, Repository>();
             services.AddScoped<ITeamService, TeamService>();
             services.AddScoped<ILeagueService, LeagueService>();
+            services.AddScoped<ICoachService, CoachService>();
 
             return services;
         }

@@ -1,4 +1,6 @@
 ﻿using FantasyBasketballLeague.Core.Contracts;
+using FantasyBasketballLeague.Core.Models.Coach;
+using FantasyBasketballLeague.Core.Models.League;
 using FantasyBasketballLeague.Core.Models.Teams;
 using FantasyBasketballLeague.Infrastructure.Data.Common;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
@@ -28,27 +30,59 @@ namespace FantasyBasketballLeague.Core.Services
                 LogoUrl = model.LogoUrl,
             };
 
+            var teamCoach = await repo.GetByIdAsync<Coach>(model.CoachId ?? 0);
+            var teamLeague = await repo.GetByIdAsync<League>(model.LeagueId ?? 0);
+
+            team.Coach = teamCoach;
+            team.League = teamLeague;
+
             await repo.AddAsync(team);
             await repo.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<TeamViewModel>> GetAllTeamsAsync()
+        public async Task<IEnumerable<CoachViewModel>> GetAllCoachesAsync()
         {
-            var result = await repo.All<Team>()
-                .Include(t => t.League)
-                .Include(t => t.Coach)
-                .OrderByDescending(t => t.Id)
-                .Select(t => new TeamViewModel()
+            return await repo.AllReadonly<Coach>()
+                .Where(c => c.Team == null)
+                .Select(c => new CoachViewModel()
                 {
-                    Name = t.Name,
-                    League = t.League.Name,
-                    LogoUrl = t.LogoUrl,
-                    CoachName = $"{t.Coach.FirstName[0]}.{t.Coach.LastName}" ?? "No coach assigned",
-                    OpenPositions = t.OpenPositions - t.Players.Count()
+                    Id = c.Id,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
                 })
                 .ToListAsync();
+        }
 
-            return result;
+        public async Task<IEnumerable<LeagueViewModel>> GetAllLeaguesAsync()
+        {
+            return await repo.AllReadonly<League>()
+                .Select(l => new LeagueViewModel()
+                {
+                    Id = l.Id,
+                    Name = l.Name,
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<TeamViewModel>> GetAllTeamsAsync()
+        {
+            var teams = await repo.All<Team>()
+             .Include(t => t.Coach)
+             .Include(t => t.League)
+             .Select(t => new TeamViewModel()
+             {
+                 Id = t.Id,
+                 Name = t.Name,
+                 League = t.League.Name ?? "No league assigned",
+                 LeagueId = t.LeagueId,
+                 LogoUrl = t.LogoUrl,
+                 CoachId = t.CoachId,
+                 CoachName = $"{t.Coach.FirstName[0]}.{t.Coach.LastName}" ?? "No coach assigned",
+                 OpenPositions = t.OpenPositions - t.Players.Count()
+             })
+             .ToListAsync();
+
+            return teams;
         }
 
         public async Task<bool> TeamExists(int teamId)

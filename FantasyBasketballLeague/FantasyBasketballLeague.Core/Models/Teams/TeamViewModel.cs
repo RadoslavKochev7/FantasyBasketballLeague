@@ -7,6 +7,8 @@ namespace FantasyBasketballLeague.Core.Models.Teams
 
     public class TeamViewModel
     {
+        public int Id { get; set; }
+
         [Required]
         [StringLength(TeamNameMaxLength, MinimumLength = TeamNameMinLength)]
         public string Name { get; set; } = null!;
@@ -19,8 +21,12 @@ namespace FantasyBasketballLeague.Core.Models.Teams
         [StringLength(FirstNameMaxLength, MinimumLength = FirstNameMinLength)]
         public string? CoachName { get; set; }
 
+        public int? CoachId { get; set; }
+
         [StringLength (LeagueNameMaxLength, MinimumLength = LeagueNameMinLength)]   
         public string? League { get; set; }
+
+        public int? LeagueId { get; set; }
 
         [Required]
         [Display(Name = "Logo Url")]
