@@ -1,4 +1,5 @@
-﻿using FantasyBasketballLeague.Infrastructure.Data.Entities;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using FantasyBasketballLeague.Infrastructure.Data.Entities;
 using FantasyBasketballLeague.Models.User.LoginViewModel;
 using FantasyBasketballLeague.Models.User.Register;
 using Microsoft.AspNetCore.Authorization;
@@ -12,12 +13,15 @@ namespace FantasyBasketballLeague.Controllers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly INotyfService notyfService;
 
         public UserController(UserManager<ApplicationUser> userManager,
-               SignInManager<ApplicationUser> signInManager)
+               SignInManager<ApplicationUser> signInManager,
+               INotyfService notyfService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.notyfService = notyfService;
         }
 
 
@@ -53,7 +57,6 @@ namespace FantasyBasketballLeague.Controllers
 
             if (result.Succeeded)
             {
-                user.LockoutEnabled = true;
                 return RedirectToAction("Login", "User");
             }
 
@@ -95,6 +98,8 @@ namespace FantasyBasketballLeague.Controllers
                 if (result.Succeeded)
                 {
                     await signInManager.SignInAsync(user, isPersistent: false);
+                    notyfService.Information("Welcome to Fantasy League!", 3);
+
                     return RedirectToAction("All", "Teams");
                 }
 

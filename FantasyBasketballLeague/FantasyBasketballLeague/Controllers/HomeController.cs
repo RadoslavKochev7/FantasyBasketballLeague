@@ -18,6 +18,7 @@ namespace FantasyBasketballLeague.Controllers
         {
             if (User?.Identity?.IsAuthenticated ?? false)
             {
+                
                 return Redirect("/Teams/All/");
             }
 
