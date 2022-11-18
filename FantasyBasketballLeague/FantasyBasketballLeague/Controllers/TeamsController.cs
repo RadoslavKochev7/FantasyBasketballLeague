@@ -1,9 +1,11 @@
 ﻿using FantasyBasketballLeague.Core.Contracts;
 using FantasyBasketballLeague.Core.Models.Teams;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FantasyBasketballLeague.Controllers
 {
+    [Authorize]
     public class TeamsController : Controller
     {
         private readonly ITeamService teamService;
@@ -36,6 +38,9 @@ namespace FantasyBasketballLeague.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(TeamAddModel model)
         {
+            if (await teamService.TeamExists(model.Name))
+                ModelState.AddModelError(nameof(model.Id), $"There is already a team with name '{model.Name}'.");
+
             if (!ModelState.IsValid)
             {
                 model.Leagues = await teamService.GetAllLeaguesAsync();
@@ -43,9 +48,6 @@ namespace FantasyBasketballLeague.Controllers
 
                 return View(model);
             }
-
-            if (await teamService.TeamExists(model.Id))
-              throw new ArgumentException("The team exist, try with another");
 
             await teamService.AddAsync(model);
 

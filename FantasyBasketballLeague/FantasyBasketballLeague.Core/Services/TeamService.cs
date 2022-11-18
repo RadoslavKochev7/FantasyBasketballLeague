@@ -43,7 +43,7 @@ namespace FantasyBasketballLeague.Core.Services
         public async Task<IEnumerable<CoachViewModel>> GetAllCoachesAsync()
         {
             return await repo.AllReadonly<Coach>()
-                .Where(c => c.Team == null)
+                .Where(c => c.TeamId == null)
                 .Select(c => new CoachViewModel()
                 {
                     Id = c.Id,
@@ -85,7 +85,7 @@ namespace FantasyBasketballLeague.Core.Services
             return teams;
         }
 
-        public async Task<bool> TeamExists(int teamId)
-        => await repo.AllReadonly<Team>().AnyAsync(t => t.Id == teamId);
+        public async Task<bool> TeamExists(string teamName)
+        => await repo.AllReadonly<Team>().AnyAsync(t => t.Name == teamName);
     }
 }

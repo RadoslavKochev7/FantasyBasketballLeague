@@ -1,9 +1,11 @@
 ﻿using FantasyBasketballLeague.Core.Contracts;
 using FantasyBasketballLeague.Core.Models.Coach;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FantasyBasketballLeague.Controllers
 {
+    [Authorize]
     public class CoachController : Controller
     {
         private readonly ICoachService coachService;

@@ -1,4 +1,5 @@
-﻿using FantasyBasketballLeague.Core.Contracts;
+﻿using AspNetCoreHero.ToastNotification;
+using FantasyBasketballLeague.Core.Contracts;
 using FantasyBasketballLeague.Core.Services;
 using FantasyBasketballLeague.Infrastructure.Data.Common;
 
@@ -12,6 +13,13 @@ namespace FantasyBasketballLeague.Extensions
             services.AddScoped<ITeamService, TeamService>();
             services.AddScoped<ILeagueService, LeagueService>();
             services.AddScoped<ICoachService, CoachService>();
+
+            services.AddNotyf(config =>
+            {
+                config.DurationInSeconds = 5;
+                config.IsDismissable = true;
+                config.Position = NotyfPosition.TopRight;
+            });
 
             return services;
         }

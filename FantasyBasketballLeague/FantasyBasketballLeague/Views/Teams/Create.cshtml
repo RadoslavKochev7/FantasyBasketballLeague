@@ -25,6 +25,7 @@
                 <div class="mb-3">
                     <label asp-for="@Model.LeagueId" class="form-label">League</label>
                     <select asp-for="@Model.LeagueId" class="form-control">
+                        <option value=""></option>
                         @foreach (var league in Model.Leagues)
                         {
                             <option value="@league.Id">@league.Name</option>
@@ -35,9 +36,10 @@
                 <div class="mb-3">
                     <label asp-for="@Model.CoachId" class="form-label">Coach</label>
                     <select asp-for="@Model.CoachId" class="form-control">
+                        <option value=""></option>
                         @foreach (var coach in Model.Coaches)
                         {
-                            <option value="@coach.Id">@($"{coach.FirstName[0]}.{coach.LastName}")</option>
+                            <option value="@coach.Id">@coach.LastName")</option>
                         }
                     </select>
                     <span asp-validation-for="CoachId" class="text-danger"></span>

@@ -1,3 +1,4 @@
+using AspNetCoreHero.ToastNotification.Extensions;
 using FantasyBasketballLeague.Extensions;
 using FantasyBasketballLeague.Infrastructure.Data;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
@@ -37,6 +38,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseNotyf();
 
 app.UseAuthentication();
 app.UseAuthorization();
