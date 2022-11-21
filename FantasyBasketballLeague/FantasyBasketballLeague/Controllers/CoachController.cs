@@ -15,9 +15,17 @@ namespace FantasyBasketballLeague.Controllers
             this.coachService = coachService;
         }
 
-        public IActionResult Details()
+        public async Task<IActionResult> Details(int coachId)
         {
-            return View();
+            var coach = await coachService.GetByIdAsync(coachId);
+
+            if (coach == null)
+            {
+                return RedirectToAction(nameof(Create));
+
+            }
+
+            return View(coach);
         }
 
         [HttpGet]
@@ -34,8 +42,8 @@ namespace FantasyBasketballLeague.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            await coachService.AddAsync(model);
-            return RedirectToAction("Details", "Coach");
+            var coachId = await coachService.AddAsync(model);
+            return RedirectToAction(nameof(Details), new { coachId });
         }
     }
 }

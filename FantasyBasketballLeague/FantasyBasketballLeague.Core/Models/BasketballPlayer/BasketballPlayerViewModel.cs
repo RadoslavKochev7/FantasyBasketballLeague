@@ -1,5 +1,6 @@
 ﻿namespace FantasyBasketballLeague.Core.Models.BasketballPlayer
 {
+#nullable disable
     public class BasketballPlayerViewModel
     {
         public int Id { get; set; }

@@ -33,10 +33,39 @@ namespace FantasyBasketballLeague.Core.Services
             var teamCoach = await repo.GetByIdAsync<Coach>(model.CoachId ?? 0);
             var teamLeague = await repo.GetByIdAsync<League>(model.LeagueId ?? 0);
 
-            team.Coach = teamCoach;
-            team.League = teamLeague;
+            team.Coach = teamCoach ?? null;
+            team.League = teamLeague ?? null;
 
             await repo.AddAsync(team);
+            await repo.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int teamId)
+        {
+            var team = await repo.GetByIdAsync<Team>(teamId);
+
+            //team.IsActive = false;
+
+            await repo.SaveChangesAsync();
+        }
+
+        public async Task Edit(int teamId, TeamViewModel model)
+        {
+            var team = await repo.GetByIdAsync<Team>(teamId);
+            var teamCoach = await repo.GetByIdAsync<Coach>(model.CoachId ?? 0);
+            var teamLeague = await repo.GetByIdAsync<League>(model.LeagueId ?? 0);
+
+            if (teamId == model.Id)
+            {
+                team.Name = model.Name;
+                team.LogoUrl = model.LogoUrl;
+                team.OpenPositions = model.OpenPositions;
+                team.CoachId = model.CoachId;
+                team.LeagueId = model.LeagueId;
+                team.Coach = teamCoach ?? null;
+                team.League = teamLeague ?? null;
+            }
+
             await repo.SaveChangesAsync();
         }
 
@@ -84,6 +113,9 @@ namespace FantasyBasketballLeague.Core.Services
 
             return teams;
         }
+
+        public async Task GetByIdAsync(int teamId)
+         => await repo.GetByIdAsync<Team>(teamId);
 
         public async Task<bool> TeamExists(string teamName)
         => await repo.AllReadonly<Team>().AnyAsync(t => t.Name == teamName);

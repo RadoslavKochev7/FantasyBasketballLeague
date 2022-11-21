@@ -11,5 +11,8 @@ namespace FantasyBasketballLeague.Core.Contracts
         Task<IEnumerable<LeagueViewModel>> GetAllLeaguesAsync();
         Task AddAsync(TeamAddModel model);
         Task<bool> TeamExists(string teamName);
+        Task Edit(int teamId, TeamViewModel model);
+        Task DeleteAsync(int teamId);
+        Task GetByIdAsync(int teamId);
     }
 }
