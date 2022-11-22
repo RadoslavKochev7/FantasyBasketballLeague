@@ -4,9 +4,12 @@ using FantasyBasketballLeague.Infrastructure.Data.Common;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace FantasyBasketballLeague.Core.Services
 {
+#nullable disable
+
     [Authorize]
     public class CoachService : ICoachService
     {
@@ -54,7 +57,7 @@ namespace FantasyBasketballLeague.Core.Services
             await repo.SaveChangesAsync();
         }
 
-        public async Task Edit(int coachId, CoachDetailsModel model)
+        public async Task<int> Edit(int coachId, CoachDetailsModel model)
         {
             var coach = await repo.GetByIdAsync<Coach>(coachId);
 
@@ -67,6 +70,25 @@ namespace FantasyBasketballLeague.Core.Services
             }
 
             await repo.SaveChangesAsync();
+            return model.Id;
+        }
+
+        [AllowAnonymous]
+        public async Task<IEnumerable<CoachDetailsModel>> GetAllCoachesAsync()
+        {
+            return await repo.AllReadonly<Coach>()
+                .Include(t => t.Team)
+                .Select(c => new CoachDetailsModel()
+                {
+                    Id = c.Id,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    ImageUrl = c.ImageUrl,
+                    TeamId = c.TeamId,
+                    Team = c.Team.Name
+                })
+                .OrderByDescending(t => t.Id)
+                .ToListAsync();
         }
 
         public async Task<CoachDetailsModel> GetByIdAsync(int coachId)
@@ -87,7 +109,19 @@ namespace FantasyBasketballLeague.Core.Services
 
             return model;
         }
-         
+
+        public async Task<IEnumerable<CoachDetailsModel>> AvailableCoaches()
+        {
+            return await repo.AllReadonly<Coach>()
+                .Where(c => c.TeamId == null)
+                .Select(c => new CoachDetailsModel()
+                {
+                    Id = c.Id,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                })
+                .ToListAsync();
+        }
 
         public async Task RemoveFromTeam(int teamId)
         {

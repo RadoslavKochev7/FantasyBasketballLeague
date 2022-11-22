@@ -1,0 +1,33 @@
+﻿@model IEnumerable<CoachDetailsModel>
+
+@{
+    ViewBag.Title = "All Coaches";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="text-center row">
+    @foreach (var coach in Model)
+    {
+        <div class="card col-4" style="width: 20rem; ">
+            <img class="card-img-top" style="width: 18rem;"
+             src="@coach.ImageUrl" alt="Team logo Image">
+            <div class="card-body">
+
+                <h5 class="card-title mt-1">@($"{coach.FirstName} {coach.LastName}")</h5>
+                <p class="mb-0">Team: @coach.Team</p>
+            </div>
+
+            <form class="input-group-sm" asp-controller="Coach" asp-action="All">
+            </form>
+            <span class="fw-bold">Actions: </span>
+            <a asp-controller="Coach" asp-action="Details" asp-route-id="@coach.Id" class="btn btn-success mb-2">View</a>
+            <span></span>
+            <a asp-controller="Coach" asp-action="Edit" asp-route-id="@coach.Id" class="btn btn-primary mb-2">Edit</a>
+                <span></span>
+            <a asp-controller="Coach" asp-action="Delete" asp-route-id="@coach.Id" class="btn btn-danger mb-2">Delete</a>
+        </div>
+    }
+</div>
+    
