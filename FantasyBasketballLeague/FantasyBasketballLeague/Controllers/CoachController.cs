@@ -29,7 +29,6 @@ namespace FantasyBasketballLeague.Controllers
             if (coach == null)
             {
                 return RedirectToAction(nameof(Create));
-
             }
 
             return View(coach);
@@ -58,8 +57,9 @@ namespace FantasyBasketballLeague.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> All()
         {
-           var coaches = await coachService.GetAllCoachesAsync();
-           return View(coaches);
+            var coaches = await coachService.GetAllCoachesAsync();
+
+            return View(coaches);
         }
 
         [HttpGet]
@@ -73,11 +73,11 @@ namespace FantasyBasketballLeague.Controllers
             }
 
             var model = new CoachDetailsModel()
-           {
-               FirstName = coach.FirstName,
-               LastName = coach.LastName,
-               ImageUrl = coach.ImageUrl
-           };
+            {
+                FirstName = coach.FirstName,
+                LastName = coach.LastName,
+                ImageUrl = coach.ImageUrl
+            };
 
             return View(model);
         }
@@ -109,7 +109,7 @@ namespace FantasyBasketballLeague.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int coachId)
         {
-            
+
             if (await CoachExists(coachId) == false)
             {
                 return RedirectToAction(nameof(All));
@@ -135,7 +135,7 @@ namespace FantasyBasketballLeague.Controllers
             }
 
             await coachService.DeleteAsync(coachId);
-
+            notyfService.Success($"Coach with Id - {coachId} was successfully deleted.");
             return RedirectToAction(nameof(All));
         }
 

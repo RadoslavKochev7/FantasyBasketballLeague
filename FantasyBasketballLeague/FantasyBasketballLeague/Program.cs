@@ -14,9 +14,12 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
 {
     options.SignIn.RequireConfirmedAccount = false;
+    options.User.RequireUniqueEmail = true;
     options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false; ;
+    options.Password.RequireUppercase = false; 
+    options.Password.RequireDigit = false;
 })
+    //.AddRoles()
     .AddEntityFrameworkStores<FantasyLeagueDbContext>();
 
 builder.Services.AddControllersWithViews();

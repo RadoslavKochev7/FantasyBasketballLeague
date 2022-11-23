@@ -93,7 +93,7 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<CoachDetailsModel> GetByIdAsync(int coachId)
         {
-            var model = await repo.AllReadonly<Coach>()
+            var model = await repo.All<Coach>()
                 .Where(x => x.Id == coachId)
                 .Include(t => t.Team)
                 .Select(c => new CoachDetailsModel()
