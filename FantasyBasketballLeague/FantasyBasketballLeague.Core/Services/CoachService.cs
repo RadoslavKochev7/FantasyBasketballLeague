@@ -105,7 +105,7 @@ namespace FantasyBasketballLeague.Core.Services
                     TeamId = c.TeamId ?? 0,
                     Team = c.TeamId != 0 ? c.Team.Name : "No team assigned"
                 })
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
             return model;
         }

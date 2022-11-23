@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FantasyBasketballLeague.Core.Models.BasketballPlayer;
+using System.ComponentModel.DataAnnotations;
 using static FantasyBasketballLeague.Infrastructure.Data.Constants.ValidationConstants;
 
 

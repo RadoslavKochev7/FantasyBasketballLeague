@@ -2,6 +2,7 @@
 using FantasyBasketballLeague.Core.Models.Coach;
 using FantasyBasketballLeague.Core.Models.League;
 using FantasyBasketballLeague.Core.Models.Teams;
+using FantasyBasketballLeague.Core.Models.UserTeams;
 using FantasyBasketballLeague.Infrastructure.Data.Common;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -43,7 +44,6 @@ namespace FantasyBasketballLeague.Core.Services
         public async Task DeleteAsync(int teamId)
         {
             var team = await repo.GetByIdAsync<Team>(teamId);
-
             //team.IsActive = false;
 
             await repo.SaveChangesAsync();
@@ -112,6 +112,46 @@ namespace FantasyBasketballLeague.Core.Services
              .ToListAsync();
 
             return teams;
+        }
+
+        public async Task<IEnumerable<MyTeamViewModel>> GetMyTeams(string userId)
+        {
+            var user = await repo.All<ApplicationUser>()
+               .Where(u => u.Id == userId)
+               .Include(u => u.UserTeams)
+               .ThenInclude(t => t.Team)
+               .ThenInclude(t => t.Coach)
+               .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                throw new ArgumentException("Invalid User Id");
+            }
+
+            var result = user.UserTeams
+                .Select(u => new MyTeamViewModel()
+                {
+                    Id = u.TeamId,
+                    Name = u.Team.Name,
+                    CoachName = $"{u.Team?.Coach?.FirstName} {u.Team?.Coach?.LastName}",
+                    League = u.Team?.League?.Name,
+                    OpenPositions = u.Team.OpenPositions,
+                    LogoUrl = u.Team.LogoUrl,
+                    Players = u.Team.Players.Select(p => new Models.BasketballPlayer.BasketballPlayerViewModel()
+                    {
+                        Id = p.Id,
+                        FirstName = p.FirstName,
+                        LastName = p.LastName,
+                        JerseyNumber = p.JerseyNumber,
+                        IsTeamCaptain = p.IsTeamCaptain == false ? "No" : "Yes",
+                        IsStarter = p.IsStarter == false ? "No" : "Yes",
+                        Position = p.Position.Initials,
+                        PositionId = p.PositionId
+                    })
+                    .ToList()
+                });
+
+            return result;
         }
 
         public async Task GetByIdAsync(int teamId)

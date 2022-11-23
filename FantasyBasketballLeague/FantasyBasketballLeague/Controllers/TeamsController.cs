@@ -1,8 +1,10 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using FantasyBasketballLeague.Core.Contracts;
 using FantasyBasketballLeague.Core.Models.Teams;
+using FantasyBasketballLeague.Core.Models.UserTeams;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FantasyBasketballLeague.Controllers
 {
@@ -62,5 +64,22 @@ namespace FantasyBasketballLeague.Controllers
 
             return RedirectToAction(nameof(All));
         }
+
+        public async Task<IActionResult> Mine()
+        {
+            var userId = GetUserId();
+
+            if (userId == null)
+            {
+                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+            }
+
+            var myTeams = await teamService.GetMyTeams(userId);
+
+            return View(myTeams);
+        }
+
+        private string GetUserId()
+        => User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 }
