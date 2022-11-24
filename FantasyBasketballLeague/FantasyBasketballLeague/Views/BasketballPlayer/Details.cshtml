@@ -1,0 +1,38 @@
+﻿@using FantasyBasketballLeague.Core.Models.Coach
+@model BasketballPlayerViewModel
+
+@{
+    ViewBag.Title = "Player details page";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+<div class="card col-4" style="width: 20rem; margin:auto ">
+    <img class="card-img-top" style="width: 19rem; height: 23rem; margin:auto "
+         src="https://i.pinimg.com/originals/ad/ff/96/adff96743178917890a9309ec43ab4d0.png" alt="Image">
+    <div class="d-flex justify-content-center">
+        <div class="card " style="width: 50rem;">
+            <div class="card-body">
+                <h3 class="card-title text-center">Player</h3>
+                <p class="card-text"><span class="fw-bold">First Name: </span>@Model.FirstName</p>
+                <p class="card-text"><span class="fw-bold">Last Name: </span>@Model.LastName</p>
+                <p class="card-text"><span class="fw-bold">Jersey Number: </span>@Model.JerseyNumber</p>
+                <p class="card-text"><span class="fw-bold">Seasons Played: </span>@Model.SeasonsPlayed</p>
+                <p class="card-text"><span class="fw-bold">Is Starter: </span>@Model.IsStarter</p>
+                <p class="card-text"><span class="fw-bold">Is Team Captain: </span>@Model.IsTeamCaptain</p>
+                <p class="card-text"><span class="fw-bold">Team: </span>@Model.Team</p>
+                <p class="card-text"><span class="fw-bold">Position: </span>@Model.Position</p>
+                <table>
+                    <tr class="actions">
+                        <th><span class="fw-bold">Actions:</span></th>
+
+                        <td>
+                            <a asp-controller="BasketballPlayer" asp-action="Edit" asp-route-playerId="@Model.Id" class="btn btn-primary">Edit</a>
+                            <a asp-controller="BasketballPlayer" asp-action="Delete" asp-route-playerId="@Model.Id" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

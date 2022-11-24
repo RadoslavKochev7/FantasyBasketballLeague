@@ -107,8 +107,9 @@ namespace FantasyBasketballLeague.Core.Services
                    Team = p.Team.Name,
                    PositionId = p.PositionId,
                    Position = p.Position.Name,
-                   IsStarter = p.IsStarter.HasValue == true ? "Yes" : "No",
-                   IsTeamCaptain = p.IsTeamCaptain.HasValue == true ? "Yes" : "No",
+                   JerseyNumber = p.JerseyNumber,
+                   IsStarter = p.IsStarter == true ? "Yes" : "No",
+                   IsTeamCaptain = p.IsTeamCaptain == true ? "Yes" : "No",
 
                })
                .FirstOrDefaultAsync();

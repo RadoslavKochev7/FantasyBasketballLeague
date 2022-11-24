@@ -14,6 +14,7 @@ namespace FantasyBasketballLeague.Extensions
             services.AddScoped<ILeagueService, LeagueService>();
             services.AddScoped<ICoachService, CoachService>();
             services.AddScoped<IPlayerService, PlayerService>();
+            services.AddScoped<IPositionService, PositionService>();
 
             services.AddNotyf(config =>
             {

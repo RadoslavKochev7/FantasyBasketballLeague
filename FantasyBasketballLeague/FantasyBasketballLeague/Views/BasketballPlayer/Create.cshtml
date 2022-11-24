@@ -22,33 +22,41 @@
                 </div>
                 <div class="mb-3">
                     <label asp-for="@Model.IsStarter" class="form-label">Is Starter</label>
-                    <input asp-for="@Model.IsStarter" class="form-control" aria-required="true" />
+                    <select asp-for="@Model.IsStarter" class="form-control" aria-required="true" />
                     <span asp-validation-for="IsStarter" class="text-danger"></span>
+                    <option value="">Yes</option>
+                    <option value="">No</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label asp-for="@Model.IsTeamCaptain" class="form-label">Is Team Captain</label>
-                    <input asp-for="@Model.IsTeamCaptain" class="form-control" aria-required="true" />
+                    <select asp-for="@Model.IsTeamCaptain" class="form-control" aria-required="true" />
                     <span asp-validation-for="IsTeamCaptain" class="text-danger"></span>
+                        <option value="">No</option>
+                        <option value="">Yes</option>
+                    </select>
                 </div>
                  <div class="mb-3">
                     <label asp-for="@Model.TeamId" class="form-label">Team</label>
-                    <input asp-for="@Model.TeamId" class="form-control" aria-required="true" />
+                    <select asp-for="@Model.TeamId" class="form-control" aria-required="true" />
                     <span asp-validation-for="TeamId" class="text-danger"></span>
                     <option value="" disabled selected hidden>Please Choose...</option>
                     @foreach (var team in Model.Teams)
                     {
                         <option value="@team.Id">@team.Name</option>
                     }
+                    </select>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="@Model.PositionId" class="form-label">Team</label>
-                    <input asp-for="@Model.PositionId" class="form-control" aria-required="true" />
+                    <label asp-for="@Model.PositionId" class="form-label">Position</label>
+                    <select asp-for="@Model.PositionId" class="form-control" aria-required="true" />
                     <span asp-validation-for="PositionId" class="text-danger"></span>
                     <option value="" disabled selected hidden>Please Choose...</option>
                     @foreach (var position in Model.Positions)
                     {
-                        <option value="@position.Id">@position.Name>@position.Initials</option>
+                        <option value="@position.Id">@($"{position.Name} - {position.Initials}")</option>
                     }
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label asp-for="@Model.SeasonsPlayed" class="form-label">Seasons Played</label>
