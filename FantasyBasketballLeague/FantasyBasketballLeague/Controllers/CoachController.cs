@@ -50,6 +50,7 @@ namespace FantasyBasketballLeague.Controllers
 
             var Id = await coachService.AddAsync(model);
             notyfService.Success($"Coach {model.FirstName} {model.LastName} is successfully added.");
+
             return RedirectToAction(nameof(Details), new { Id });
         }
 
@@ -169,6 +170,7 @@ namespace FantasyBasketballLeague.Controllers
             if (coach.Team != null)
             {
                 notyfService.Warning($"Coach {coach.FirstName} {coach.LastName} already has a team assigned!");
+                return RedirectToAction(nameof(All));
             }
 
             var team = model.Teams.FirstOrDefault();

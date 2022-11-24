@@ -32,6 +32,5 @@ namespace FantasyBasketballLeague.Core.Models.Teams
         [Required]
         [Display(Name = "Logo Url")]
         public string LogoUrl { get; set; } = null!;
-
     }
 }

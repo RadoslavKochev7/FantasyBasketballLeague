@@ -9,22 +9,29 @@
 <hr />
 
 <div class="text-center row">
-    @foreach (var team in Model)
+    @if (!Model.Any())
     {
-        <div class="card col-4" style="width: 20rem; ">
-            <img class="card-img-top" style="width: 18rem;"
+        <h3>There are no teams added.</h3>
+    }
+    else
+    {
+        @foreach (var team in Model)
+        {
+            <div class="card col-4" style="width: 20rem; ">
+                <img class="card-img-top" style="width: 18rem; height:20rem"
              src="@team.LogoUrl" alt="Team logo Image">
-            <div class="card-body">
+                <div class="card-body">
 
-                <h5 class="card-title mt-1">@team.Name</h5>
-                <p class="mb-0">Open positions: @team.OpenPositions</p>
-                <p class="mb-0">League: @team.League</p>
-                <p class="mb-0">Coach: @team.CoachName</p>
+                    <h5 class="card-title mt-1">@team.Name</h5>
+                    <p class="mb-0">Open positions: @team.OpenPositions</p>
+                    <p class="mb-0">League: @team.League</p>
+                    <p class="mb-0">Coach: @team.CoachName</p>
+                </div>
+
+                <form class="input-group-sm" asp-controller="Teams" asp-action="All">
+                </form>
             </div>
-
-            <form class="input-group-sm" asp-controller="Teams" asp-action="All">
-            </form>
-        </div>
+        }
     }
 </div>
     

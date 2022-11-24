@@ -2,7 +2,6 @@
 using FantasyBasketballLeague.Core.Models.Coach;
 using FantasyBasketballLeague.Core.Models.League;
 using FantasyBasketballLeague.Core.Models.Teams;
-using FantasyBasketballLeague.Core.Models.UserTeams;
 using FantasyBasketballLeague.Infrastructure.Data.Common;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -49,7 +48,7 @@ namespace FantasyBasketballLeague.Core.Services
             await repo.SaveChangesAsync();
         }
 
-        public async Task Edit(int teamId, TeamViewModel model)
+        public async Task<int> Edit(int teamId, TeamViewModel model)
         {
             var team = await repo.GetByIdAsync<Team>(teamId);
             var teamCoach = await repo.GetByIdAsync<Coach>(model.CoachId ?? 0);
@@ -67,6 +66,7 @@ namespace FantasyBasketballLeague.Core.Services
             }
 
             await repo.SaveChangesAsync();
+            return teamId;
         }
 
         public async Task<IEnumerable<CoachViewModel>> GetAllCoachesAsync()
@@ -134,8 +134,10 @@ namespace FantasyBasketballLeague.Core.Services
                     Id = u.TeamId,
                     Name = u.Team.Name,
                     CoachName = $"{u.Team?.Coach?.FirstName} {u.Team?.Coach?.LastName}",
+                    CoachId = u.Team.CoachId,
                     League = u.Team?.League?.Name,
-                    OpenPositions = u.Team.OpenPositions,
+                    LeagueId = u.Team?.League?.Id,
+                    OpenPositions = u.Team.OpenPositions - u.Team.Players.Count(),
                     LogoUrl = u.Team.LogoUrl,
                     Players = u.Team.Players.Select(p => new Models.BasketballPlayer.BasketballPlayerViewModel()
                     {

@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FantasyBasketballLeague.Core.Models.Coach;
+using FantasyBasketballLeague.Core.Models.Position;
+using FantasyBasketballLeague.Core.Models.Teams;
+using System.ComponentModel.DataAnnotations;
 using static FantasyBasketballLeague.Infrastructure.Data.Constants.ValidationConstants;
 
 
@@ -12,27 +15,43 @@ namespace FantasyBasketballLeague.Core.Models.BasketballPlayer
 
         [Required]
         [StringLength(FirstNameMaxLength, MinimumLength = FirstNameMinLength)]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
         [Required]
         [StringLength(LastNameMaxLength, MinimumLength = LastNameMinLength)]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         [Required]
+        [StringLength(PositionMaxLength, MinimumLength = PositionMinLength)]
         public string Position { get; set; }
 
         public int PositionId { get; set; }
 
         [Required]
+        [StringLength(TeamNameMaxLength, MinimumLength = TeamNameMinLength)]
+        public string Team { get; set; }
+
+        public int TeamId { get; set; }
+
         [Display(Name = "Is Team Captain")]
         public string IsTeamCaptain { get; set; }
 
-        [Required]
         [Display(Name = "Is Starter")]
         public string IsStarter { get; set; }
 
         [Required]
-        [StringLength (JerseyMaxNumer, MinimumLength = JerseyMinNumer)]   
+        [Display(Name = "Seasons Played")]
+        public byte SeasonsPlayed { get; set; }
+
+        [Required]
+        [StringLength (JerseyMaxNumer, MinimumLength = JerseyMinNumer)]
+        [Display(Name = "Jersey Number")]
         public string JerseyNumber { get; set; } 
+
+        public IEnumerable<TeamViewModel> Teams { get; set; } = new List<TeamViewModel>();
+
+        public IEnumerable<PositionViewModel> Positions { get; set; } = new List<PositionViewModel>();
     }
 }

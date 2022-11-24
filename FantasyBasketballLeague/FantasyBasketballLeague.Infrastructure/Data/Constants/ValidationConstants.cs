@@ -11,7 +11,7 @@
 
         // Basketball player
         public const int JerseyMaxNumer = 99;
-        public const int JerseyMinNumer = 0;
+        public const int JerseyMinNumer = 1;
 
         // Team
         public const int TeamNameMaxLength = 50;
@@ -34,5 +34,12 @@
         // League
         public const int LeagueNameMaxLength = 50;
         public const int LeagueNameMinLength = 3;
+
+        // Position
+        public const int PositionMaxLength = 50;
+        public const int PositionMinLength = 1;
+
+        public const int InitialsMaxLength = 10;
+        public const int InitialsMinLength = 1;
     }
 }

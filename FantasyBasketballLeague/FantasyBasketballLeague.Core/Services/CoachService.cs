@@ -52,9 +52,13 @@ namespace FantasyBasketballLeague.Core.Services
         public async Task DeleteAsync(int coachId)
         {
             var coach = await repo.GetByIdAsync<Coach>(coachId);
-            //coach.IsActive = false;
 
-            await repo.SaveChangesAsync();
+            if (coach != null)
+            {
+                //coach.IsActive = false;
+
+                await repo.SaveChangesAsync();
+            }
         }
 
         public async Task<int> Edit(int coachId, CoachDetailsModel model)
@@ -127,7 +131,7 @@ namespace FantasyBasketballLeague.Core.Services
         {
             var team = await repo.GetByIdAsync<Team>(teamId);
 
-            if (team != null)
+            if (team != null && team.Coach != null)
             {
                 team.Coach = null;
                 await repo.SaveChangesAsync();

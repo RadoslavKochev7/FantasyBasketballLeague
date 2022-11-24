@@ -16,7 +16,7 @@ namespace FantasyBasketballLeague.Core.Services
             repo = _repo;
         }
 
-        public async Task AddAsync(LeagueViewModel model)
+        public async Task<int> AddAsync(LeagueViewModel model)
         {
             var league = new League()
             {
@@ -26,6 +26,8 @@ namespace FantasyBasketballLeague.Core.Services
 
             await repo.AddAsync(league);
             await repo.SaveChangesAsync();
+
+            return league.Id;
         }
 
         public async Task AddTeam(int teamId, int leagueId)
@@ -50,7 +52,7 @@ namespace FantasyBasketballLeague.Core.Services
 
         }
 
-        public async Task Edit(int leagueId, LeagueViewModel model)
+        public async Task<int> Edit(int leagueId, LeagueViewModel model)
         {
             var league = await repo.GetByIdAsync<League>(leagueId);
 
@@ -59,6 +61,7 @@ namespace FantasyBasketballLeague.Core.Services
             
 
             await repo.SaveChangesAsync();
+            return league.Id;
         }
 
         public async Task GetByIdAsync(int leagueId)

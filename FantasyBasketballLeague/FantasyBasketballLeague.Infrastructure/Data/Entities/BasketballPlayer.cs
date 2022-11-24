@@ -11,11 +11,6 @@ namespace FantasyBasketballLeague.Infrastructure.Data.Entities
     /// </summary>
     public class BasketballPlayer : Person
     {
-        ///// <summary>
-        ///// Player id.
-        ///// </summary>
-        //public int PlayerId { get; set; }
-
         /// <summary>
         /// The number of player's jersey.
         /// </summary>

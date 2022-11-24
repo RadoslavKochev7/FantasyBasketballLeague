@@ -1,6 +1,5 @@
 ﻿using FantasyBasketballLeague.Core.Models.Coach;
 using FantasyBasketballLeague.Core.Models.League;
-using FantasyBasketballLeague.Infrastructure.Data.Entities;
 using System.ComponentModel.DataAnnotations;
 using static FantasyBasketballLeague.Infrastructure.Data.Constants.ValidationConstants;
 
