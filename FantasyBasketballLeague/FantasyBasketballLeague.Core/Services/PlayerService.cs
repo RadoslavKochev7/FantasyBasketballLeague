@@ -24,8 +24,8 @@ namespace FantasyBasketballLeague.Core.Services
                 LastName = model.LastName,
                 SeasonsPlayed = model.SeasonsPlayed,
                 TeamId = model.TeamId,
-                IsStarter = model.IsStarter == "Yes" ? true : false,
-                IsTeamCaptain = model.IsTeamCaptain == "Yes" ? true : false,
+                IsStarter = model.IsStarter == "true" ? true : false,
+                IsTeamCaptain = model.IsTeamCaptain == "true" ? true : false,
                 JerseyNumber = model.JerseyNumber,
                 PositionId = model.PositionId,
             };
@@ -42,7 +42,7 @@ namespace FantasyBasketballLeague.Core.Services
 
             if (player != null)
             {
-                //player.IsActive = false;
+                player.IsActive = false;
 
                 await repo.SaveChangesAsync();
             }
@@ -60,20 +60,18 @@ namespace FantasyBasketballLeague.Core.Services
                 player.SeasonsPlayed = model.SeasonsPlayed;
                 player.IsTeamCaptain = model.IsTeamCaptain == "Yes";
                 player.IsStarter = model.IsStarter == "Yes";
-
-
             }
 
             await repo.SaveChangesAsync();
             return model.Id;
         }
 
-        public async Task<IEnumerable<BasketballPlayerViewModel>> GetAllPlayersAsync()
+        public async Task<IEnumerable<BasketballPlayerDetailsModel>> GetAllPlayersAsync()
         {
             return await repo.AllReadonly<BasketballPlayer>()
                  .Include(t => t.Team)
                  .Include(p => p.Position)
-                 .Select(p => new BasketballPlayerViewModel()
+                 .Select(p => new BasketballPlayerDetailsModel()
                  {
                      Id = p.Id,
                      FirstName = p.FirstName,
@@ -91,13 +89,13 @@ namespace FantasyBasketballLeague.Core.Services
                    .ToListAsync();
         }
 
-        public async Task<BasketballPlayerViewModel> GetByIdAsync(int id)
+        public async Task<BasketballPlayerDetailsModel> GetByIdAsync(int id)
         {
             var model = await repo.All<BasketballPlayer>()
                .Where(x => x.Id == id)
                .Include(t => t.Team)
                .Include(p => p.Position)
-               .Select(p => new BasketballPlayerViewModel()
+               .Select(p => new BasketballPlayerDetailsModel()
                {
                    Id = id,
                    FirstName = p.FirstName,
@@ -105,8 +103,8 @@ namespace FantasyBasketballLeague.Core.Services
                    SeasonsPlayed = p.SeasonsPlayed,
                    TeamId = p.TeamId,
                    Team = p.Team.Name,
-                   PositionId = p.PositionId,
                    Position = p.Position.Name,
+                   PositionId = p.PositionId,
                    JerseyNumber = p.JerseyNumber,
                    IsStarter = p.IsStarter == true ? "Yes" : "No",
                    IsTeamCaptain = p.IsTeamCaptain == true ? "Yes" : "No",

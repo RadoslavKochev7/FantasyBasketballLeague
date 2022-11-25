@@ -110,33 +110,20 @@ namespace FantasyBasketballLeague.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-
             if (await CoachExists(id) == false)
             {
                 return RedirectToAction(nameof(All));
             }
             var coach = await coachService.GetByIdAsync(id);
 
-            var model = new CoachDetailsModel()
+            if (coach is null)
             {
-                FirstName = coach.FirstName,
-                LastName = coach.LastName,
-                ImageUrl = coach.ImageUrl
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Delete(int id, CoachDetailsModel model)
-        {
-            if (await CoachExists(id) == false)
-            {
-                return RedirectToAction(nameof(All));
+                throw new ArgumentNullException($"There's no coach with Id {id}");
             }
 
             await coachService.DeleteAsync(id);
-            notyfService.Success($"Coach with Id - {id} was successfully deleted.");
+            notyfService.Success($"Coach {coach.FirstName} {coach.LastName} was successfully deleted!");
+
             return RedirectToAction(nameof(All));
         }
 

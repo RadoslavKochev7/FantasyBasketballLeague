@@ -55,7 +55,7 @@ namespace FantasyBasketballLeague.Core.Services
 
             if (coach != null)
             {
-                //coach.IsActive = false;
+                coach.IsActive = false;
 
                 await repo.SaveChangesAsync();
             }
@@ -81,6 +81,7 @@ namespace FantasyBasketballLeague.Core.Services
         public async Task<IEnumerable<CoachDetailsModel>> GetAllCoachesAsync()
         {
             return await repo.AllReadonly<Coach>()
+                .Where(c => c.IsActive)
                 .Include(t => t.Team)
                 .Select(c => new CoachDetailsModel()
                 {
@@ -99,6 +100,7 @@ namespace FantasyBasketballLeague.Core.Services
         {
             var model = await repo.All<Coach>()
                 .Where(x => x.Id == coachId)
+                .Where(x => x.IsActive)
                 .Include(t => t.Team)
                 .Select(c => new CoachDetailsModel()
                 {
@@ -117,7 +119,7 @@ namespace FantasyBasketballLeague.Core.Services
         public async Task<IEnumerable<CoachDetailsModel>> AvailableCoaches()
         {
             return await repo.AllReadonly<Coach>()
-                .Where(c => c.TeamId == null)
+                .Where(c => c.TeamId == null && c.IsActive)
                 .Select(c => new CoachDetailsModel()
                 {
                     Id = c.Id,

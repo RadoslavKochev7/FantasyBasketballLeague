@@ -17,5 +17,7 @@ namespace FantasyBasketballLeague.Infrastructure.Data.Entities
         [MaxLength(LastNameMaxLength)]
         [MinLength(LastNameMinLength)]
         public string LastName { get; set; } = null!;
+
+        public bool IsActive { get; set; } = true;
     }
 }

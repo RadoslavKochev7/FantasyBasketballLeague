@@ -1,5 +1,5 @@
 ﻿@using FantasyBasketballLeague.Core.Models.Coach
-@model BasketballPlayerViewModel
+@model BasketballPlayerDetailsModel
 
 @{
     ViewBag.Title = "Player details page";
@@ -27,8 +27,8 @@
                         <th><span class="fw-bold">Actions:</span></th>
 
                         <td>
-                            <a asp-controller="BasketballPlayer" asp-action="Edit" asp-route-playerId="@Model.Id" class="btn btn-primary">Edit</a>
-                            <a asp-controller="BasketballPlayer" asp-action="Delete" asp-route-playerId="@Model.Id" class="btn btn-danger">Delete</a>
+                            <a asp-controller="BasketballPlayer" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                            <a asp-controller="BasketballPlayer" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
                         </td>
                     </tr>
                 </table>

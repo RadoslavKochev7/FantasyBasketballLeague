@@ -1,9 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using AspNetCoreHero.ToastNotification.Notyf;
 using FantasyBasketballLeague.Core.Contracts;
 using FantasyBasketballLeague.Core.Models.BasketballPlayer;
-using FantasyBasketballLeague.Core.Models.Teams;
-using FantasyBasketballLeague.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,24 +45,17 @@ namespace FantasyBasketballLeague.Controllers
                 notyfService.Error($"There is already a player with name {model.FirstName} {model.LastName}", 10);
             }
 
-            if ((await positionService.GetAllPositionsAsync()).Any(x => x.Name != model.Position))
-            {
-                ModelState.AddModelError(nameof(model.PositionId), "There's no such position.");
-                notyfService.Error("There's no such position", 10);
-            }
-
             if (!ModelState.IsValid)
             {
-
                 model.Positions = await positionService.GetAllPositionsAsync();
                 model.Teams = await teamService.GetAllTeamsAsync();
 
                 return View(model);
             }
 
-            var playerId = playerService.AddAsync(model);
+            var id = await playerService.AddAsync(model);
 
-            return RedirectToAction(nameof(Details), new { playerId });
+            return RedirectToAction(nameof(Details), new { id });
         }
 
         public async Task<IActionResult> Details(int id)

@@ -7,8 +7,8 @@ namespace FantasyBasketballLeague.Core.Contracts
         Task<int> AddAsync(BasketballPlayerViewModel model);
         Task<int> Edit(int id, BasketballPlayerViewModel model);
         Task DeleteAsync(int id);
-        Task<BasketballPlayerViewModel> GetByIdAsync(int id);
+        Task<BasketballPlayerDetailsModel> GetByIdAsync(int id);
         Task<bool> PlayerNameExists(string playerName, string lastName);
-        Task<IEnumerable<BasketballPlayerViewModel>> GetAllPlayersAsync();
+        Task<IEnumerable<BasketballPlayerDetailsModel>> GetAllPlayersAsync();
     }
 }

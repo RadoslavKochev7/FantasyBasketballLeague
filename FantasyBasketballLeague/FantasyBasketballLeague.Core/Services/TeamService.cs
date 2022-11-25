@@ -95,7 +95,7 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<IEnumerable<TeamViewModel>> GetAllTeamsAsync()
         {
-            var teams = await repo.All<Team>()
+            var teams = await repo.AllReadonly<Team>()
              .Include(t => t.Coach)
              .Include(t => t.League)
              .Select(t => new TeamViewModel()
@@ -105,7 +105,7 @@ namespace FantasyBasketballLeague.Core.Services
                  League = t.League.Name ?? "No league assigned",
                  LeagueId = t.LeagueId,
                  LogoUrl = t.LogoUrl,
-                 CoachId = t.CoachId,
+                 CoachId = t.CoachId.HasValue ? t.CoachId : null,
                  CoachName = $"{t.Coach.FirstName[0]}.{t.Coach.LastName}" ?? "No coach assigned",
                  OpenPositions = t.OpenPositions - t.Players.Count()
              })
@@ -120,7 +120,8 @@ namespace FantasyBasketballLeague.Core.Services
                .Where(u => u.Id == userId)
                .Include(u => u.UserTeams)
                .ThenInclude(t => t.Team)
-               .ThenInclude(t => t.Coach)
+               .ThenInclude(t => t.Players)
+               .ThenInclude(t => t.Position)
                .FirstOrDefaultAsync();
 
             if (user == null)
@@ -133,13 +134,8 @@ namespace FantasyBasketballLeague.Core.Services
                 {
                     Id = u.TeamId,
                     Name = u.Team.Name,
-                    CoachName = $"{u.Team?.Coach?.FirstName} {u.Team?.Coach?.LastName}",
-                    CoachId = u.Team.CoachId,
-                    League = u.Team?.League?.Name,
-                    LeagueId = u.Team?.League?.Id,
-                    OpenPositions = u.Team.OpenPositions - u.Team.Players.Count(),
                     LogoUrl = u.Team.LogoUrl,
-                    Players = u.Team.Players.Select(p => new Models.BasketballPlayer.BasketballPlayerViewModel()
+                    Players = u.Team.Players.Select(p => new Models.BasketballPlayer.BasketballPlayerDetailsModel()
                     {
                         Id = p.Id,
                         FirstName = p.FirstName,
@@ -148,7 +144,8 @@ namespace FantasyBasketballLeague.Core.Services
                         IsTeamCaptain = p.IsTeamCaptain == false ? "No" : "Yes",
                         IsStarter = p.IsStarter == false ? "No" : "Yes",
                         Position = p.Position.Initials,
-                        PositionId = p.PositionId
+                        PositionId = p.PositionId,
+                        SeasonsPlayed = p.SeasonsPlayed
                     })
                     .ToList()
                 });

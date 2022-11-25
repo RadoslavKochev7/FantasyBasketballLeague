@@ -4,15 +4,96 @@
     ViewBag.Title = "My Teams";
 }
 
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 
+
 @if (Model.Any())
 {
-    <div class="row">
+    <div class="text-center row">
         @foreach (var team in Model)
         {
-            <partial name="_HousePartial" model="@team" />
+            <div class="card col-4" style="width: 20rem; margin:auto;">
+                <img class="card-img-top" style="width: 18rem; height:20rem"
+             src="@team.LogoUrl" alt="Team logo Image">
+                <div class="card-body">
+
+                    <h5 class="card-title mt-1">@team.Name</h5>
+                </div>
+            </div>
+                <table id="dtBasicExample" class="table" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="th-sm">
+                                First Name
+                            </th>
+                            <th class="th-sm">
+                                Last Name
+                            </th>
+                            <th class="th-sm">
+                                Position
+                            </th>
+                            <th class="th-sm">
+                                Jersey Number
+                            </th>
+                            <th class="th-sm">
+                                Is Captain
+                            </th>
+                            <th class="th-sm">
+                                Is Starter
+                            </th>
+                            <th class="th-sm">
+                                Seasons Played
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var player in team.Players)
+                        {
+                            <tr>
+                                <td>@player.FirstName</td>
+                                <td>@player.LastName</td>
+                                <td>@player.Position</td>
+                                <td>@player.JerseyNumber</td>
+                                <td>@player.IsTeamCaptain</td>
+                                <td>@player.IsStarter</td>
+                                <td>@player.SeasonsPlayed</td>
+                            </tr>
+                        }
+                    <tfoot>
+                        <tr>
+                            <th>
+                                First Name
+                            </th>
+                            <th>
+                                Last Name
+                            </th>
+                            <th>
+                                Position
+                            </th>
+                            <th>
+                                Jersey Number
+                            </th>
+                            <th>
+                                Is Captain
+                            </th>
+                            <th>
+                                Is Starter
+                            </th>
+                            <th>
+                                Seasons Played
+                            </th>
+                        </tr>
+                    </tfoot>
+                 </tbody>
+                </table>
+
+                <form class="input-group-sm" asp-controller="Teams" asp-action="All">
+                </form>
         }
     </div>
 }
@@ -20,3 +101,10 @@ else
 {
     <h3 class="text-center">You have no teams yet!</h3>
 }
+
+<script>
+    $(document).ready(function () {
+        $('#dtBasicExample').DataTable();
+        $('.dataTables_length').addClass('bs-select');
+    });
+</script>

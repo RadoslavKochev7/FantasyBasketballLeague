@@ -23,15 +23,7 @@ namespace FantasyBasketballLeague.Core.Models.BasketballPlayer
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [Required]
-        [StringLength(PositionMaxLength, MinimumLength = PositionMinLength)]
-        public string Position { get; set; }
-
         public int PositionId { get; set; }
-
-        [Required]
-        [StringLength(TeamNameMaxLength, MinimumLength = TeamNameMinLength)]
-        public string Team { get; set; }
 
         public int TeamId { get; set; }
 
