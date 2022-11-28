@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FantasyBasketballLeague.Core.Models.Teams;
+using System.ComponentModel.DataAnnotations;
 using static FantasyBasketballLeague.Infrastructure.Data.Constants.ValidationConstants;
 
 namespace FantasyBasketballLeague.Core.Models.League
@@ -10,5 +11,9 @@ namespace FantasyBasketballLeague.Core.Models.League
         [Required]
         [StringLength(LeagueNameMaxLength, MinimumLength = LeagueNameMinLength)]
         public string Name { get; set; } = null!;
+
+        public int Count { get; set; }
+
+        public IEnumerable<TeamsShortViewModel> Teams { get; set; } = new List<TeamsShortViewModel>();
     }
 }
