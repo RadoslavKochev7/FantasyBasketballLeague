@@ -17,14 +17,14 @@
                 <p class="mb-0">Teams: @league.Count</p>
             </div>
 
-            <form class="input-group-sm" asp-controller="Coach" asp-action="All">
+            <form class="input-group-sm" asp-controller="League" asp-action="All">
             </form>
             <span class="fw-bold">Actions: </span>
-            <a asp-controller="Coach" asp-action="Details" asp-route-id="@league.Id" class="btn btn-success mb-2">View</a>
+            <a asp-controller="Leagues" asp-action="Details" asp-route-id="@league.Id" class="btn btn-success mb-2">View</a>
             <span></span>
-            <a asp-controller="Coach" asp-action="Edit" asp-route-id="@league.Id" class="btn btn-primary mb-2">Edit</a>
+            <a asp-controller="Leagues" asp-action="Edit" asp-route-id="@league.Id" class="btn btn-primary mb-2">Edit</a>
                 <span></span>
-            <a asp-controller="Coach" asp-action="Delete" asp-route-id="@league.Id" class="btn btn-danger mb-2">Delete</a>
+            <a asp-controller="Leagues" asp-action="Delete" asp-route-id="@league.Id" class="btn btn-danger mb-2">Delete</a>
         </div>
     }
 </div>

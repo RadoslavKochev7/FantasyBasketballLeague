@@ -1,4 +1,5 @@
 ﻿using FantasyBasketballLeague.Core.Contracts;
+using FantasyBasketballLeague.Core.Models.League;
 using FantasyBasketballLeague.Core.Models.Position;
 using FantasyBasketballLeague.Infrastructure.Data.Common;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
@@ -77,6 +78,16 @@ namespace FantasyBasketballLeague.Core.Services
         }
 
         public async Task<PositionViewModel> GetByIdAsync(int id)
-           => await repo.GetByIdAsync<PositionViewModel>(id);
+        {
+            return await repo.All<Position>()
+               .Where(t => t.Id == id)
+               .Select(l => new PositionViewModel()
+               {
+                   Id = l.Id,
+                   Name = l.Name,
+                   Initials = l.Initials,
+               })
+               .FirstAsync();
+        }
     }
 }

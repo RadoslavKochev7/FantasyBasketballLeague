@@ -1,9 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using FantasyBasketballLeague.Core.Contracts;
-using FantasyBasketballLeague.Core.Models.Coach;
 using FantasyBasketballLeague.Core.Models.League;
-using FantasyBasketballLeague.Core.Models.Teams;
-using FantasyBasketballLeague.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,9 +38,9 @@ namespace FantasyBasketballLeague.Controllers
             return RedirectToAction(nameof(All));
         }
 
-        public IActionResult All()
+        public async Task<IActionResult> All()
         {
-            var leagues = leagueService.GetAllLeaguesAsync();
+            var leagues = await leagueService.GetAllLeaguesAsync();
 
             return View(leagues);
         }
@@ -66,30 +63,67 @@ namespace FantasyBasketballLeague.Controllers
             return View(model);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Edit(int id, LeagueViewModel model)
-        //{
-        //    if (id != model.Id)
-        //    {
-        //        return RedirectToAction(nameof(All));
-        //    }
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, LeagueViewModel model)
+        {
+            if (id != model.Id)
+            {
+                return RedirectToAction(nameof(All));
+            }
 
-        //    var league = await leagueService.GetByIdAsync(id);
+            var league = await leagueService.GetByIdAsync(id);
 
-        //    if (league == null)
-        //    {
-        //        notyfService.Error($"League with Id {id} does not exist");
-        //        return RedirectToAction(nameof(All));
-        //    }
+            if (league == null)
+            {
+                notyfService.Error($"League with Id {id} does not exist");
+                return RedirectToAction(nameof(All));
+            }
 
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
-        //    await leagueService.Edit(id, model);
+            await leagueService.Edit(id, model);
+            notyfService.Success($"League {model.Name} was successfully edited");
 
-            //return RedirectToAction(nameof(Details), new { model.Id });
-        //}
+            return RedirectToAction(nameof(Details), new { model.Id });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var league = await leagueService.GetByIdAsync(id);
+
+            if (league == null)
+            {
+                notyfService.Error($"There's no league with Id {id}");
+                return RedirectToAction(nameof(Create));
+            }
+
+            return View(league);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            
+            var league = await leagueService.GetByIdAsync(id);
+
+            if (league is null)
+            {
+                throw new ArgumentNullException($"There's no league with Id {id}");
+            }
+            if (league.Teams.Any())
+            {
+                notyfService.Success($"League - {league.Name} cannot be deleted.There are {league.Teams.Count()} to be removed first.");
+                return RedirectToAction(nameof(All));
+            }
+
+            await leagueService.DeleteAsync(id);
+            notyfService.Success($"League - {league.Name} was successfully deleted!");
+
+            return RedirectToAction(nameof(All));
+        }
     }
 }

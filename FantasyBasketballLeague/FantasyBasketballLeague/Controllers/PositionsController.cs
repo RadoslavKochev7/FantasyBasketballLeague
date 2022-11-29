@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using FantasyBasketballLeague.Core.Contracts;
 using FantasyBasketballLeague.Core.Models.Position;
+using FantasyBasketballLeague.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,7 @@ namespace FantasyBasketballLeague.Controllers
             this.notyfService = notyfService;
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             var model = new PositionViewModel();
@@ -45,6 +47,21 @@ namespace FantasyBasketballLeague.Controllers
 
             return View(positions);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var position = await positionService.GetByIdAsync(id);
+
+            if (position == null)
+            {
+                notyfService.Error($"There's no league with Id {id}");
+                return RedirectToAction(nameof(Create));
+            }
+
+            return View(position);
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)

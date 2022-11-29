@@ -12,7 +12,7 @@ namespace FantasyBasketballLeague.Core.Models.League
         [StringLength(LeagueNameMaxLength, MinimumLength = LeagueNameMinLength)]
         public string Name { get; set; } = null!;
 
-        public int Count { get; set; }
+        public int Count { get; set; } 
 
         public IEnumerable<TeamsShortViewModel> Teams { get; set; } = new List<TeamsShortViewModel>();
     }

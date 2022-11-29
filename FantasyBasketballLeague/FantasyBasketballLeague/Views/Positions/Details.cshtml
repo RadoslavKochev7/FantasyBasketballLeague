@@ -1,0 +1,30 @@
+﻿@using FantasyBasketballLeague.Core.Models.Position
+@model PositionViewModel
+
+@{
+    ViewBag.Title = "Details page";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+<div class="card col-4" style="width: 20rem; margin:auto ">
+    <div class="d-flex justify-content-center">
+        <div class="card " style="width: 50rem;">
+            <div class="card-body">
+                <h3 class="card-title text-center">Position</h3>
+                <p class="card-text"><span class="fw-bold">Name: </span>@Model.Name</p>
+                <p class="card-text"><span class="fw-bold">Initials: </span>@Model.Initials</p>
+                <table>
+                    <tr class="actions">
+                        <th><span class="fw-bold">Actions:</span></th>
+
+                        <td>
+                            <a asp-controller="Position" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                            <a asp-controller="Position" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

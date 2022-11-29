@@ -27,7 +27,7 @@
                     <option value="" disabled selected hidden>Please Choose...</option>
                     <option value=false>No</option>
                     <option value=true>Yes</option>
-                     </select>
+                   </select>
                 </div>
                 <div class="mb-3">
                     <label asp-for="@Model.IsTeamCaptain" class="form-label">Is Team Captain</label>
@@ -36,7 +36,7 @@
                     <option value="" disabled selected hidden>Please Choose...</option>
                         <option value=false>No</option>
                     <option value=true>Yes</option>
-                     </select>
+                   </select>
                 </div>
                  <div class="mb-3">
                     <label asp-for="@Model.TeamId" class="form-label">Team</label>
@@ -47,7 +47,7 @@
                     {
                         <option value="@team.Id">@team.Name</option>
                     }
-                     </select>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label asp-for="@Model.PositionId" class="form-label">Position</label>
@@ -58,7 +58,7 @@
                     {
                         <option value="@position.Id">@($"{position.Name} - {position.Initials}")</option>
                     }
-                     </select>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label asp-for="@Model.SeasonsPlayed" class="form-label">Seasons Played</label>

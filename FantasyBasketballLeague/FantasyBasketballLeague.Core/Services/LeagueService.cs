@@ -22,7 +22,7 @@ namespace FantasyBasketballLeague.Core.Services
             var league = new League()
             {
                 Id = model.Id,
-                Name = model.Name,
+                Name = model.Name
             };
 
             await repo.AddAsync(league);
@@ -67,17 +67,30 @@ namespace FantasyBasketballLeague.Core.Services
         public async Task<IEnumerable<LeagueViewModel>> GetAllLeaguesAsync()
         {
             return await repo.AllReadonly<League>()
+                .Include(t => t.Teams)
                 .Select(t => new LeagueViewModel()
                 {
                     Id = t.Id,
                     Name = t.Name,
+                    Count = t.Teams.Count
                 })
                 .OrderByDescending(t => t.Id)
                 .ToListAsync();
         }
 
         public async Task<LeagueViewModel> GetByIdAsync(int leagueId)
-        => await repo.GetByIdAsync<LeagueViewModel>(leagueId);
+        { 
+            return await repo.All<League>()
+                .Where(t => t.Id == leagueId)
+                .Include(t => t.Teams)
+                .Select(l => new LeagueViewModel()
+                {
+                    Id = l.Id,
+                    Name = l.Name,
+                    Count = l.Teams.Count
+                })
+                .FirstAsync();
+        }
 
         public async Task RemoveTeam(int teamId, int leagueId)
         {

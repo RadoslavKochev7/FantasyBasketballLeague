@@ -1,0 +1,33 @@
+﻿@model PositionViewModel
+@{
+    ViewBag.Title = "Edit position";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="text-center row">
+    <div class="row">
+        <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+            <form asp-action="Edit" method="post">
+                <div class="mb-3">
+                    <label asp-for="@Model.Name" class="form-label">Name</label>
+                    <input asp-for="@Model.Name" class="form-control" aria-required="true" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="@Model.Initials" class="form-label">Initials</label>
+                    <input asp-for="@Model.Initials" class="form-control" aria-required="true" />
+                    <span asp-validation-for="Initials" class="text-danger"></span>
+                </div>
+                <input class="btn btn-primary" type="submit" value="Save" />
+                <input class="btn btn-secondary" value="Cancel" onclick="location.href='@Url.Action("All","Position")';" />
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
