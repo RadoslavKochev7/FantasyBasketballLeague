@@ -47,7 +47,10 @@ namespace FantasyBasketballLeague.Core.Services
             var league = await repo.GetByIdAsync<League>(leagueId);
 
             if (league != null)
+            {
+                await repo.DeleteAsync<League>(leagueId);
                 await repo.SaveChangesAsync();
+            }
         }
 
         public async Task<int> Edit(int leagueId, LeagueViewModel model)
