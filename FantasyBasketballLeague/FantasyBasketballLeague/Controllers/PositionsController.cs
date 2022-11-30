@@ -13,7 +13,7 @@ namespace FantasyBasketballLeague.Controllers
         private readonly IPositionService positionService;
         private readonly INotyfService notyfService;
 
-        public PositionsController(IPositionService positionService, 
+        public PositionsController(IPositionService positionService,
                                    INotyfService notyfService)
         {
             this.positionService = positionService;
@@ -55,7 +55,7 @@ namespace FantasyBasketballLeague.Controllers
 
             if (position == null)
             {
-                notyfService.Error($"There's no league with Id {id}");
+                notyfService.Error($"There's no position with Id {id}");
                 return RedirectToAction(nameof(Create));
             }
 
@@ -81,6 +81,42 @@ namespace FantasyBasketballLeague.Controllers
             };
 
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, PositionViewModel model)
+        {
+            var position = await positionService.GetByIdAsync(id);
+
+            if (position is null)
+            {
+                notyfService.Warning($"There's no position with Id {id}");
+                return RedirectToAction(nameof(All));
+            }
+
+            if (position.Id == id)
+            {
+                await positionService.Edit(position.Id, model);
+                notyfService.Success($"Position {model.Name} was successfully edited");
+            }
+
+            return RedirectToAction(nameof(Details), new { model.Id });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var position = await positionService.GetByIdAsync(id);
+
+            if (position is null)
+            {
+                throw new ArgumentNullException($"There's no position with Id {id}");
+            }
+
+            await positionService.DeleteAsync(id);
+            notyfService.Success($"Position {position.Name} was successfully deleted!");
+
+            return RedirectToAction(nameof(All));
         }
     }
 }

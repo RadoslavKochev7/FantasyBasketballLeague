@@ -1,7 +1,9 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using FantasyBasketballLeague.Core.Contracts;
+using FantasyBasketballLeague.Core.Models.BasketballPlayer;
 using FantasyBasketballLeague.Core.Models.Teams;
 using FantasyBasketballLeague.Core.Models.UserTeams;
+using FantasyBasketballLeague.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -77,6 +79,70 @@ namespace FantasyBasketballLeague.Controllers
             var myTeams = await teamService.GetMyTeams(userId);
 
             return View(myTeams);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var team = await teamService.GetByIdAsync(id);
+
+            if (team == null)
+            {
+                notyfService.Warning($"There's no team with id {id}");
+                return RedirectToAction(nameof(All));
+            }
+
+            var model = new TeamAddModel()
+            {
+                Id = id,
+                Name = team.Name,
+                OpenPositions = team.OpenPositions,
+                LogoUrl = team.LogoUrl,
+                Coach = team.CoachName,
+                CoachId = team.CoachId,
+                League = team.League,
+                LeagueId = team.LeagueId,
+                Coaches = await teamService.GetAllCoachesAsync(),
+                Leagues = await teamService.GetAllLeaguesAsync()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, TeamAddModel model)
+        {
+            if (id == model.Id)
+            {
+                if (!ModelState.IsValid)
+                {
+                    ModelState.AddModelError("", "Wrong data.");
+
+                    model.Coaches = await teamService.GetAllCoachesAsync();
+                    model.Leagues = await teamService.GetAllLeaguesAsync();
+
+                    return View(model);
+                }
+
+                await teamService.Edit(id, model);
+            }
+            return RedirectToAction(nameof(All), new { model.Id });
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var team = await teamService.GetByIdAsync(id);
+
+            if (team is null)
+            {
+                throw new ArgumentNullException($"There's no team with Id {id}");
+            }
+
+            await teamService.DeleteAsync(id);
+            notyfService.Success($"Team {team.Name} was successfully deleted!");
+
+            return RedirectToAction(nameof(All));
         }
 
         private string GetUserId()

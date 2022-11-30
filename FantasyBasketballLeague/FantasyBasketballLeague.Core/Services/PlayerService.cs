@@ -24,8 +24,8 @@ namespace FantasyBasketballLeague.Core.Services
                 LastName = model.LastName,
                 SeasonsPlayed = model.SeasonsPlayed,
                 TeamId = model.TeamId,
-                IsStarter = model.IsStarter == "true" ? true : false,
-                IsTeamCaptain = model.IsTeamCaptain == "true" ? true : false,
+                IsStarter = model.IsStarter == "true",
+                IsTeamCaptain = model.IsTeamCaptain == "true",
                 JerseyNumber = model.JerseyNumber,
                 PositionId = model.PositionId,
             };
@@ -48,7 +48,7 @@ namespace FantasyBasketballLeague.Core.Services
             }
         }
 
-        public async Task<int> Edit(int id, BasketballPlayerViewModel model)
+        public async Task<int> Edit(int id, BasketballPlayerDetailsModel model)
         {
             var player = await repo.GetByIdAsync<BasketballPlayer>(id);
 
@@ -58,8 +58,10 @@ namespace FantasyBasketballLeague.Core.Services
                 player.LastName = model.LastName;
                 player.JerseyNumber = model.JerseyNumber;
                 player.SeasonsPlayed = model.SeasonsPlayed;
-                player.IsTeamCaptain = model.IsTeamCaptain == "Yes";
-                player.IsStarter = model.IsStarter == "Yes";
+                player.IsTeamCaptain = model.IsTeamCaptain == "true";
+                player.IsStarter = model.IsStarter == "true";
+                player.PositionId = model.PositionId;
+                player.TeamId = model.TeamId;
             }
 
             await repo.SaveChangesAsync();
@@ -69,6 +71,7 @@ namespace FantasyBasketballLeague.Core.Services
         public async Task<IEnumerable<BasketballPlayerDetailsModel>> GetAllPlayersAsync()
         {
             return await repo.AllReadonly<BasketballPlayer>()
+                 .Where(x => x.IsActive)
                  .Include(t => t.Team)
                  .Include(p => p.Position)
                  .Select(p => new BasketballPlayerDetailsModel()

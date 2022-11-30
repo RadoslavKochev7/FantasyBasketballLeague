@@ -43,12 +43,16 @@ namespace FantasyBasketballLeague.Core.Services
         public async Task DeleteAsync(int teamId)
         {
             var team = await repo.GetByIdAsync<Team>(teamId);
-            //team.IsActive = false;
+
+            if (team != null)
+            {
+                //team.IsActive = false;
+            }
 
             await repo.SaveChangesAsync();
         }
 
-        public async Task<int> Edit(int teamId, TeamViewModel model)
+        public async Task<int> Edit(int teamId, TeamAddModel model)
         {
             var team = await repo.GetByIdAsync<Team>(teamId);
             var teamCoach = await repo.GetByIdAsync<Coach>(model.CoachId ?? 0);
@@ -153,8 +157,28 @@ namespace FantasyBasketballLeague.Core.Services
             return result;
         }
 
-        public async Task GetByIdAsync(int teamId)
-         => await repo.GetByIdAsync<Team>(teamId);
+        public async Task<TeamViewModel> GetByIdAsync(int teamId)
+        {
+            var team = await repo.All<Team>()
+                .Where(t => t.Id == teamId)
+                .Include(c => c.Coach)
+                .Include(l => l.League)
+                .Include(bp => bp.Players)
+                .Select(t => new TeamViewModel()
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    League = t.League.Name ?? "No league assigned",
+                    LeagueId = t.LeagueId,
+                    LogoUrl = t.LogoUrl,
+                    CoachId = t.CoachId.HasValue ? t.CoachId : null,
+                    CoachName = $"{t.Coach.FirstName[0]}.{t.Coach.LastName}" ?? "No coach assigned",
+                    OpenPositions = t.OpenPositions - t.Players.Count(),
+                })
+                .FirstOrDefaultAsync();
+
+            return team;
+        }
 
         public async Task<bool> TeamExists(string teamName)
         => await repo.AllReadonly<Team>().AnyAsync(t => t.Name == teamName);

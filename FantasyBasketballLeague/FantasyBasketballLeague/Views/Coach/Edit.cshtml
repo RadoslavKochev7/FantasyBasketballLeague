@@ -12,12 +12,12 @@
             <form asp-action="Edit" method="post">
                 <div class="mb-3">
                     <label asp-for="@Model.FirstName" class="form-label">First Name</label>
-                    <input asp-for="@Model.FirstName" class="form-control" aria-required="true" />
+                    <input asp-for="@Model.FirstName" class="form-control" aria-required="false" />
                     <span asp-validation-for="FirstName" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label asp-for="@Model.LastName" class="form-label">Last Name</label>
-                    <input asp-for="@Model.LastName" class="form-control" aria-required="true" />
+                    <input asp-for="@Model.LastName" class="form-control" aria-required="false" />
                     <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
