@@ -145,12 +145,14 @@ namespace FantasyBasketballLeague.Controllers
             return View(model);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Assign(CoachAssignToTeamModel model, int id)
         {
             var coach = await coachService.GetByIdAsync(id);
 
             if (await CoachExists(id) == false)
             {
+                notyfService.Warning($"There's no coach with id {id}");
                 return RedirectToAction(nameof(All));
             }
 

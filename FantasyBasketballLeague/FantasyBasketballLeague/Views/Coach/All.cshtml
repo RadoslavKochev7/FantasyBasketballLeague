@@ -11,12 +11,12 @@
     @foreach (var coach in Model)
     {
         <div class="card col-4" style="width: 20rem; ">
-            <img class="card-img-top" style="width: 18rem;height:25rem"
+            <img class="card-img-top" style="width: 15rem;height:18rem; margin:auto;"
              src="@coach.ImageUrl" alt="Team logo Image">
             <div class="card-body">
 
                 <h5 class="card-title mt-1">@($"{coach.FirstName} {coach.LastName}")</h5>
-                <p class="mb-0">Team: @coach.Team</p>
+                <p class="mb-0">Team: @(coach.Team ?? "Free agent")</p>
             </div>
 
             <form class="input-group-sm" asp-controller="Coach" asp-action="All">

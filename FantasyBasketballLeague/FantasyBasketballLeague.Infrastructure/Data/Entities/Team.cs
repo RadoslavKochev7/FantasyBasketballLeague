@@ -53,6 +53,7 @@ namespace FantasyBasketballLeague.Infrastructure.Data.Entities
         [Required]
         public string LogoUrl { get; set; } = null!;
 
+        public bool IsActive { get; set; } = true;
         /// <summary>
         /// List of all players in the team.
         /// </summary>

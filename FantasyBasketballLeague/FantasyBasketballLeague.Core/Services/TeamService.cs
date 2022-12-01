@@ -46,7 +46,7 @@ namespace FantasyBasketballLeague.Core.Services
 
             if (team != null)
             {
-                //team.IsActive = false;
+                team.IsActive = false;
             }
 
             await repo.SaveChangesAsync();
@@ -58,16 +58,19 @@ namespace FantasyBasketballLeague.Core.Services
             var teamCoach = await repo.GetByIdAsync<Coach>(model.CoachId ?? 0);
             var teamLeague = await repo.GetByIdAsync<League>(model.LeagueId ?? 0);
 
-            if (teamId == model.Id)
+            if (teamCoach == null && team.CoachId != 0)
             {
-                team.Name = model.Name;
-                team.LogoUrl = model.LogoUrl;
-                team.OpenPositions = model.OpenPositions;
-                team.CoachId = model.CoachId;
-                team.LeagueId = model.LeagueId;
-                team.Coach = teamCoach ?? null;
-                team.League = teamLeague ?? null;
+                var coach = await repo.GetByIdAsync<Coach>(team.CoachId ?? 0);
+                coach.TeamId = null;
+                coach.Team = null;
             }
+           
+            team.Name = model.Name;
+            team.LogoUrl = model.LogoUrl;
+            team.LeagueId = model.LeagueId ?? null;
+            team.CoachId = model.CoachId ?? null;
+            team.Coach = teamCoach;
+            team.League = teamLeague;
 
             await repo.SaveChangesAsync();
             return teamId;
@@ -76,7 +79,7 @@ namespace FantasyBasketballLeague.Core.Services
         public async Task<IEnumerable<CoachViewModel>> GetAllCoachesAsync()
         {
             return await repo.AllReadonly<Coach>()
-                .Where(c => c.TeamId == null)
+                .Where(c => c.TeamId == null && c.IsActive)
                 .Select(c => new CoachViewModel()
                 {
                     Id = c.Id,
@@ -100,17 +103,18 @@ namespace FantasyBasketballLeague.Core.Services
         public async Task<IEnumerable<TeamViewModel>> GetAllTeamsAsync()
         {
             var teams = await repo.AllReadonly<Team>()
+             .Where(t => t.IsActive)
              .Include(t => t.Coach)
              .Include(t => t.League)
              .Select(t => new TeamViewModel()
              {
                  Id = t.Id,
                  Name = t.Name,
-                 League = t.League.Name ?? "No league assigned",
+                 League = t.League.Name,
                  LeagueId = t.LeagueId,
                  LogoUrl = t.LogoUrl,
                  CoachId = t.CoachId.HasValue ? t.CoachId : null,
-                 CoachName = $"{t.Coach.FirstName[0]}.{t.Coach.LastName}" ?? "No coach assigned",
+                 CoachName = $"{t.Coach.FirstName} {t.Coach.LastName}" ?? "No coach assigned",
                  OpenPositions = t.OpenPositions - t.Players.Count()
              })
              .ToListAsync();

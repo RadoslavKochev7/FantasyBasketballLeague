@@ -32,6 +32,19 @@ namespace FantasyBasketballLeague.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var team = await teamService.GetByIdAsync(id);
+
+            if (team == null)
+            {
+                return RedirectToAction(nameof(All));
+            }
+
+            return View(team);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             var model = new TeamAddModel()
@@ -95,7 +108,6 @@ namespace FantasyBasketballLeague.Controllers
             {
                 Id = id,
                 Name = team.Name,
-                OpenPositions = team.OpenPositions,
                 LogoUrl = team.LogoUrl,
                 Coach = team.CoachName,
                 CoachId = team.CoachId,
@@ -125,7 +137,7 @@ namespace FantasyBasketballLeague.Controllers
 
                 await teamService.Edit(id, model);
             }
-            return RedirectToAction(nameof(All), new { model.Id });
+            return RedirectToAction(nameof(All), new { id });
         }
 
 
