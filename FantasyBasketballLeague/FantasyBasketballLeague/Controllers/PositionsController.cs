@@ -1,14 +1,11 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using FantasyBasketballLeague.Core.Contracts;
 using FantasyBasketballLeague.Core.Models.Position;
-using FantasyBasketballLeague.Core.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FantasyBasketballLeague.Controllers
 {
-    [Authorize]
-    public class PositionsController : Controller
+    public class PositionsController : BaseController
     {
         private readonly IPositionService positionService;
         private readonly INotyfService notyfService;

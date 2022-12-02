@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FantasyBasketballLeague.Controllers
 {
-    [Authorize]
-    public class LeaguesController : Controller
+    public class LeaguesController : BaseController
     {
         private readonly ILeagueService leagueService;
         private readonly INotyfService notyfService;
@@ -114,6 +113,7 @@ namespace FantasyBasketballLeague.Controllers
             {
                 throw new ArgumentNullException($"There's no league with Id {id}");
             }
+
             if (league.Teams.Any())
             {
                 notyfService.Success($"League - {league.Name} cannot be deleted.There are {league.Teams.Count()} to be removed first.");

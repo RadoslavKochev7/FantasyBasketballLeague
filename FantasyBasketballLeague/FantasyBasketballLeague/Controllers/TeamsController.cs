@@ -1,17 +1,12 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using FantasyBasketballLeague.Core.Contracts;
-using FantasyBasketballLeague.Core.Models.BasketballPlayer;
 using FantasyBasketballLeague.Core.Models.Teams;
-using FantasyBasketballLeague.Core.Models.UserTeams;
-using FantasyBasketballLeague.Core.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace FantasyBasketballLeague.Controllers
 {
-    [Authorize]
-    public class TeamsController : Controller
+    public class TeamsController : BaseController
     {
         private readonly ITeamService teamService;
         private readonly INotyfService notyfService;
@@ -38,6 +33,7 @@ namespace FantasyBasketballLeague.Controllers
 
             if (team == null)
             {
+                notyfService.Warning($"There's no team with Id {id}");
                 return RedirectToAction(nameof(All));
             }
 

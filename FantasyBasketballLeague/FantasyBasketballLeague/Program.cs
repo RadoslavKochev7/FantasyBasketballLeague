@@ -2,6 +2,7 @@ using AspNetCoreHero.ToastNotification.Extensions;
 using FantasyBasketballLeague.Extensions;
 using FantasyBasketballLeague.Infrastructure.Data;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +20,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireUppercase = false; 
     options.Password.RequireDigit = false;
 })
-    //.AddRoles()
+    //.AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<FantasyLeagueDbContext>();
 
 builder.Services.AddControllersWithViews();

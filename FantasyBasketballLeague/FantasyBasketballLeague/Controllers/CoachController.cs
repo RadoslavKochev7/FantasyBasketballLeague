@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FantasyBasketballLeague.Controllers
 {
-    [Authorize]
-    public class CoachController : Controller
+    public class CoachController : BaseController
     {
         private readonly ICoachService coachService;
         private readonly INotyfService notyfService;

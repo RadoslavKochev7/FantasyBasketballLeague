@@ -1,16 +1,12 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using FantasyBasketballLeague.Core.Contracts;
 using FantasyBasketballLeague.Core.Models.BasketballPlayer;
-using FantasyBasketballLeague.Core.Models.Coach;
-using FantasyBasketballLeague.Core.Services;
-using FantasyBasketballLeague.Infrastructure.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FantasyBasketballLeague.Controllers
 {
-    [Authorize]
-    public class BasketballPlayerController : Controller
+    public class BasketballPlayerController : BaseController
     {
         private readonly IPlayerService playerService;
         private readonly IPositionService positionService;
@@ -148,7 +144,8 @@ namespace FantasyBasketballLeague.Controllers
 
                 await playerService.Edit(id, model);
             }
-                return RedirectToAction(nameof(Details), new { model.Id });
+
+            return RedirectToAction(nameof(Details), new { model.Id });
         }
 
 

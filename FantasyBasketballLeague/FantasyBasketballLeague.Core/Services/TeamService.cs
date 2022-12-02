@@ -110,11 +110,11 @@ namespace FantasyBasketballLeague.Core.Services
              {
                  Id = t.Id,
                  Name = t.Name,
-                 League = t.League.Name,
+                 League = t.League != null ? t.League.Name : "No league joined",
                  LeagueId = t.LeagueId,
                  LogoUrl = t.LogoUrl,
                  CoachId = t.CoachId.HasValue ? t.CoachId : null,
-                 CoachName = $"{t.Coach.FirstName} {t.Coach.LastName}" ?? "No coach assigned",
+                 CoachName = t.Coach != null ? $"{t.Coach.FirstName} {t.Coach.LastName}" : "No coach assigned",
                  OpenPositions = t.OpenPositions - t.Players.Count()
              })
              .ToListAsync();
@@ -172,11 +172,11 @@ namespace FantasyBasketballLeague.Core.Services
                 {
                     Id = t.Id,
                     Name = t.Name,
-                    League = t.League.Name ?? "No league assigned",
+                    League = t.League != null ? t.League.Name : "No league joined",
                     LeagueId = t.LeagueId,
                     LogoUrl = t.LogoUrl,
                     CoachId = t.CoachId.HasValue ? t.CoachId : null,
-                    CoachName = $"{t.Coach.FirstName[0]}.{t.Coach.LastName}" ?? "No coach assigned",
+                    CoachName = t.Coach != null ? $"{t.Coach.FirstName} {t.Coach.LastName}" : "No coach assigned",
                     OpenPositions = t.OpenPositions - t.Players.Count(),
                 })
                 .FirstOrDefaultAsync();
