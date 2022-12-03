@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyBasketballLeague.Core.Services
 {
-    [Authorize]
     public class LeagueService : ILeagueService
     {
         private readonly IRepository repo;

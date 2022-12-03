@@ -5,6 +5,8 @@ using FantasyBasketballLeague.Models.User.Register;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using static FantasyBasketballLeague.Infrastructure.Data.Constants.ValidationConstants;
 
 namespace FantasyBasketballLeague.Controllers
 {
@@ -112,6 +114,26 @@ namespace FantasyBasketballLeague.Controllers
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> BecomeAdmin()
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var user = await userManager.FindByIdAsync(userId);
+           
+            if (user != null)
+            {
+                if (!await userManager.IsInRoleAsync(user, Administrator))
+                {
+                    await userManager.AddToRoleAsync(user, Administrator);
+                    notyfService.Success($"Congratulations, you are now an {Administrator}!");
+                    return RedirectToAction("Index", "Home");
+                }
+
+                notyfService.Information($"You are already an {Administrator}!");
+            }
 
             return RedirectToAction("Index", "Home");
         }

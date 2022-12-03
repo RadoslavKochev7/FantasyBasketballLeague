@@ -138,33 +138,33 @@ namespace FantasyBasketballLeague.Controllers
 
             var model = new CoachAssignToTeamModel()
             {
-                Teams = await teamService.GetAllTeamsAsync()
+                Teams = await teamService.GetAllTeamsWithoutCoaches()
             };
 
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Assign(CoachAssignToTeamModel model, int id)
-        {
-            var coach = await coachService.GetByIdAsync(id);
+        //[HttpPost]
+        //public async Task<IActionResult> Assign(CoachAssignToTeamModel model, int id)
+        //{
+        //    var coach = await coachService.GetByIdAsync(id);
 
-            if (await CoachExists(id) == false)
-            {
-                notyfService.Warning($"There's no coach with id {id}");
-                return RedirectToAction(nameof(All));
-            }
+        //    if (await CoachExists(id) == false)
+        //    {
+        //        notyfService.Warning($"There's no coach with id {id}");
+        //        return RedirectToAction(nameof(All));
+        //    }
 
-            if (coach.Team != null)
-            {
-                notyfService.Warning($"Coach {coach.FirstName} {coach.LastName} already has a team assigned!");
-                return RedirectToAction(nameof(All));
-            }
+        //    if (coach.Team != null)
+        //    {
+        //        notyfService.Warning($"Coach {coach.FirstName} {coach.LastName} already has a team assigned!");
+        //        return RedirectToAction(nameof(All));
+        //    }
 
-            var team = model.Teams.FirstOrDefault();
+        //    var team = model.Teams.FirstOrDefault();
 
-            return RedirectToAction(nameof(All));
-        }
+        //    return RedirectToAction(nameof(All));
+        //}
 
         private async Task<bool> CoachExists(int id)
         {

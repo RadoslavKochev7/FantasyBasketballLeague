@@ -1,5 +1,4 @@
-﻿using FantasyBasketballLeague.Core.Models.Coach;
-using FantasyBasketballLeague.Core.Models.Position;
+﻿using FantasyBasketballLeague.Core.Models.Position;
 using FantasyBasketballLeague.Core.Models.Teams;
 using System.ComponentModel.DataAnnotations;
 using static FantasyBasketballLeague.Infrastructure.Data.Constants.ValidationConstants;

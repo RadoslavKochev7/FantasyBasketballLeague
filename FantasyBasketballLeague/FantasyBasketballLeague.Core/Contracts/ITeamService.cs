@@ -7,6 +7,7 @@ namespace FantasyBasketballLeague.Core.Contracts
     public interface ITeamService
     {
         Task<IEnumerable<TeamViewModel>> GetAllTeamsAsync();
+        Task<IEnumerable<TeamViewModel>> GetAllTeamsWithoutCoaches();
         Task<IEnumerable<CoachViewModel>> GetAllCoachesAsync();
         Task<IEnumerable<LeagueViewModel>> GetAllLeaguesAsync();
         Task<IEnumerable<MyTeamViewModel>> GetMyTeams(string userId);

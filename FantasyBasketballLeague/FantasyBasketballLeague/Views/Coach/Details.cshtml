@@ -16,7 +16,7 @@
                 <h3 class="card-title text-center">Coach</h3>
                 <p class="card-text"><span class="fw-bold">First Name: </span>@Model.FirstName</p>
                 <p class="card-text"><span class="fw-bold">Last Name: </span>@Model.LastName</p>
-                <p class="card-text"><span class="fw-bold">Team: </span>@Model.Team</p>
+                <p class="card-text"><span class="fw-bold">Team: </span>@(Model.Team ?? "Free Agent")</p>
                 <table>
                     <tr class="actions">
                         <th><span class="fw-bold">Actions:</span></th>

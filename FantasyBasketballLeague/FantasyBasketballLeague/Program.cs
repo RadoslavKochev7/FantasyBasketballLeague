@@ -20,7 +20,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireUppercase = false; 
     options.Password.RequireDigit = false;
 })
-    //.AddRoles<IdentityRole>()
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<FantasyLeagueDbContext>();
 
 builder.Services.AddControllersWithViews();

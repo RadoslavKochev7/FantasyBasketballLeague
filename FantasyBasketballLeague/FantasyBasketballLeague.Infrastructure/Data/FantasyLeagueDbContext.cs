@@ -30,6 +30,7 @@ public class FantasyLeagueDbContext : IdentityDbContext<ApplicationUser>
         builder.ApplyConfiguration(new PositionConfiguration());
         builder.ApplyConfiguration(new TeamConfiguration());
         builder.ApplyConfiguration(new PlayerConfiguration());
+        builder.ApplyConfiguration(new IdentityRoleConfiguration());
 
         base.OnModelCreating(builder);
     }

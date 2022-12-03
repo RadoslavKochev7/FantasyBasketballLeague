@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyBasketballLeague.Core.Services
 {
-    [Authorize]
     public class TeamService : ITeamService
     {
         private readonly IRepository repo;
@@ -186,5 +185,27 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<bool> TeamExists(string teamName)
         => await repo.AllReadonly<Team>().AnyAsync(t => t.Name == teamName);
+
+        public async Task<IEnumerable<TeamViewModel>> GetAllTeamsWithoutCoaches()
+        {
+            var teams = await repo.AllReadonly<Team>()
+             .Where(t => t.IsActive && t.CoachId == null)
+             .Include(t => t.Coach)
+             .Include(t => t.League)
+             .Select(t => new TeamViewModel()
+             {
+                 Id = t.Id,
+                 Name = t.Name,
+                 League = t.League != null ? t.League.Name : "No league joined",
+                 LeagueId = t.LeagueId,
+                 LogoUrl = t.LogoUrl,
+                 CoachId = t.CoachId.HasValue ? t.CoachId : null,
+                 CoachName = "No coach assigned",
+                 OpenPositions = t.OpenPositions - t.Players.Count()
+             })
+             .ToListAsync();
+
+            return teams;
+        }
     }
 }

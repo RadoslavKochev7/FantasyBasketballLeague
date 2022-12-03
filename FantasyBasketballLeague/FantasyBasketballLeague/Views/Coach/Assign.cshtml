@@ -1,0 +1,42 @@
+﻿@model CoachAssignToTeamModel
+
+@{
+    ViewBag.Title = "Teams without coaches";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="text-center row">
+    @if (!Model.Teams.Any())
+    {
+        <h3>There are no teams looking for a coach.</h3>
+    }
+    else
+    {
+        @foreach (var team in Model.Teams)
+        {
+            <div class="card col-4" style="width: 20rem; ">
+                <img class="card-img-top" style="width: 18rem; height:20rem"
+             src="@team.LogoUrl" alt="Team logo Image">
+                <div class="card-body">
+
+                    <h5 class="card-title mt-1">@team.Name</h5>
+                    <p class="mb-0">Open positions: @team.OpenPositions</p>
+                    <p class="mb-0">League: @(team.League ?? "No league joined")</p>
+                    <p class="mb-0">Coach: @(team.CoachName ?? "No coach assigned")</p>
+                </div>
+
+                <form class="input-group-sm" asp-controller="Teams" asp-action="All">
+                </form>
+                <span class="fw-bold">Actions: </span>
+                <a asp-controller="Teams" asp-action="Details" asp-route-id="@team.Id" class="btn btn-success mb-2">View</a>
+                <span></span>
+                <a asp-controller="Teams" asp-action="Edit" asp-route-id="@team.Id" class="btn btn-primary mb-2">Edit</a>
+                <span></span>
+                <a asp-controller="Teams" asp-action="Delete" asp-route-id="@team.Id" class="btn btn-danger mb-2">Delete</a>
+
+            </div>
+        }
+    }
+</div>

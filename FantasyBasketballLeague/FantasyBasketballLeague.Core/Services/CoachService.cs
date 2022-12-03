@@ -4,13 +4,11 @@ using FantasyBasketballLeague.Infrastructure.Data.Common;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace FantasyBasketballLeague.Core.Services
 {
 #nullable disable
 
-    [Authorize]
     public class CoachService : ICoachService
     {
         private readonly IRepository repo;
@@ -34,19 +32,6 @@ namespace FantasyBasketballLeague.Core.Services
             await repo.SaveChangesAsync();
 
             return coach.Id;
-        }
-
-        public async Task AddToTeam(int coachId, int teamId)
-        {
-            var coach = await repo.GetByIdAsync<Coach>(coachId);
-            var team = await repo.GetByIdAsync<Team>(teamId);
-
-            if (coach != null && team != null)
-            {
-                team.Coach = coach;
-                await repo.SaveChangesAsync();
-            }
-
         }
 
         public async Task DeleteAsync(int coachId)
@@ -77,7 +62,6 @@ namespace FantasyBasketballLeague.Core.Services
             return model.Id;
         }
 
-        [AllowAnonymous]
         public async Task<IEnumerable<CoachDetailsModel>> GetAllCoachesAsync()
         {
             return await repo.AllReadonly<Coach>()
@@ -129,14 +113,18 @@ namespace FantasyBasketballLeague.Core.Services
                 .ToListAsync();
         }
 
-        public async Task RemoveFromTeam(int teamId)
+        public async Task AddToTeam(int coachId, int teamId)
         {
+            var coach = await repo.GetByIdAsync<Coach>(coachId);
             var team = await repo.GetByIdAsync<Team>(teamId);
 
-            if (team != null && team.Coach != null)
+            if (coach != null && team != null)
             {
-                team.Coach = null;
-                await repo.SaveChangesAsync();
+                if (team.CoachId == null)
+                {
+                    team.CoachId = coachId;
+                    await repo.SaveChangesAsync();
+                }
             }
         }
     }

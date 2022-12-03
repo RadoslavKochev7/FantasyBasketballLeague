@@ -41,5 +41,8 @@
 
         public const int InitialsMaxLength = 10;
         public const int InitialsMinLength = 1;
+
+        // Identity Role
+        public const string Administrator = "Administrator";
     }
 }
