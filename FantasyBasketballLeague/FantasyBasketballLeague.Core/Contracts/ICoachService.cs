@@ -10,5 +10,6 @@ namespace FantasyBasketballLeague.Core.Contracts
         Task<CoachDetailsModel> GetByIdAsync(int coachId);
         Task<IEnumerable<CoachDetailsModel>> GetAllCoachesAsync();
         Task<IEnumerable<CoachDetailsModel>> AvailableCoaches();
+        Task<bool> AssignToTeam(int coachId, int teamId);
     }
 }

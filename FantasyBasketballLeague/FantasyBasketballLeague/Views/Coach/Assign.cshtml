@@ -16,27 +16,26 @@
     {
         @foreach (var team in Model.Teams)
         {
-            <div class="card col-4" style="width: 20rem; ">
-                <img class="card-img-top" style="width: 18rem; height:20rem"
-             src="@team.LogoUrl" alt="Team logo Image">
-                <div class="card-body">
+            <form asp-action="Assign" method="post">
+                <div class="card col-4" style="width: 20rem; ">
+                    <img class="card-img-top" style="width: 18rem; height:20rem"
+                 src="@team.LogoUrl" alt="Team logo Image">
+                    <div class="card-body">
 
-                    <h5 class="card-title mt-1">@team.Name</h5>
-                    <p class="mb-0">Open positions: @team.OpenPositions</p>
-                    <p class="mb-0">League: @(team.League ?? "No league joined")</p>
-                    <p class="mb-0">Coach: @(team.CoachName ?? "No coach assigned")</p>
+                        <h5 class="card-title mt-1">@team.Name</h5>
+                        <p class="mb-0">Open positions: @team.OpenPositions</p>
+                        <p class="mb-0">League: @(team.League ?? "No league joined")</p>
+                        <p class="mb-0">Coach: @(team.CoachName ?? "No coach assigned")</p>
+                    </div>
+                    <span>
+                        <input class="btn btn-success" type="submit" value="Assign" />
+                    </span>
+                    @*<a asp-controller="Coach" asp-action="Assign" asp-route-id="@team.Id" class="btn btn-success mb-2">Assign</a>*@
+
                 </div>
+            </form>
 
-                <form class="input-group-sm" asp-controller="Teams" asp-action="All">
-                </form>
-                <span class="fw-bold">Actions: </span>
-                <a asp-controller="Teams" asp-action="Details" asp-route-id="@team.Id" class="btn btn-success mb-2">View</a>
-                <span></span>
-                <a asp-controller="Teams" asp-action="Edit" asp-route-id="@team.Id" class="btn btn-primary mb-2">Edit</a>
-                <span></span>
-                <a asp-controller="Teams" asp-action="Delete" asp-route-id="@team.Id" class="btn btn-danger mb-2">Delete</a>
-
-            </div>
+            @Model.TeamId = team.Id;
         }
     }
 </div>

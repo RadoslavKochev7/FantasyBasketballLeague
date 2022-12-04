@@ -2,7 +2,6 @@
 using FantasyBasketballLeague.Core.Models.Coach;
 using FantasyBasketballLeague.Infrastructure.Data.Common;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace FantasyBasketballLeague.Core.Services
@@ -113,19 +112,23 @@ namespace FantasyBasketballLeague.Core.Services
                 .ToListAsync();
         }
 
-        public async Task AddToTeam(int coachId, int teamId)
+        public async Task<bool> AssignToTeam(int coachId, int teamId)
         {
             var coach = await repo.GetByIdAsync<Coach>(coachId);
             var team = await repo.GetByIdAsync<Team>(teamId);
+            bool isAdded = false;
 
             if (coach != null && team != null)
             {
                 if (team.CoachId == null)
                 {
                     team.CoachId = coachId;
+                    isAdded = true;
                     await repo.SaveChangesAsync();
                 }
             }
+
+            return isAdded;
         }
     }
 }
