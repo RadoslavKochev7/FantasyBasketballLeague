@@ -26,6 +26,10 @@
                         <a asp-controller="Coach" asp-action="Details" asp-route-id="@coach.Id" class="btn btn-success">View</a>
                         <a asp-controller="Coach" asp-action="Edit" asp-route-id="@coach.Id" class="btn btn-primary">Edit</a>
                         <a asp-controller="Coach" asp-action="Delete" asp-route-id="@coach.Id" class="btn btn-danger">Delete</a>
+                        @if (coach.Team == null)
+                        {
+                            <a asp-controller="Coach" asp-action="Assign" asp-route-id="@coach.Id" class="btn btn-warning">Assign to Team</a>
+                        }
                     </td>
                 </tr>
             </table>

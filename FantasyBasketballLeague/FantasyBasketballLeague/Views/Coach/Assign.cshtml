@@ -17,8 +17,8 @@
         @foreach (var team in Model.Teams)
         {
             <form asp-action="Assign" method="post">
-                <div class="card col-4" style="width: 20rem; ">
-                    <img class="card-img-top" style="width: 18rem; height:20rem"
+                <div class="card col-4" style="width: 20rem;">
+                    <img class="card-img-top" style="width: 18rem; height:20rem; margin:auto;"
                  src="@team.LogoUrl" alt="Team logo Image">
                     <div class="card-body">
 
@@ -27,17 +27,12 @@
                         <p class="mb-0">League: @(team.League ?? "No league joined")</p>
                         <p class="mb-0">Coach: @(team.CoachName ?? "No coach assigned")</p>
                     </div>
+
                     <span>
-                        @*<label for="@Model.TeamId">Assign</label>
-                        <input class="btn btn-success" type="number" name="TeamId" />
-                        <option value=false>No</option>*@
                         <button class="btn btn-success" name="TeamId" type="submit" value="@team.Id">Assign</button>
                     </span>
-                    @*<a asp-controller="Coach" asp-action="Assign" asp-route-id="@team.Id" class="btn btn-success mb-2">Assign Coach</a>*@
                 </div>
             </form>
         }
-
-        
     }
 </div>

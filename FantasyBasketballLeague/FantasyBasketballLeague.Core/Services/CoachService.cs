@@ -123,6 +123,7 @@ namespace FantasyBasketballLeague.Core.Services
                 if (team.CoachId == null)
                 {
                     coach.TeamId = teamId;
+                    team.CoachId = coach.Id;
                     isAdded = true;
                     await repo.SaveChangesAsync();
                 }

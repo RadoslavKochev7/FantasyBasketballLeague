@@ -57,7 +57,7 @@ namespace FantasyBasketballLeague.Core.Services
             var teamCoach = await repo.GetByIdAsync<Coach>(model.CoachId ?? 0);
             var teamLeague = await repo.GetByIdAsync<League>(model.LeagueId ?? 0);
 
-            if (teamCoach == null && team.CoachId != 0)
+            if (teamCoach == null && team.CoachId != null)
             {
                 var coach = await repo.GetByIdAsync<Coach>(team.CoachId ?? 0);
                 coach.TeamId = null;
@@ -66,8 +66,8 @@ namespace FantasyBasketballLeague.Core.Services
            
             team.Name = model.Name;
             team.LogoUrl = model.LogoUrl;
-            team.LeagueId = model.LeagueId ?? null;
-            team.CoachId = model.CoachId ?? null;
+            team.LeagueId = model.LeagueId;
+            team.CoachId = model.CoachId;
             team.Coach = teamCoach;
             team.League = teamLeague;
 
@@ -188,7 +188,7 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<IEnumerable<TeamViewModel>> GetAllTeamsWithoutCoaches()
         {
-            var teams = await repo.AllReadonly<Team>()
+            var teams = await repo.All<Team>()
              .Where(t => t.IsActive && t.CoachId == null)
              .Include(t => t.Coach)
              .Include(t => t.League)
