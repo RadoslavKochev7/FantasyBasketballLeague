@@ -123,8 +123,6 @@ namespace FantasyBasketballLeague.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    ModelState.AddModelError("", "Wrong data.");
-
                     model.Coaches = await teamService.GetAllCoachesAsync();
                     model.Leagues = await teamService.GetAllLeaguesAsync();
 

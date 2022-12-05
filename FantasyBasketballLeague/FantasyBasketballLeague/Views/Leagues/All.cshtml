@@ -10,7 +10,7 @@
 <div class="text-center row">
     @foreach (var league in Model)
     {
-        <div class="card col-4" style="width: 20rem; ">
+        <div class="card col-4" style="width: 20rem; margin:auto;">
             <div class="card-body">
 
                 <h5 class="card-title mt-1">@($"{league.Name}")</h5>
@@ -19,13 +19,17 @@
 
             <form class="input-group-sm" asp-controller="League" asp-action="All">
             </form>
-            <span class="fw-bold">Actions: </span>
-            <a asp-controller="Leagues" asp-action="Details" asp-route-id="@league.Id" class="btn btn-success mb-2">View</a>
-            <span></span>
-            <a asp-controller="Leagues" asp-action="Edit" asp-route-id="@league.Id" class="btn btn-primary mb-2">Edit</a>
-                <span></span>
-            <a asp-controller="Leagues" asp-action="Delete" asp-route-id="@league.Id" class="btn btn-danger mb-2">Delete</a>
-        </div>
+            <table>
+                <tr class="actions">
+                    <th><span class="fw-bold">Actions:</span></th>
+                    <td>
+                        <a asp-controller="Leagues" asp-action="Details" asp-route-id="@league.Id" class="btn btn-success">View</a>
+                        <a asp-controller="Leagues" asp-action="Edit" asp-route-id="@league.Id" class="btn btn-primary">Edit</a>
+                        <a asp-controller="Leagues" asp-action="Delete" asp-route-id="@league.Id" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            </table>
+            </div>
     }
 </div>
     

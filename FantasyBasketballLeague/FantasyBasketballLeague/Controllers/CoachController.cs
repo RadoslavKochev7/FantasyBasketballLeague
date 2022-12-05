@@ -134,8 +134,6 @@ namespace FantasyBasketballLeague.Controllers
                 return RedirectToAction(nameof(All));
             }
 
-            var coach = await coachService.GetByIdAsync(id);
-
             var model = new CoachAssignToTeamModel()
             {
                 Teams = await teamService.GetAllTeamsWithoutCoaches()
@@ -161,7 +159,12 @@ namespace FantasyBasketballLeague.Controllers
                 return RedirectToAction(nameof(All));
             }
 
-            var isAdded = coachService.AssignToTeam(id, model.TeamId);
+            var isAdded = await coachService.AssignToTeam(id, model.TeamId);
+            if (isAdded)
+            {
+                var team = await teamService.GetByIdAsync(model.TeamId);
+                notyfService.Success($"Coach {coach.FirstName} {coach.LastName} signed up with {team.Name}");
+            }
 
             return RedirectToAction(nameof(All));
         }
