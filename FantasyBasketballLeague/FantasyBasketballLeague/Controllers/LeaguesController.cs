@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using FantasyBasketballLeague.Core.Contracts;
 using FantasyBasketballLeague.Core.Models.League;
+using FantasyBasketballLeague.Infrastructure.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FantasyBasketballLeague.Controllers
@@ -30,10 +31,10 @@ namespace FantasyBasketballLeague.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var Id = await leagueService.AddAsync(model);
+            var id = await leagueService.AddAsync(model);
             notyfService.Success($"League {model.Name} is created.");
 
-            return RedirectToAction(nameof(All));
+            return RedirectToAction(nameof(Details) , new {id});
         }
 
         public async Task<IActionResult> All()
@@ -121,6 +122,28 @@ namespace FantasyBasketballLeague.Controllers
 
             await leagueService.DeleteAsync(id);
             notyfService.Success($"League - {league.Name} was successfully deleted!");
+
+            return RedirectToAction(nameof(All));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddTeams(int id)
+        {
+            var model = await leagueService.GetAllTeamsWithoutLeague();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddTeams(int id, IEnumerable<LeagueAddTeamsModel> model)
+        {
+            if (model == null)
+                notyfService.Warning($"There are no teams without league");
+
+            var teamIds = model.Select(x => x.TeamId).ToArray();
+            var result = await leagueService.AddTeams(teamIds, id);
+            var league = await leagueService.GetByIdAsync(id);
+            notyfService.Success($"{result} teams are added to {league.Name}");
 
             return RedirectToAction(nameof(All));
         }

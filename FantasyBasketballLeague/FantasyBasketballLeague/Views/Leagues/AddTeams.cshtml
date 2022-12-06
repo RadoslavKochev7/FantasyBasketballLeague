@@ -1,0 +1,73 @@
+﻿@model IEnumerable<LeagueAddTeamsModel>
+
+@{
+    ViewBag.Title = "List of teams without leagues";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+@*<div class="text-center row">
+    <form asp-action="AddTeams" method="post">
+        @if (!Model.Any())
+        {
+            <h2>There are no teams without league.</h2>
+            <p>Create one via the button below '&#x2B07'</p>
+            <input class="btn btn-success" value="Create Team" onclick="location.href='@Url.Action("Create","Teams")';" />
+        }
+        else
+        {
+            <table>
+                <select class="select" multiple data-mdb-placeholder="Choose a team" multiple;>
+
+                    @foreach (var team in Model)
+                    {
+                        <option value="@team.TeamId">@team.TeamName</option>
+                    }
+                </select>
+            </table>
+
+            <span>
+                <button class="btn btn-success" name="TeamId" type="submit" value="@Model.Select(t => t.TeamId)">Save</button>
+            </span>
+        }
+    </form>
+</div>*@
+<div class="text-center row">
+    <div class="row">
+        <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+            <form asp-action="AddTeams" method="post">
+                <div class="mb-4">
+                    <label asp-for="@Model." class="form-label">Teams</label>
+                    @if (!Model.Any())
+                    {
+                        <h2>There are no teams without league.</h2>
+                        <p>Create one via the button below '&#x2B07'</p>
+                        <input class="btn btn-success" value="Create Team" onclick="location.href='@Url.Action("Create","Teams")';" />
+                    }
+                    else
+                    {
+                        <table>
+                            <select class="select" multiple data-mdb-placeholder="Choose a team" multiple;>
+
+                                @foreach (var team in Model)
+                                {
+                                    <option value="@team.TeamId">@team.TeamName</option>
+                                }
+                            </select>
+                        </table>
+
+                        <span>
+                            <button class="btn btn-success" name="TeamId" type="submit" value="@Model.Select(t => t.TeamId)">Save</button>
+                        </span>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    }

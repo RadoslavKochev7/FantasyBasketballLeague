@@ -14,6 +14,17 @@
                 <h3 class="card-title text-center">League</h3>
                 <p class="card-text"><span class="fw-bold">Name: </span>@Model.Name</p>
                 <p class="card-text"><span class="fw-bold">Teams: </span>@Model.Count</p>
+                <table>
+                    <tr class="actions">
+                        <th><span class="fw-bold">Actions:</span></th>
+
+                        <td>
+                            <a asp-controller="Leagues" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                            <a asp-controller="Leagues" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+                            @*<a asp-controller="Leagues" asp-action="Add" asp-route-id="@Model.Id" class="btn btn-danger">AddTeams</a>*@
+                        </td>
+                    </tr>
+                </table>
                 <div>
                     @if (!Model.Teams.Any())
                     {

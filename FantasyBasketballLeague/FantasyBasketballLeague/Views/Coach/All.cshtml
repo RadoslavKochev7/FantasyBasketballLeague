@@ -16,7 +16,7 @@
             <div class="card-body">
 
                 <h5 class="card-title mt-1">@($"{coach.FirstName} {coach.LastName}")</h5>
-                <p class="mb-0">Team: @(coach.Team ?? "Free agent")</p>
+                <p class="mb-0">Team: @(coach.Team ?? "No team assigned")</p>
             </div>
 
             <table>
@@ -26,9 +26,9 @@
                         <a asp-controller="Coach" asp-action="Details" asp-route-id="@coach.Id" class="btn btn-success">View</a>
                         <a asp-controller="Coach" asp-action="Edit" asp-route-id="@coach.Id" class="btn btn-primary">Edit</a>
                         <a asp-controller="Coach" asp-action="Delete" asp-route-id="@coach.Id" class="btn btn-danger">Delete</a>
-                        @if (coach.Team == null)
+                        @if (coach.TeamId == null)
                         {
-                            <a asp-controller="Coach" asp-action="Assign" asp-route-id="@coach.Id" class="btn btn-warning">Assign to Team</a>
+                            <a asp-controller="Coach" asp-action="Assign" asp-route-id="@coach.Id" class="btn btn-warning">Assign</a>
                         }
                     </td>
                 </tr>

@@ -2,7 +2,6 @@
 using FantasyBasketballLeague.Core.Models.League;
 using FantasyBasketballLeague.Infrastructure.Data.Common;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace FantasyBasketballLeague.Core.Services
@@ -20,7 +19,6 @@ namespace FantasyBasketballLeague.Core.Services
         {
             var league = new League()
             {
-                Id = model.Id,
                 Name = model.Name
             };
 
@@ -30,15 +28,25 @@ namespace FantasyBasketballLeague.Core.Services
             return league.Id;
         }
 
-        public async Task AddTeam(int teamId, int leagueId)
+        public async Task<int> AddTeams(int[] teamIds, int leagueId)
         {
+            var countAddedTeams = 0;
             var league = await repo.GetByIdAsync<League>(leagueId);
-            var team = await repo.GetByIdAsync<Team>(teamId);
 
-            if (team != null && league != null) 
-            league.Teams.Add(team);
+            if (league == null)
+            {
+                return 0;
+            }
 
-            await repo.SaveChangesAsync();
+            var teams = new List<Team>();
+            foreach (var id in teamIds)
+            {
+                var team = await repo.GetByIdAsync<Team>(id);
+                teams.Add(team);
+            }
+
+            league.Teams.ToList().AddRange(teams);
+            return countAddedTeams;
         }
 
         public async Task DeleteAsync(int leagueId)
@@ -58,7 +66,7 @@ namespace FantasyBasketballLeague.Core.Services
 
             if (leagueId == model.Id)
                 league.Name = model.Name;
-            
+
             await repo.SaveChangesAsync();
             return league.Id;
         }
@@ -85,6 +93,22 @@ namespace FantasyBasketballLeague.Core.Services
             return leagues;
         }
 
+        public async Task<IEnumerable<LeagueAddTeamsModel>> GetAllTeamsWithoutLeague()
+        {
+            var teams = await repo.AllReadonly<Team>()
+                .Where(t => t.IsActive)
+                .Where(t => t.LeagueId == null)
+                .Select(t => new LeagueAddTeamsModel()
+                {
+                    TeamId = t.Id,
+                    TeamName = t.Name
+                })
+                .OrderBy(t => t.TeamName)
+                .ToListAsync();
+
+            return teams;
+        }
+
         public async Task<LeagueViewModel> GetByIdAsync(int leagueId)
         {
             var league = await repo.All<League>()
@@ -107,7 +131,7 @@ namespace FantasyBasketballLeague.Core.Services
             var team = await repo.GetByIdAsync<Team>(teamId);
 
             if (team != null && league != null && league.Teams.Any(t => t.Id == team.Id))
-            league.Teams.Remove(team);
+                league.Teams.Remove(team);
 
             await repo.SaveChangesAsync();
         }
