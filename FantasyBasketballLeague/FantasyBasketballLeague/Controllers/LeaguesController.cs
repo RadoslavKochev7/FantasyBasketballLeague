@@ -1,7 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using FantasyBasketballLeague.Core.Contracts;
 using FantasyBasketballLeague.Core.Models.League;
-using FantasyBasketballLeague.Infrastructure.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FantasyBasketballLeague.Controllers
@@ -31,10 +30,18 @@ namespace FantasyBasketballLeague.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var id = await leagueService.AddAsync(model);
-            notyfService.Success($"League {model.Name} is created.");
+            try
+            {
+                var id = await leagueService.AddAsync(model);
+                notyfService.Success($"League {model.Name} is created.");
 
-            return RedirectToAction(nameof(Details) , new {id});
+                return RedirectToAction(nameof(Details), new { id });
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
         }
 
         public async Task<IActionResult> All()
@@ -46,88 +53,84 @@ namespace FantasyBasketballLeague.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var league = await leagueService.GetByIdAsync(id);
-
-            if (league == null)
+            try
             {
-                notyfService.Warning($"There's no league with Id {id}");
-                return RedirectToAction(nameof(All));
+                var league = await leagueService.GetByIdAsync(id);
+                var model = new LeagueViewModel()
+                {
+                    Name = league.Name,
+                };
+
+                return View(model);
             }
-
-            var model = new LeagueViewModel()
+            catch (Exception)
             {
-                Name = league.Name,
-            };
-
-            return View(model);
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(int id, LeagueViewModel model)
         {
-            if (id != model.Id)
+            try
             {
-                return RedirectToAction(nameof(All));
+                var league = await leagueService.GetByIdAsync(id);
+
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                await leagueService.Edit(id, model);
+                notyfService.Success($"League {model.Name} was successfully edited");
+
+                return RedirectToAction(nameof(Details), new { model.Id });
             }
-
-            var league = await leagueService.GetByIdAsync(id);
-
-            if (league == null)
+            catch (Exception)
             {
-                notyfService.Error($"League with Id {id} does not exist");
-                return RedirectToAction(nameof(All));
+                return RedirectToAction("Error", "Home");
             }
-
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            await leagueService.Edit(id, model);
-            notyfService.Success($"League {model.Name} was successfully edited");
-
-            return RedirectToAction(nameof(Details), new { model.Id });
         }
-
+           
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var league = await leagueService.GetByIdAsync(id);
-
-            if (league == null)
+            try
             {
-                notyfService.Error($"There's no league with Id {id}");
-                return RedirectToAction(nameof(Create));
+                var league = await leagueService.GetByIdAsync(id);
+                return View(league);
             }
-
-            return View(league);
+            catch (Exception)
+            {
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            
-            var league = await leagueService.GetByIdAsync(id);
-
-            if (league is null)
+            try
             {
-                throw new ArgumentNullException($"There's no league with Id {id}");
-            }
+                var league = await leagueService.GetByIdAsync(id);
 
-            if (league.Teams.Any())
-            {
-                notyfService.Success($"League - {league.Name} cannot be deleted.There are {league.Teams.Count()} to be removed first.");
+                if (league.Teams.Any())
+                {
+                    notyfService.Success($"League - {league.Name} cannot be deleted.There are {league.Teams.Count()} to be removed first.");
+                    return RedirectToAction(nameof(All));
+                }
+
+                await leagueService.DeleteAsync(id);
+                notyfService.Success($"League - {league.Name} was successfully deleted!");
                 return RedirectToAction(nameof(All));
             }
-
-            await leagueService.DeleteAsync(id);
-            notyfService.Success($"League - {league.Name} was successfully deleted!");
-
-            return RedirectToAction(nameof(All));
+            catch (Exception)
+            {
+                return RedirectToAction("Error", "Home");
+            }
         }
-
+       
         [HttpGet]
-        public async Task<IActionResult> AddTeams(int id)
+        public async Task<IActionResult> AddTeams()
         {
             var model = await leagueService.GetAllTeamsWithoutLeague();
 
@@ -135,15 +138,15 @@ namespace FantasyBasketballLeague.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTeams(int id, IEnumerable<LeagueAddTeamsModel> model)
+        public async Task<IActionResult> AddTeams(int id, LeagueAddTeamsModel model)
         {
             if (model == null)
                 notyfService.Warning($"There are no teams without league");
 
-            var teamIds = model.Select(x => x.TeamId).ToArray();
-            var result = await leagueService.AddTeams(teamIds, id);
-            var league = await leagueService.GetByIdAsync(id);
-            notyfService.Success($"{result} teams are added to {league.Name}");
+            //var teamIds = model.Select(x => x.TeamId).ToArray();
+            //var result = await leagueService.AddTeams(teamIds, id);
+            //var league = await leagueService.GetByIdAsync(id);
+            //notyfService.Success($"{result} teams are added to {league.Name}");
 
             return RedirectToAction(nameof(All));
         }

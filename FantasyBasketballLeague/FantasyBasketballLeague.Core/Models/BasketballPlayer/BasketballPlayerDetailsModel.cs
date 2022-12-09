@@ -12,5 +12,7 @@ namespace FantasyBasketballLeague.Core.Models.BasketballPlayer
 
         [StringLength(TeamNameMaxLength, MinimumLength = TeamNameMinLength)]
         public string Team { get; set; }
+
+        public string Experience { get; set; }
     }
 }

@@ -31,10 +31,16 @@ namespace FantasyBasketballLeague.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var Id = await positionService.AddAsync(model);
-            notyfService.Success($"Position {model.Name} - {model.Initials} is created.");
-
-            return RedirectToAction(nameof(All));
+            try
+            {
+                var Id = await positionService.AddAsync(model);
+                notyfService.Success($"Position {model.Name} - {model.Initials} is created.");
+                return RedirectToAction(nameof(All));
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         [HttpGet]
@@ -48,72 +54,74 @@ namespace FantasyBasketballLeague.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var position = await positionService.GetByIdAsync(id);
-
-            if (position == null)
+            try
             {
-                notyfService.Error($"There's no position with Id {id}");
-                return RedirectToAction(nameof(Create));
+                var position = await positionService.GetByIdAsync(id);
+                return View(position);
+
             }
-
-            return View(position);
+            catch (Exception)
+            {
+                return RedirectToAction("Error", "Home");
+            }
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var position = await positionService.GetByIdAsync(id);
-
-            if (position == null)
+            try
             {
-                notyfService.Warning($"There's no position with Id {id}");
-                return RedirectToAction(nameof(All));
+                var position = await positionService.GetByIdAsync(id);
+                var model = new PositionViewModel()
+                {
+                    Name = position.Name,
+                    Initials = position.Initials
+                };
+
+                return View(model);
             }
-
-            var model = new PositionViewModel()
+            catch (Exception)
             {
-                Name = position.Name,
-                Initials = position.Initials
-            };
 
-            return View(model);
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(int id, PositionViewModel model)
         {
-            var position = await positionService.GetByIdAsync(id);
-
-            if (position is null)
+            try
             {
-                notyfService.Warning($"There's no position with Id {id}");
-                return RedirectToAction(nameof(All));
-            }
+                var position = await positionService.GetByIdAsync(id);
 
-            if (position.Id == id)
-            {
                 await positionService.Edit(position.Id, model);
                 notyfService.Success($"Position {model.Name} was successfully edited");
-            }
 
-            return RedirectToAction(nameof(Details), new { model.Id });
+                return RedirectToAction(nameof(Details), new { model.Id });
+
+            }
+            catch (Exception)
+            {
+                notyfService.Warning("There's no such position");
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var position = await positionService.GetByIdAsync(id);
-
-            if (position is null)
+            try
             {
-                throw new ArgumentNullException($"There's no position with Id {id}");
+                var position = await positionService.GetByIdAsync(id);
+                await positionService.DeleteAsync(id);
+                notyfService.Success($"Position {position.Name} was successfully deleted!");
+                return RedirectToAction(nameof(All));
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Error", "Home");
             }
 
-            await positionService.DeleteAsync(id);
-            notyfService.Success($"Position {position.Name} was successfully deleted!");
-
-            return RedirectToAction(nameof(All));
         }
     }
 }

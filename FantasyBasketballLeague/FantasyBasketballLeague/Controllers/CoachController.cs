@@ -153,7 +153,7 @@ namespace FantasyBasketballLeague.Controllers
                 return RedirectToAction(nameof(All));
             }
 
-            if (coach.Team != null)
+            if (coach.TeamId != null)
             {
                 notyfService.Warning($"Coach {coach.FirstName} {coach.LastName} already has a team assigned!");
                 return RedirectToAction(nameof(All));

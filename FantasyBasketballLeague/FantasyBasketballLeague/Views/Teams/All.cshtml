@@ -24,8 +24,8 @@
 
                     <h5 class="card-title mt-1">@team.Name</h5>
                     <p class="mb-0">Open positions: @team.OpenPositions</p>
-                    <p class="mb-0">League: @(team.League ?? null)</p>
-                    <p class="mb-0">Coach: @(team.CoachName ?? null)</p>
+                    <p class="mb-0">League: @team.League</p>
+                    <p class="mb-0">Coach: @team.CoachName</p>
                 </div>
 
                 <table>
@@ -35,10 +35,14 @@
                             <a asp-controller="Teams" asp-action="Details" asp-route-id="@team.Id" class="btn btn-success">View</a>
                             <a asp-controller="Teams" asp-action="Edit" asp-route-id="@team.Id" class="btn btn-primary">Edit</a>
                             <a asp-controller="Teams" asp-action="Delete" asp-route-id="@team.Id" class="btn btn-danger">Delete</a>
-                            @if (team.LeagueId == null)
+                           @* @if (team.LeagueId == null)
                             {
                                 <a asp-controller="Team" asp-action="JoinLeague" asp-route-id="@team.Id" class="btn btn-warning">Join League</a>
                             }
+                            @if (team.CoachName == "No coach assigned")
+                            {
+                                <a asp-controller="Coach" asp-action="Assign" asp-route-id="@team.Id" class="btn btn-secondary">Assign Coach</a>
+                            }*@
                         </td>
                     </tr>
                 </table>

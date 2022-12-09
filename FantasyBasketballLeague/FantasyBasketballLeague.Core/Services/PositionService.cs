@@ -1,5 +1,4 @@
 ﻿using FantasyBasketballLeague.Core.Contracts;
-using FantasyBasketballLeague.Core.Models.League;
 using FantasyBasketballLeague.Core.Models.Position;
 using FantasyBasketballLeague.Infrastructure.Data.Common;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
@@ -19,13 +18,13 @@ namespace FantasyBasketballLeague.Core.Services
         public async Task<int> AddAsync(PositionViewModel model)
         {
             if (model is null)
-            {
-                throw new ArgumentNullException();
-            }
+                throw new ArgumentNullException("Model cannot be null ");
+
+            if (string.IsNullOrEmpty(model.Name) || string.IsNullOrEmpty(model.Initials))
+                throw new InvalidDataException("Name/Initials cannot be null or empty");
 
             var position = new Position()
             {
-                Id = model.Id,
                 Name = model.Name,
                 Initials = model.Initials
             };
@@ -38,18 +37,22 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task DeleteAsync(int id)
         {
-            var position = await repo.GetByIdAsync<Position>(id);
-
-            if (position != null)
+            if (!await repo.AllReadonly<Position>().AnyAsync(p => p.Id == id))
             {
-                await repo.DeleteAsync<Position>(id);
-                await repo.SaveChangesAsync();
+                throw new InvalidOperationException();
             }
+
+            await repo.DeleteAsync<Position>(id);
+            await repo.SaveChangesAsync();
+           
         }
 
         public async Task<int> Edit(int id, PositionViewModel model)
         {
             var position = await repo.GetByIdAsync<Position>(id);
+
+            if (position == null)
+                throw new ArgumentNullException();
 
             if (id == model.Id)
             {
@@ -87,7 +90,7 @@ namespace FantasyBasketballLeague.Core.Services
                    Name = l.Name,
                    Initials = l.Initials,
                })
-               .FirstAsync();
+               .FirstAsync() ?? throw new InvalidOperationException();
         }
     }
 }

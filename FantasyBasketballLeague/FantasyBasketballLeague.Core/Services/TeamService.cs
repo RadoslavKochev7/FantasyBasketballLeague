@@ -85,6 +85,7 @@ namespace FantasyBasketballLeague.Core.Services
                     FirstName = c.FirstName,
                     LastName = c.LastName,
                 })
+                .OrderByDescending(c => c.Id)
                 .ToListAsync();
         }
 
@@ -116,6 +117,7 @@ namespace FantasyBasketballLeague.Core.Services
                  CoachName = t.Coach != null ? $"{t.Coach.FirstName} {t.Coach.LastName}" : "No coach assigned",
                  OpenPositions = t.OpenPositions - t.Players.Count()
              })
+             .OrderByDescending(t => t.Id)
              .ToListAsync();
 
             return teams;
@@ -154,8 +156,10 @@ namespace FantasyBasketballLeague.Core.Services
                         PositionId = p.PositionId,
                         SeasonsPlayed = p.SeasonsPlayed
                     })
+                    .OrderBy(p => p.JerseyNumber)
                     .ToList()
-                });
+                })
+                .OrderByDescending(t => t.Id);
 
             return result;
         }
@@ -178,7 +182,7 @@ namespace FantasyBasketballLeague.Core.Services
                     CoachName = t.Coach != null ? $"{t.Coach.FirstName} {t.Coach.LastName}" : "No coach assigned",
                     OpenPositions = t.OpenPositions - t.Players.Count(),
                 })
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync() ?? throw new ArgumentNullException();
 
             return team;
         }
@@ -203,6 +207,7 @@ namespace FantasyBasketballLeague.Core.Services
                  CoachName = "No coach assigned",
                  OpenPositions = t.OpenPositions - t.Players.Count()
              })
+             .OrderByDescending(t => t.Id)
              .ToListAsync();
 
             return teams;

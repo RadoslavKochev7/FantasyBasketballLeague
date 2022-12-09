@@ -17,6 +17,11 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<int> AddAsync(LeagueViewModel model)
         {
+            if (string.IsNullOrEmpty(model.Name))
+            {
+                throw new InvalidDataException("Name cannot be null or empty");
+            }
+
             var league = new League()
             {
                 Name = model.Name
@@ -51,20 +56,19 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task DeleteAsync(int leagueId)
         {
-            var league = await repo.GetByIdAsync<League>(leagueId);
-
-            if (league != null)
-            {
-                await repo.DeleteAsync<League>(leagueId);
-                await repo.SaveChangesAsync();
-            }
+            if (await repo.AllReadonly<League>().AnyAsync(l => l.Id == leagueId) == false)
+                throw new ArgumentNullException($"No league with id {leagueId}");
+            
+            await repo.DeleteAsync<League>(leagueId);
+            await repo.SaveChangesAsync();
         }
 
         public async Task<int> Edit(int leagueId, LeagueViewModel model)
         {
-            var league = await repo.GetByIdAsync<League>(leagueId);
+            var league = await repo.GetByIdAsync<League>(leagueId)
+                ?? throw new ArgumentNullException($"No league with id {leagueId}");
 
-            if (leagueId == model.Id)
+            if (league.Id == model.Id)
                 league.Name = model.Name;
 
             await repo.SaveChangesAsync();

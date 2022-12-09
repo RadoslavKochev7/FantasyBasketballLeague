@@ -13,15 +13,14 @@
     <div class="d-flex justify-content-center">
         <div class="card " style="width: 50rem;">
             <div class="card-body">
-                <h3 class="card-title text-center">Player</h3>
-                <p class="card-text"><span class="fw-bold">First Name: </span>@Model.FirstName</p>
-                <p class="card-text"><span class="fw-bold">Last Name: </span>@Model.LastName</p>
+                <h3 class="card-title text-center">@($"{Model.FirstName} {Model.LastName}")</h3>
+                <p class="card-text"><span class="fw-bold">Team: </span>@Model.Team</p>
+                <p class="card-text"><span class="fw-bold">Position: </span>@Model.Position</p>
                 <p class="card-text"><span class="fw-bold">Jersey Number: </span>@Model.JerseyNumber</p>
                 <p class="card-text"><span class="fw-bold">Seasons Played: </span>@Model.SeasonsPlayed</p>
                 <p class="card-text"><span class="fw-bold">Is Starter: </span>@Model.IsStarter</p>
                 <p class="card-text"><span class="fw-bold">Is Team Captain: </span>@Model.IsTeamCaptain</p>
-                <p class="card-text"><span class="fw-bold">Team: </span>@Model.Team</p>
-                <p class="card-text"><span class="fw-bold">Position: </span>@Model.Position</p>
+                <p class="card-text"><span class="fw-bold">Experience: </span>@Model.Experience</p>
                 <table>
                     <tr class="actions">
                         <th><span class="fw-bold">Actions:</span></th>
@@ -29,6 +28,7 @@
                         <td>
                             <a asp-controller="BasketballPlayer" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
                             <a asp-controller="BasketballPlayer" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+                            <a asp-controller="BasketballPlayer" asp-action="All" asp-route-id="" class="btn btn-secondary">Back</a>
                         </td>
                     </tr>
                 </table>
