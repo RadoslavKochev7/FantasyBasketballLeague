@@ -3,6 +3,9 @@
 @{
     ViewBag.Title = "List of teams without leagues";
 }
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
 
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
@@ -22,7 +25,7 @@
                     else
                     {
                         <table>
-                            <select class="select" multiple data-mdb-placeholder="Choose a team" multiple;>
+                            <select class="select" multiple data-mdb-filter="true">
 
                                 @foreach (var team in Model)
                                 {

@@ -137,18 +137,18 @@ namespace FantasyBasketballLeague.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddTeams(int id, LeagueAddTeamsModel model)
-        {
-            if (model == null)
-                notyfService.Warning($"There are no teams without league");
+        //[HttpPost]
+        //public async Task<IActionResult> AddTeams(int id, LeagueAddTeamsModel model)
+        //{
+        //    if (model == null)
+        //        notyfService.Warning($"There are no teams without league");
 
-            //var teamIds = model.Select(x => x.TeamId).ToArray();
-            //var result = await leagueService.AddTeams(teamIds, id);
-            //var league = await leagueService.GetByIdAsync(id);
-            //notyfService.Success($"{result} teams are added to {league.Name}");
+        //    //var teamIds = model.Select(x => x.TeamId).ToArray();
+        //    //var result = await leagueService.AddTeams(teamIds, id);
+        //    //var league = await leagueService.GetByIdAsync(id);
+        //    //notyfService.Success($"{result} teams are added to {league.Name}");
 
-            return RedirectToAction(nameof(All));
-        }
+        //    return RedirectToAction(nameof(All));
+        //}
     }
 }

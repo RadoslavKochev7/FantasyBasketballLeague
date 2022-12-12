@@ -99,8 +99,7 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<IEnumerable<LeagueAddTeamsModel>> GetAllTeamsWithoutLeague()
         {
-            var teams = await repo.AllReadonly<Team>()
-                .Where(t => t.IsActive)
+            var teams = await repo.AllReadonly<Team>(t => t.IsActive)
                 .Where(t => t.LeagueId == null)
                 .Select(t => new LeagueAddTeamsModel()
                 {
@@ -115,7 +114,7 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<LeagueViewModel> GetByIdAsync(int leagueId)
         {
-            var league = await repo.All<League>()
+           return await repo.All<League>()
                 .Where(t => t.Id == leagueId)
                 .Include(t => t.Teams)
                 .Select(l => new LeagueViewModel()
@@ -124,9 +123,7 @@ namespace FantasyBasketballLeague.Core.Services
                     Name = l.Name,
                     Count = l.Teams.Count
                 })
-                .FirstOrDefaultAsync();
-
-            return league;
+                .FirstAsync() ?? throw new InvalidOperationException();
         }
 
         public async Task RemoveTeam(int teamId, int leagueId)

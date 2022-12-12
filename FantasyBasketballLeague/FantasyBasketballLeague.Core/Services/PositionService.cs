@@ -44,24 +44,30 @@ namespace FantasyBasketballLeague.Core.Services
 
             await repo.DeleteAsync<Position>(id);
             await repo.SaveChangesAsync();
-           
         }
 
         public async Task<int> Edit(int id, PositionViewModel model)
         {
-            var position = await repo.GetByIdAsync<Position>(id);
-
-            if (position == null)
-                throw new ArgumentNullException();
-
-            if (id == model.Id)
+            try
             {
+                var position = await repo.GetByIdAsync<Position>(id);
+                if (model == null)
+                    throw new ArgumentNullException("Model cannot be null");
+
                 position.Name = model.Name;
                 position.Initials = model.Initials;
-            }
 
-            await repo.SaveChangesAsync();
-            return position.Id;
+                await repo.SaveChangesAsync();
+                return position.Id;
+            }
+            catch (InvalidOperationException)
+            {
+                throw new InvalidOperationException("No position with current Id");
+            }
+            catch (ArgumentNullException ane)
+            {
+                throw new ArgumentNullException(ane.Message);
+            }
         }
 
         public Task<bool> ExistsByName(string positionName)
@@ -82,8 +88,7 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<PositionViewModel> GetByIdAsync(int id)
         {
-            return await repo.All<Position>()
-               .Where(t => t.Id == id)
+            return await repo.All<Position>(t => t.Id == id)
                .Select(l => new PositionViewModel()
                {
                    Id = l.Id,

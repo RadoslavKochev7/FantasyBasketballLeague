@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using static FantasyBasketballLeague.Infrastructure.Data.Constants.ValidationConstants;
+using static FantasyBasketballLeague.Infrastructure.Data.Constants.RoleConstants;
 
 namespace FantasyBasketballLeague.Controllers
 {
@@ -129,6 +129,7 @@ namespace FantasyBasketballLeague.Controllers
                 {
                     await userManager.AddToRoleAsync(user, Administrator);
                     notyfService.Success($"Congratulations, you are now an {Administrator}!");
+
                     return RedirectToAction("Index", "Home");
                 }
 

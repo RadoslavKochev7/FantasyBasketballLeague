@@ -137,8 +137,7 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<BasketballPlayerDetailsModel> GetByIdAsync(int id)
         {
-            return await repo.All<BasketballPlayer>()
-               .Where(x => x.Id == id)
+            return await repo.All<BasketballPlayer>(x => x.Id == id)
                .Include(t => t.Team)
                .Include(p => p.Position)
                .Select(p => new BasketballPlayerDetailsModel()
