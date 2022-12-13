@@ -4,7 +4,6 @@ using FantasyBasketballLeague.Core.Models.League;
 using FantasyBasketballLeague.Core.Models.Teams;
 using FantasyBasketballLeague.Infrastructure.Data.Common;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace FantasyBasketballLeague.Core.Services
@@ -20,6 +19,12 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task AddAsync(TeamAddModel model)
         {
+            if (model is null)
+             throw new ArgumentNullException("Model cannot be null");
+
+            if (string.IsNullOrEmpty(model.Name))
+                throw new ArgumentNullException("Name cannot be null or empty");
+
             var team = new Team()
             {
                 Id = model.Id,
@@ -42,7 +47,7 @@ namespace FantasyBasketballLeague.Core.Services
         public async Task DeleteAsync(int teamId)
         {
             var team = await repo.GetByIdAsync<Team>(teamId);
-
+            //InvalidOperationException
             if (team != null)
             {
                 team.IsActive = false;
@@ -144,7 +149,8 @@ namespace FantasyBasketballLeague.Core.Services
                     Id = u.TeamId,
                     Name = u.Team.Name,
                     LogoUrl = u.Team.LogoUrl,
-                    Players = u.Team.Players.Select(p => new Models.BasketballPlayer.BasketballPlayerDetailsModel()
+                    Players = u.Team.Players
+                    .Select(p => new Models.BasketballPlayer.BasketballPlayerDetailsModel()
                     {
                         Id = p.Id,
                         FirstName = p.FirstName,
@@ -166,7 +172,7 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<TeamViewModel> GetByIdAsync(int teamId)
         {
-            var team = await repo.All<Team>()
+            var team = await repo.All<Team>(t => t.IsActive)
                 .Where(t => t.Id == teamId)
                 .Include(c => c.Coach)
                 .Include(l => l.League)
@@ -182,7 +188,7 @@ namespace FantasyBasketballLeague.Core.Services
                     CoachName = t.Coach != null ? $"{t.Coach.FirstName} {t.Coach.LastName}" : "No coach assigned",
                     OpenPositions = t.OpenPositions - t.Players.Count(),
                 })
-                .FirstOrDefaultAsync() ?? throw new ArgumentNullException();
+                .FirstAsync() ?? throw new ArgumentNullException();
 
             return team;
         }

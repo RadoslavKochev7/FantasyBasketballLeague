@@ -110,7 +110,7 @@ namespace FantasyBasketballLeague.Controllers
             }
             catch (Exception)
             {
-                notyfService.Error($"Edit [{id}] failed");
+                notyfService.Error($"Edit [{id}] Failed");
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -129,10 +129,9 @@ namespace FantasyBasketballLeague.Controllers
             }
             catch (Exception)
             {
-                notyfService.Error($"Delete [{id}] failed");
+                notyfService.Error($"Delete [{id}] Failed");
                 return RedirectToAction("Error", "Home");
             }
-            
         }
 
         [HttpGet]
@@ -170,7 +169,7 @@ namespace FantasyBasketballLeague.Controllers
             }
             catch (Exception)
             {
-                notyfService.Error($"Assign [{id}] failed");
+                notyfService.Error($"Assign [{id}] Failed");
                 return RedirectToAction("Error", "Home");
             }
         }

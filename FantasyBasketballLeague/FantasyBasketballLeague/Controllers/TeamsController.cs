@@ -57,23 +57,31 @@ namespace FantasyBasketballLeague.Controllers
         {
             if (await teamService.TeamExists(model.Name))
             {
-                ModelState.AddModelError(nameof(model.Id), $"There is already a team with name {model.Name}.");
-                notyfService.Error($"There is already a team with name {model.Name}.", 10);
+                ModelState.AddModelError(nameof(model.Id), "");
+                notyfService.Warning($"There is already a team with name {model.Name}.", 10);
             }
 
             if (!ModelState.IsValid)
             {
-
                 model.Leagues = await teamService.GetAllLeaguesAsync();
                 model.Coaches = await teamService.GetAllCoachesAsync();
 
                 return View(model);
             }
 
-            await teamService.AddAsync(model);
-            notyfService.Success($"{model.Name} is Successfully created!");
+            try
+            {
+                await teamService.AddAsync(model);
+                notyfService.Success($"{model.Name} is Successfully created!");
 
-            return RedirectToAction(nameof(All));
+                return RedirectToAction(nameof(All));
+            }
+            catch (Exception)
+            {
+                notyfService.Error($"Create Team Failed");
+                return RedirectToAction("Error", "Home");
+            }
+           
         }
 
         public async Task<IActionResult> Mine()
@@ -92,63 +100,76 @@ namespace FantasyBasketballLeague.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var team = await teamService.GetByIdAsync(id);
-
-            if (team == null)
+            try
             {
-                notyfService.Warning($"There's no team with id {id}");
-                return RedirectToAction(nameof(All));
+                var team = await teamService.GetByIdAsync(id);
+
+                var model = new TeamAddModel()
+                {
+                    Id = id,
+                    Name = team.Name,
+                    LogoUrl = team.LogoUrl,
+                    Coach = team.CoachName,
+                    CoachId = team.CoachId,
+                    League = team.League,
+                    LeagueId = team.LeagueId,
+                    Coaches = await teamService.GetAllCoachesAsync(),
+                    Leagues = await teamService.GetAllLeaguesAsync()
+                };
+
+                return View(model);
             }
-
-            var model = new TeamAddModel()
+            catch (Exception)
             {
-                Id = id,
-                Name = team.Name,
-                LogoUrl = team.LogoUrl,
-                Coach = team.CoachName,
-                CoachId = team.CoachId,
-                League = team.League,
-                LeagueId = team.LeagueId,
-                Coaches = await teamService.GetAllCoachesAsync(),
-                Leagues = await teamService.GetAllLeaguesAsync()
-            };
-
-            return View(model);
+                notyfService.Error($"Edit for [{id}] Failed");
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(int id, TeamAddModel model)
         {
-            if (id == model.Id)
+            try
             {
-                if (!ModelState.IsValid)
+                if (id == model.Id)
                 {
-                    model.Coaches = await teamService.GetAllCoachesAsync();
-                    model.Leagues = await teamService.GetAllLeaguesAsync();
+                    if (!ModelState.IsValid)
+                    {
+                        model.Coaches = await teamService.GetAllCoachesAsync();
+                        model.Leagues = await teamService.GetAllLeaguesAsync();
 
-                    return View(model);
+                        return View(model);
+                    }
+
+                    await teamService.Edit(id, model);
                 }
-
-                await teamService.Edit(id, model);
+                return RedirectToAction(nameof(All), new { id });
             }
-            return RedirectToAction(nameof(All), new { id });
+            catch (Exception)
+            {
+                notyfService.Error($"Edit for [{id}] Failed");
+                return RedirectToAction("Error", "Home");
+            }
         }
 
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var team = await teamService.GetByIdAsync(id);
-
-            if (team is null)
+            try
             {
-                throw new ArgumentNullException($"There's no team with Id {id}");
+                var team = await teamService.GetByIdAsync(id);
+
+                await teamService.DeleteAsync(id);
+                notyfService.Success($"Team {team.Name} was successfully deleted!");
+
+                return RedirectToAction(nameof(All));
             }
-
-            await teamService.DeleteAsync(id);
-            notyfService.Success($"Team {team.Name} was successfully deleted!");
-
-            return RedirectToAction(nameof(All));
+            catch (Exception)
+            {
+                notyfService.Error($"Delete for [{id}] Failed");
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         private string GetUserId()
