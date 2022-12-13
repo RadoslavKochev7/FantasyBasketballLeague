@@ -60,9 +60,9 @@ namespace FantasyBasketballLeague.Core.Services
                 await repo.SaveChangesAsync();
                 return position.Id;
             }
-            catch (InvalidOperationException)
+            catch (NullReferenceException)
             {
-                throw new InvalidOperationException("No position with current Id");
+                throw new NullReferenceException("No position with current Id");
             }
             catch (ArgumentNullException ane)
             {

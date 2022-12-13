@@ -23,14 +23,16 @@ namespace FantasyBasketballLeague.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var coach = await coachService.GetByIdAsync(id);
-
-            if (coach == null)
+            try
             {
-                return RedirectToAction(nameof(Create));
+                var coach = await coachService.GetByIdAsync(id);
+                return View(coach);
             }
-
-            return View(coach);
+            catch (Exception)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+          
         }
 
         [HttpGet]
@@ -44,13 +46,21 @@ namespace FantasyBasketballLeague.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CoachViewModel model)
         {
-            if (!ModelState.IsValid)
-                return View(model);
+            try
+            {
+                if (!ModelState.IsValid)
+                    return View(model);
 
-            var Id = await coachService.AddAsync(model);
-            notyfService.Success($"Coach {model.FirstName} {model.LastName} is successfully added.");
+                var Id = await coachService.AddAsync(model);
+                notyfService.Success($"Coach {model.FirstName} {model.LastName} is successfully added.");
 
-            return RedirectToAction(nameof(Details), new { Id });
+                return RedirectToAction(nameof(Details), new { Id });
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+           
         }
 
         [HttpGet]
@@ -65,75 +75,69 @@ namespace FantasyBasketballLeague.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var coach = await coachService.GetByIdAsync(id);
-
-            if (await CoachExists(id) == false)
+            try
             {
-                return RedirectToAction(nameof(All));
+                var coach = await coachService.GetByIdAsync(id);
+                var model = new CoachDetailsModel()
+                {
+                    FirstName = coach.FirstName,
+                    LastName = coach.LastName,
+                    ImageUrl = coach.ImageUrl
+                };
+
+                return View(model);
             }
-
-            var model = new CoachDetailsModel()
+            catch (Exception)
             {
-                FirstName = coach.FirstName,
-                LastName = coach.LastName,
-                ImageUrl = coach.ImageUrl
-            };
-
-            return View(model);
+                notyfService.Warning("Inavalid model");
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(int id, CoachDetailsModel model)
         {
-            if (id != model.Id)
+            try
             {
-                notyfService.Error($"Coach with Id {id} does not exist");
-                return RedirectToAction(nameof(All));
-            }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
 
-            if (await CoachExists(id) == false)
+                await coachService.Edit(id, model);
+                notyfService.Success($"Edit [{id}] successfull");
+                return RedirectToAction(nameof(Details), new { model.Id });
+            }
+            catch (Exception)
             {
-                return RedirectToAction(nameof(All));
+                notyfService.Error($"Edit [{id}] failed");
+                return RedirectToAction("Error", "Home");
             }
-
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            await coachService.Edit(id, model);
-
-            return RedirectToAction(nameof(Details), new { model.Id });
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            if (await CoachExists(id) == false)
+            try
             {
+                var coach = await coachService.GetByIdAsync(id);
+
+                await coachService.DeleteAsync(id);
+                notyfService.Success($"Coach {coach.FirstName} {coach.LastName} was successfully deleted!");
+
                 return RedirectToAction(nameof(All));
             }
-            var coach = await coachService.GetByIdAsync(id);
-
-            if (coach is null)
+            catch (Exception)
             {
-                throw new ArgumentNullException($"There's no coach with Id {id}");
+                notyfService.Error($"Delete [{id}] failed");
+                return RedirectToAction("Error", "Home");
             }
-
-            await coachService.DeleteAsync(id);
-            notyfService.Success($"Coach {coach.FirstName} {coach.LastName} was successfully deleted!");
-
-            return RedirectToAction(nameof(All));
+            
         }
 
         [HttpGet]
-        public async Task<IActionResult> Assign(int id)
+        public async Task<IActionResult> Assign()
         {
-            if (await CoachExists(id) == false)
-            {
-                return RedirectToAction(nameof(All));
-            }
-
             var model = new CoachAssignToTeamModel()
             {
                 Teams = await teamService.GetAllTeamsWithoutCoaches()
@@ -145,42 +149,30 @@ namespace FantasyBasketballLeague.Controllers
         [HttpPost]
         public async Task<IActionResult> Assign(int id, CoachAssignToTeamModel model)
         {
-            var coach = await coachService.GetByIdAsync(id);
-
-            if (await CoachExists(id) == false)
+            try
             {
-                notyfService.Warning($"There's no coach with id {id}");
+                var coach = await coachService.GetByIdAsync(id);
+
+                if (coach.TeamId != null)
+                {
+                    notyfService.Warning($"Coach {coach.FirstName} {coach.LastName} already has a team assigned!");
+                    return RedirectToAction(nameof(All));
+                }
+                var isAdded = await coachService.AssignToTeam(id, model.TeamId);
+
+                if (isAdded)
+                {
+                    var team = await teamService.GetByIdAsync(model.TeamId);
+                    notyfService.Success($"Coach {coach.FirstName} {coach.LastName} signed up with {team.Name}");
+                }
+
                 return RedirectToAction(nameof(All));
             }
-
-            if (coach.TeamId != null)
+            catch (Exception)
             {
-                notyfService.Warning($"Coach {coach.FirstName} {coach.LastName} already has a team assigned!");
-                return RedirectToAction(nameof(All));
+                notyfService.Error($"Assign [{id}] failed");
+                return RedirectToAction("Error", "Home");
             }
-
-            var isAdded = await coachService.AssignToTeam(id, model.TeamId);
-            if (isAdded)
-            {
-                var team = await teamService.GetByIdAsync(model.TeamId);
-                notyfService.Success($"Coach {coach.FirstName} {coach.LastName} signed up with {team.Name}");
-            }
-
-            return RedirectToAction(nameof(All));
-        }
-
-        private async Task<bool> CoachExists(int id)
-        {
-            var coach = await coachService.GetByIdAsync(id);
-            bool exists = true;
-
-            if (coach == null)
-            {
-                notyfService.Error($"Coach with Id - {id} does not exists!");
-                return false;
-            }
-
-            return exists;
         }
     }
 }

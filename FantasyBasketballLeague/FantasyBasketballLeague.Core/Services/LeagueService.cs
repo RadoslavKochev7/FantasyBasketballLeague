@@ -18,9 +18,11 @@ namespace FantasyBasketballLeague.Core.Services
         public async Task<int> AddAsync(LeagueViewModel model)
         {
             if (string.IsNullOrEmpty(model.Name))
-            {
                 throw new InvalidDataException("Name cannot be null or empty");
-            }
+
+
+            if (model == null)
+                throw new NullReferenceException();
 
             var league = new League()
             {
@@ -58,7 +60,7 @@ namespace FantasyBasketballLeague.Core.Services
         {
             if (await repo.AllReadonly<League>().AnyAsync(l => l.Id == leagueId) == false)
                 throw new ArgumentNullException($"No league with id {leagueId}");
-            
+
             await repo.DeleteAsync<League>(leagueId);
             await repo.SaveChangesAsync();
         }
@@ -114,16 +116,16 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<LeagueViewModel> GetByIdAsync(int leagueId)
         {
-           return await repo.All<League>()
-                .Where(t => t.Id == leagueId)
-                .Include(t => t.Teams)
-                .Select(l => new LeagueViewModel()
-                {
-                    Id = l.Id,
-                    Name = l.Name,
-                    Count = l.Teams.Count
-                })
-                .FirstAsync() ?? throw new InvalidOperationException();
+            return await repo.All<League>()
+                 .Where(t => t.Id == leagueId)
+                 .Include(t => t.Teams)
+                 .Select(l => new LeagueViewModel()
+                 {
+                     Id = l.Id,
+                     Name = l.Name,
+                     Count = l.Teams.Count
+                 })
+                 .FirstAsync() ?? throw new InvalidOperationException();
         }
 
         public async Task RemoveTeam(int teamId, int leagueId)

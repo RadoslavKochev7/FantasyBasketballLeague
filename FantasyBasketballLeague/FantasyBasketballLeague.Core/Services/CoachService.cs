@@ -19,6 +19,9 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<int> AddAsync(CoachViewModel model)
         {
+            if (model is null)
+                throw new NullReferenceException("Model cannot be null");
+
             var coach = new Coach()
             {
                 Id = model.Id,
@@ -27,15 +30,23 @@ namespace FantasyBasketballLeague.Core.Services
                 ImageUrl = model.ImageUrl
             };
 
-            await repo.AddAsync(coach);
-            await repo.SaveChangesAsync();
+            try
+            {
+                await repo.AddAsync(coach);
+                await repo.SaveChangesAsync();
+                return coach.Id;
 
-            return coach.Id;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Database failed to save info", ex);
+            }
         }
 
         public async Task DeleteAsync(int coachId)
         {
-            var coach = await repo.GetByIdAsync<Coach>(coachId);
+            var coach = await repo.GetByIdAsync<Coach>(coachId)
+                ?? throw new InvalidOperationException("Coach cannot be null");
 
             if (coach != null)
             {
@@ -47,7 +58,8 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<int> Edit(int coachId, CoachDetailsModel model)
         {
-            var coach = await repo.GetByIdAsync<Coach>(coachId);
+            var coach = await repo.GetByIdAsync<Coach>(coachId)
+               ?? throw new InvalidOperationException("Coach cannot be null");
 
             if (coachId == model.Id)
             {
@@ -72,8 +84,8 @@ namespace FantasyBasketballLeague.Core.Services
                     FirstName = c.FirstName,
                     LastName = c.LastName,
                     ImageUrl = c.ImageUrl,
-                    TeamId = c.TeamId,
-                    Team = c.Team.Name
+                    TeamId = c.TeamId ?? 0,
+                    Team = c.TeamId != 0 ? c.Team.Name : "No team assigned"
                 })
                 .OrderByDescending(t => t.Id)
                 .ToListAsync();
@@ -81,8 +93,7 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<CoachDetailsModel> GetByIdAsync(int coachId)
         {
-            var model = await repo.All<Coach>()
-                .Where(x => x.Id == coachId)
+            return await repo.All<Coach>(x => x.Id == coachId)
                 .Where(x => x.IsActive)
                 .Include(t => t.Team)
                 .Select(c => new CoachDetailsModel()
@@ -94,15 +105,13 @@ namespace FantasyBasketballLeague.Core.Services
                     TeamId = c.TeamId ?? 0,
                     Team = c.TeamId != 0 ? c.Team.Name : "No team assigned"
                 })
-                .FirstOrDefaultAsync();
-
-            return model;
+                .FirstAsync() ?? throw new InvalidOperationException("Coach cannot be null");
         }
 
         public async Task<IEnumerable<CoachDetailsModel>> AvailableCoaches()
         {
-            return await repo.AllReadonly<Coach>()
-                .Where(c => c.TeamId == null && c.IsActive)
+            return await repo.AllReadonly<Coach>(c => c.IsActive)
+                .Where(c => c.TeamId == null)
                 .Select(c => new CoachDetailsModel()
                 {
                     Id = c.Id,

@@ -18,11 +18,10 @@ namespace FantasyBasketballLeague.Controllers
         {
             if (User?.Identity?.IsAuthenticated ?? false)
             {
-                
-                return Redirect("/Teams/All/");
+                return View();
             }
 
-            return View();
+            return Redirect("/User/Login/");
         }
 
 

@@ -72,7 +72,7 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<IEnumerable<BasketballPlayerDetailsModel>> GetAllPlayersAsync()
         {
-            return await repo.AllReadonly<BasketballPlayer>()
+            var model = await repo.AllReadonly<BasketballPlayer>()
                  .Where(x => x.IsActive)
                  .Include(t => t.Team)
                  .Include(p => p.Position)
@@ -87,13 +87,14 @@ namespace FantasyBasketballLeague.Core.Services
                      PositionId = p.PositionId,
                      Position = p.Position.Name,
                      JerseyNumber = p.JerseyNumber,
-                     IsStarter = p.IsStarter.HasValue == true ? "Yes" : "No",
-                     IsTeamCaptain = p.IsTeamCaptain.HasValue == true ? "Yes" : "No",
+                     IsStarter = p.IsStarter.HasValue && p.IsStarter.Value == true ? "Yes" : "No",
+                     IsTeamCaptain = p.IsTeamCaptain.HasValue && p.IsTeamCaptain.Value == true ? "Yes" : "No",
                      Experience = p.ExperienceLevel.ToString()
                  })
-                   .OrderByDescending(t => t.PositionId)
-                   .ThenBy(t => t.IsStarter)
+                   .OrderByDescending(t => t.Id)
                    .ToListAsync();
+
+            return model;
         }
 
         public Task<IEnumerable<MyPlayersModel>> GetMyPlayers()

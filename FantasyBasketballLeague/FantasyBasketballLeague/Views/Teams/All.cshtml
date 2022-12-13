@@ -5,8 +5,8 @@
     ViewBag.Title = "All Teams";
 }
 
-<h2 class="text-center">@ViewBag.Title</h2>
-<hr />
+<h1 class="text-center" style="color:white">@ViewBag.Title</h1>
+<hr style="color:white" />
 
 <div class="text-center row">
     @if (!Model.Any())
@@ -17,7 +17,7 @@
     {
         @foreach (var team in Model)
         {
-            <div class="card col-4" style="width: 20rem; ">
+            <div class="card col-4" style="width: 20rem; margin:.30rem ">
                 <img class="card-img-top" style="width: 18rem; height:20rem"
              src="@team.LogoUrl" alt="Team logo Image">
                 <div class="card-body">

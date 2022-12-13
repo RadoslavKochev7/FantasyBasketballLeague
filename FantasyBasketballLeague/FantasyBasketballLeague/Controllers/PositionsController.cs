@@ -82,7 +82,6 @@ namespace FantasyBasketballLeague.Controllers
             }
             catch (Exception)
             {
-
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -102,7 +101,7 @@ namespace FantasyBasketballLeague.Controllers
             }
             catch (Exception)
             {
-                notyfService.Warning("There's no such position");
+                notyfService.Warning("Editing failed!");
                 return RedirectToAction("Error", "Home");
             }
         }

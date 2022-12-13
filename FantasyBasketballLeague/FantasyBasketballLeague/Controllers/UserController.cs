@@ -76,7 +76,7 @@ namespace FantasyBasketballLeague.Controllers
         {
             if (User?.Identity?.IsAuthenticated ?? false)
             {
-                return RedirectToAction("All", "Тeams");
+                return RedirectToAction("Index", "Home");
             }
             var model = new LoginViewModel();
 
