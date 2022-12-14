@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 </head>
 
-<h2 class="text-center">@ViewBag.Title</h2>
-<hr />
+<h1 class="text-center" style="color:white">@ViewBag.Title</h1>
+<hr style="color:white" />
 
 <input class="btn btn-success" value="Add Player" onclick="location.href='@Url.Action("Create","BasketballPlayer")';"  />
 
@@ -27,7 +27,7 @@
                     <h5 class="card-title mt-1">@team.Name</h5>
                 </div>
             </div>
-            <table id="dtBasicExample" class="table" width="100%">
+            <table id="dtBasicExample" class="table" width="100%" style="color:white">
                 <thead>
                     <tr>
                         <th class="th-sm">
@@ -70,25 +70,25 @@
 
                 <tfoot>
                     <tr>
-                        <th>
+                         <th class="th-sm">
                             First Name
                         </th>
-                        <th>
+                        <th class="th-sm">
                             Last Name
                         </th>
-                        <th>
+                        <th class="th-sm">
                             Position
                         </th>
-                        <th>
+                        <th class="th-sm">
                             Jersey Number
                         </th>
-                        <th>
+                        <th class="th-sm">
                             Is Captain
                         </th>
-                        <th>
+                        <th class="th-sm">
                             Is Starter
                         </th>
-                        <th>
+                        <th class="th-sm">
                             Seasons Played
                         </th>
                     </tr>

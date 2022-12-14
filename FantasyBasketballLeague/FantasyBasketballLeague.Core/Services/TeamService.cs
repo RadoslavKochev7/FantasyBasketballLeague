@@ -47,7 +47,6 @@ namespace FantasyBasketballLeague.Core.Services
         public async Task DeleteAsync(int teamId)
         {
             var team = await repo.GetByIdAsync<Team>(teamId);
-            //InvalidOperationException
             if (team != null)
             {
                 team.IsActive = false;
@@ -198,8 +197,8 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<IEnumerable<TeamViewModel>> GetAllTeamsWithoutCoaches()
         {
-            var teams = await repo.All<Team>()
-             .Where(t => t.IsActive && t.CoachId == null)
+            var teams = await repo.All<Team>(t => t.IsActive)
+             .Where(t => t.CoachId == null)
              .Include(t => t.Coach)
              .Include(t => t.League)
              .Select(t => new TeamViewModel()

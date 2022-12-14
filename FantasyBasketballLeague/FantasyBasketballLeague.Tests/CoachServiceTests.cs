@@ -13,33 +13,22 @@ namespace FantasyBasketballLeague.Tests
         private FantasyLeagueDbContext dbContext;
         private IRepository repo = null!;
         private ICoachService coachService = null!;
-        private Coach coach;
 
         [SetUp]
-        public void TestInitialize()
+        public async Task TestInitialize()
         {
-            coach = new Coach
-            {
-                Id = 30,
-                FirstName = "Ivan",
-                LastName = "Ivanov",
-                ImageUrl = "",
-                IsActive = true,
-            };
-
             dbContext = InMemoryDatabase.Instance;
             dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
+
+            repo = new Repository(dbContext);
+            coachService = new CoachService(repo);
+            await SeedCoach(repo);
         }
 
         [Test]
         public async Task Test_GetByIdAsync_Positive()
         {
-            repo = new Repository(dbContext);
-            coachService = new CoachService(repo);
-
-            await repo.AddAsync(coach);
-            await repo.SaveChangesAsync();
 
             int CoachId = 30;
             var searchedCoach = await coachService.GetByIdAsync(CoachId);
@@ -49,14 +38,8 @@ namespace FantasyBasketballLeague.Tests
         }
 
         [Test]
-        public async Task Test_GetByIdAsync_NegativeCase()
+        public void Test_GetByIdAsync_NegativeCase()
         {
-            repo = new Repository(dbContext);
-            coachService = new CoachService(repo);
-
-            await repo.AddAsync(coach);
-            await repo.SaveChangesAsync();
-
             int CoachId = 124;
 
             Assert.ThrowsAsync<InvalidOperationException>
@@ -66,20 +49,17 @@ namespace FantasyBasketballLeague.Tests
         [Test]
         public async Task Test_GetAllCoaches_GetsCorrectNumberOfCoaches_WithCorrectOrder()
         {
-            repo = new Repository(dbContext);
-            coachService = new CoachService(repo);
-
+            var coach = new Coach() { Id = 16, FirstName = "Ivan", LastName = "Dimitrov", ImageUrl = "" };
             await repo.AddAsync(coach);
             await repo.SaveChangesAsync();
 
             int count = dbContext.Coaches.Count();
-
             var coaches = await coachService.GetAllCoachesAsync();
+
             Assert.That(coaches.Count(), Is.EqualTo(count));
 
             coach.IsActive = false;
             await repo.SaveChangesAsync();
-
             coaches = await coachService.GetAllCoachesAsync();
 
             Assert.That(coaches.Count(), Is.Not.EqualTo(count));
@@ -88,28 +68,23 @@ namespace FantasyBasketballLeague.Tests
         [Test]
         public async Task Test_AddAsync_SuccessfullyAddsAnObject()
         {
-            repo = new Repository(dbContext);
-            coachService = new CoachService(repo);
-
             var coachesCount = dbContext.Coaches.Count();
             var coaches = await coachService.GetAllCoachesAsync();
 
             Assert.That(coaches.Count(), Is.EqualTo(coachesCount));
 
-            await repo.AddAsync(coach);
-            await repo.SaveChangesAsync();
+            var model = new CoachViewModel() { Id = 16, FirstName = "Ivan", LastName = "Georgi" };
+            await coachService.AddAsync(model);
             coaches = await coachService.GetAllCoachesAsync();
 
             Assert.That(coachesCount, Is.LessThan(coaches.Count()));
+            Assert.That(coaches.Any(c => c.Id == model.Id));
         }
 
         [Test]
         public void Test_AddAsync_NegativeScenarios()
         {
 #nullable disable
-
-            repo = new Repository(dbContext);
-            coachService = new CoachService(repo);
 
             var modelWithNullName = new CoachViewModel { FirstName = null, LastName = "idsadsa", ImageUrl = "dsadas" };
             var coachWithEmptyLastName = new CoachViewModel { FirstName = "Coach", LastName = "", ImageUrl = "dasdas" };
@@ -123,11 +98,8 @@ namespace FantasyBasketballLeague.Tests
         }
 
         [Test]
-        public async Task Test_AvailableCoaches_Returns_AllTeamlessCoaches()
+        public async Task Test_AvailableCoaches_Returns_AllCoachesWithoutTeamId()
         {
-            repo = new Repository(dbContext);
-            coachService = new CoachService(repo);
-
             var coach = new Coach()
             {
                 Id = 23,
@@ -136,7 +108,7 @@ namespace FantasyBasketballLeague.Tests
                 ImageUrl = "",
                 TeamId = null
             };
-        
+
             await repo.AddAsync(coach);
             await repo.SaveChangesAsync();
             var unassignedCoaches = await coachService.AvailableCoaches();
@@ -154,22 +126,17 @@ namespace FantasyBasketballLeague.Tests
         [Test]
         public async Task Test_DeleteAsync_Positive()
         {
-            repo = new Repository(dbContext);
-            coachService = new CoachService(repo);
-
-            await repo.AddAsync(coach);
-            await repo.SaveChangesAsync();
-
             var coaches = await coachService.GetAllCoachesAsync();
             var coachesInDb = dbContext.Coaches.Count();
 
             Assert.That(coaches.Count(), Is.EqualTo(coachesInDb));
 
-            await coachService.DeleteAsync(coach.Id);
+            var coachId = 30;
+            await coachService.DeleteAsync(coachId);
             coaches = await coachService.GetAllCoachesAsync();
 
             Assert.That(coaches.Count(), Is.LessThan(coachesInDb));
-            Assert.That(!coaches.Any(p => p.Id == coach.Id), Is.True);
+            Assert.That(!coaches.Any(p => p.Id == coachId));
         }
 
         [Test]
@@ -188,12 +155,6 @@ namespace FantasyBasketballLeague.Tests
         [Test]
         public async Task Test_Edit_PositiveScenario()
         {
-            repo = new Repository(dbContext);
-            coachService = new CoachService(repo);
-
-            await repo.AddAsync(coach);
-            await repo.SaveChangesAsync();
-
             var model = new CoachDetailsModel
             { 
                 Id = 30,
@@ -203,7 +164,7 @@ namespace FantasyBasketballLeague.Tests
                 TeamId = 20
             };
 
-            var id = coach.Id;
+            var id = model.Id;
             
             var coachId = await coachService.Edit(id, model);
             var editedCoach = await coachService.GetByIdAsync(coachId);
@@ -219,14 +180,8 @@ namespace FantasyBasketballLeague.Tests
         }
 
         [Test]
-        public async Task Test_Edit_Negative_WithNotExistingObject()
+        public void Test_Edit_Negative_WithNotExistingObject()
         {
-            repo = new Repository(dbContext);
-            coachService = new CoachService(repo);
-
-            await repo.AddAsync(coach);
-            await repo.SaveChangesAsync();
-
             var model = new CoachDetailsModel
             {
                 Id = 30,
@@ -250,6 +205,21 @@ namespace FantasyBasketballLeague.Tests
         public void TearDown()
         {
             dbContext.Dispose();
+        }
+
+        private async Task SeedCoach(IRepository repo)
+        {
+            var coach = new Coach
+            {
+                Id = 30,
+                FirstName = "Ivan",
+                LastName = "Ivanov",
+                ImageUrl = "",
+                IsActive = true,
+            };
+
+            await repo.AddAsync(coach);
+            await repo.SaveChangesAsync();
         }
     }
 }

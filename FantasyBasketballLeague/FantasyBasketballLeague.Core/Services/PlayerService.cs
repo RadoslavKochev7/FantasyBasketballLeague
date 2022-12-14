@@ -1,10 +1,8 @@
 ﻿using FantasyBasketballLeague.Core.Contracts;
 using FantasyBasketballLeague.Core.Models.BasketballPlayer;
-using FantasyBasketballLeague.Core.Models.Teams;
 using FantasyBasketballLeague.Infrastructure.Data.Common;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace FantasyBasketballLeague.Core.Services
 {
@@ -97,44 +95,42 @@ namespace FantasyBasketballLeague.Core.Services
             return model;
         }
 
-        public Task<IEnumerable<MyPlayersModel>> GetMyPlayers()
-        {
-            //var user = await repo.All<ApplicationUser>()
-            //   .Where(u => u.Id == userId)
-            //   .Include(u => u.UserTeams)
-            //   .ThenInclude(t => t.Team)
-            //   .ThenInclude(t => t.Players)
-            //   .ThenInclude(t => t.Position)
-            //   .FirstOrDefaultAsync();
+        //public async Task<IEnumerable<MyPlayersModel>> GetMyPlayers(string userId)
+        //{
+        //    var user = await repo.All<ApplicationUser>(u => u.Id == userId)
+        //       .Include(u => u.UserTeams)
+        //       .ThenInclude(t => t.Team)
+        //       .ThenInclude(t => t.Players)
+        //       .ThenInclude(t => t.Position)
+        //       .FirstOrDefaultAsync();
 
-            //if (user == null)
-            //{
-            //    throw new ArgumentException("Invalid User Id");
-            //}
-            //var result = user.UserTeams
-            //     .Select(u => new MyTeamViewModel()
-            //     {
-            //         Players = u.Team.Players.Select(p => new Models.BasketballPlayer.BasketballPlayerDetailsModel()
-            //         {
-            //             Id = p.Id,
-            //             FirstName = p.FirstName,
-            //             LastName = p.LastName,
-            //             JerseyNumber = p.JerseyNumber,
-            //             IsTeamCaptain = p.IsTeamCaptain == false ? "No" : "Yes",
-            //             IsStarter = p.IsStarter == false ? "No" : "Yes",
-            //             Position = p.Position.Initials,
-            //             PositionId = p.PositionId,
-            //             SeasonsPlayed = p.SeasonsPlayed
-            //         })
-            //         .OrderBy(p => p.JerseyNumber)
-            //         .ToList()
-            //     })
-            //     .OrderByDescending(t => t.Id);
+        //    if (user == null)
+        //    {
+        //        throw new ArgumentException("Invalid User Id");
+        //    }
 
-            //return result;
+        //    var players = new MyPlayersModel();
 
-            throw new NotImplementedException();
-        }
+        //    var result = user.UserTeams
+        //         .Select(tp => tp.Team.Players
+        //         .Select(p => new MyPlayersModel()
+        //         {
+        //             Id = p.Id,
+        //             FirstName = p.FirstName,
+        //             LastName = p.LastName,
+        //             JerseyNumber = p.JerseyNumber,
+        //             IsTeamCaptain = p.IsTeamCaptain == false ? "No" : "Yes",
+        //             IsStarter = p.IsStarter == false ? "No" : "Yes",
+        //             Position = p.Position.Initials,
+        //             PositionId = p.PositionId,
+        //             SeasonsPlayed = p.SeasonsPlayed,
+        //             Experience = p.ExperienceLevel.ToString(),
+        //             TeamId = p.TeamId,
+        //             Team = p.Team.Name
+        //         }));
+
+        //    return result;
+        //}
 
         public async Task<BasketballPlayerDetailsModel> GetByIdAsync(int id)
         {
@@ -156,9 +152,13 @@ namespace FantasyBasketballLeague.Core.Services
                    IsTeamCaptain = p.IsTeamCaptain == true ? "Yes" : "No",
                    Experience = p.ExperienceLevel.ToString()
                })
-               .FirstOrDefaultAsync() ?? throw new ArgumentNullException("No such player.");
+               .FirstOrDefaultAsync() ?? throw new NullReferenceException("No such player.");
         }
 
+        public Task<IEnumerable<MyPlayersModel>> GetMyPlayers(string userId)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<bool> PlayerNameExists(string firstName, string lastName)
         => await repo.AllReadonly<BasketballPlayer>().AnyAsync(t => t.FirstName == firstName

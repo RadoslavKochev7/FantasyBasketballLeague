@@ -10,6 +10,6 @@ namespace FantasyBasketballLeague.Core.Contracts
         Task<BasketballPlayerDetailsModel> GetByIdAsync(int id);
         Task<bool> PlayerNameExists(string playerName, string lastName);
         Task<IEnumerable<BasketballPlayerDetailsModel>> GetAllPlayersAsync();
-        Task<IEnumerable<MyPlayersModel>> GetMyPlayers();
+        Task<IEnumerable<MyPlayersModel>> GetMyPlayers(string userId);
     }
 }
