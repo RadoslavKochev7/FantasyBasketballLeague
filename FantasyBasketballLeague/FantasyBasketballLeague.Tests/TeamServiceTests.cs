@@ -34,7 +34,7 @@ namespace FantasyBasketballLeague.Tests
             var searchedteam = await teamService.GetByIdAsync(teamId);
 
             Assert.NotNull(searchedteam);
-            Assert.DoesNotThrowAsync(() => teamService.GetByIdAsync(teamId));
+            Assert.DoesNotThrowAsync(async () => await teamService.GetByIdAsync(teamId));
         }
 
         [Test]
