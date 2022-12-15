@@ -1,5 +1,6 @@
 ﻿using FantasyBasketballLeague.Core.Contracts;
 using FantasyBasketballLeague.Core.Models.League;
+using FantasyBasketballLeague.Core.Models.Teams;
 using FantasyBasketballLeague.Infrastructure.Data.Common;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -81,17 +82,12 @@ namespace FantasyBasketballLeague.Core.Services
         {
             var leagues = await repo.AllReadonly<League>()
                 .Include(t => t.Teams)
+                .ThenInclude(t => t.Coach)
                 .Select(t => new LeagueViewModel()
                 {
                     Id = t.Id,
                     Name = t.Name,
                     Count = t.Teams.Count,
-                    Teams = t.Teams.Select(lt => new Models.Teams.TeamsShortViewModel()
-                    {
-                        Id = lt.Id,
-                        Name = lt.Name,
-                        CoachName = lt.Coach != null ? $"{lt.Coach.FirstName} {lt.Coach.LastName}" : "No coach assigned"
-                    })
                 })
                 .OrderByDescending(t => t.Id)
                 .ToListAsync();
@@ -99,20 +95,6 @@ namespace FantasyBasketballLeague.Core.Services
             return leagues;
         }
 
-        public async Task<IEnumerable<LeagueAddTeamsModel>> GetAllTeamsWithoutLeague()
-        {
-            var teams = await repo.AllReadonly<Team>(t => t.IsActive)
-                .Where(t => t.LeagueId == null)
-                .Select(t => new LeagueAddTeamsModel()
-                {
-                    TeamId = t.Id,
-                    TeamName = t.Name
-                })
-                .OrderBy(t => t.TeamName)
-                .ToListAsync();
-
-            return teams;
-        }
 
         public async Task<LeagueViewModel> GetByIdAsync(int leagueId)
         {
@@ -123,7 +105,15 @@ namespace FantasyBasketballLeague.Core.Services
                  {
                      Id = l.Id,
                      Name = l.Name,
-                     Count = l.Teams.Count
+                     Count = l.Teams.Count,
+                     Teams = l.Teams.Select(lt => new Models.Teams.TeamsShortViewModel()
+                     {
+                         Id = lt.Id,
+                         Name = lt.Name,
+                         CoachName = lt.Coach != null ? $"{lt.Coach.FirstName} {lt.Coach.LastName}" : "No coach assigned",
+                         LogoUrl = lt.LogoUrl,
+                     })
+
                  })
                  .FirstAsync() ?? throw new InvalidOperationException();
         }

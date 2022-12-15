@@ -77,7 +77,7 @@ namespace FantasyBasketballLeague.Controllers
             catch (Exception)
             {
                 notyfService.Error($"Create Team Failed");
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("BasketballPlayer", "All");
             }
         }
 

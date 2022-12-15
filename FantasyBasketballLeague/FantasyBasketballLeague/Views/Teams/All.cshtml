@@ -8,6 +8,10 @@
 <h1 class="text-center" style="color:white">@ViewBag.Title</h1>
 <hr style="color:white" />
 
+<input class="btn btn-success" value="Create" onclick="location.href='@Url.Action("Create","Teams")';" />
+<br />
+<br />
+
 <div class="text-center row">
     @if (!Model.Any())
     {
@@ -17,8 +21,8 @@
     {
         @foreach (var team in Model)
         {
-            <div class="card col-4" style="width: 20rem; margin:.30rem ">
-                <img class="card-img-top" style="width: 18rem; height:20rem"
+            <div class="card col-4" style="width: 18rem; margin:.30rem; background-color:lightgrey">
+                <img class="card-img-top" style="width: 17rem; height:20rem"
              src="@team.LogoUrl" alt="Team logo Image">
                 <div class="card-body">
 
@@ -32,17 +36,10 @@
                     <tr class="actions">
                         <th><span class="fw-bold">Actions:</span></th>
                         <td>
-                            <a asp-controller="Teams" asp-action="Details" asp-route-id="@team.Id" class="btn btn-success">View</a>
-                            <a asp-controller="Teams" asp-action="Edit" asp-route-id="@team.Id" class="btn btn-primary">Edit</a>
+                            <a asp-controller="Teams" asp-action="Details" asp-route-id="@team.Id" class="btn btn-primary">View</a>
+                            <a asp-controller="Teams" asp-action="Edit" asp-route-id="@team.Id" class="btn btn-warning">Edit</a>
                             <a asp-controller="Teams" asp-action="Delete" asp-route-id="@team.Id" class="btn btn-danger">Delete</a>
-                           @* @if (team.LeagueId == null)
-                            {
-                                <a asp-controller="Team" asp-action="JoinLeague" asp-route-id="@team.Id" class="btn btn-warning">Join League</a>
-                            }
-                            @if (team.CoachName == "No coach assigned")
-                            {
-                                <a asp-controller="Coach" asp-action="Assign" asp-route-id="@team.Id" class="btn btn-secondary">Assign Coach</a>
-                            }*@
+                           
                         </td>
                     </tr>
                 </table>

@@ -17,6 +17,14 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<int> AddAsync(BasketballPlayerViewModel model)
         {
+            if (model is null)
+                throw new ArgumentNullException("Model cannot be null");
+
+            if (string.IsNullOrEmpty(model.FirstName) ||
+                string.IsNullOrEmpty(model.LastName) ||
+                string.IsNullOrEmpty(model.JerseyNumber))
+                throw new ArgumentException("Value cannot be null or empty");
+
             var player = new BasketballPlayer()
             {
                 Id = model.Id,
@@ -30,10 +38,17 @@ namespace FantasyBasketballLeague.Core.Services
                 PositionId = model.PositionId,
             };
 
-            await repo.AddAsync(player);
-            await repo.SaveChangesAsync();
+            try
+            {
+                await repo.AddAsync(player);
+                await repo.SaveChangesAsync();
 
-            return player.Id;
+                return player.Id;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Database failed to save info", ex);
+            }
         }
 
         public async Task DeleteAsync(int id)
@@ -117,7 +132,7 @@ namespace FantasyBasketballLeague.Core.Services
                    IsTeamCaptain = p.IsTeamCaptain == true ? "Yes" : "No",
                    Experience = p.ExperienceLevel.ToString()
                })
-               .FirstAsync() ?? throw new NullReferenceException("No such player.");
+               .FirstAsync() ?? throw new InvalidOperationException();
         }
 
 

@@ -4,27 +4,34 @@
     ViewBag.Title = "All Positions";
 }
 
-<h2 class="text-center">@ViewBag.Title</h2>
-<hr />
+<h1 class="text-center" style="color:white">@ViewBag.Title</h1>
+<hr style="color:white" />
+
+<input class="btn btn-success" value="Create" onclick="location.href='@Url.Action("Create","Positions")';" />
+<br />
+<br />
 
 <div class="text-center row">
     @foreach (var position in Model)
     {
-        <div class="card col-4" style="width: 20rem; ">
+        <div class="card col-4" style="width: 20rem; margin:0.30rem; background-color:lightgray">
             <div class="card-body">
 
                 <h5 class="card-title mt-1">@position.Name</h5>
                 <p class="mb-0">Initials: @position.Initials</p>
             </div>
 
-            <form class="input-group-sm" asp-controller="Position" asp-action="All">
-            </form>
-            <span class="fw-bold">Actions: </span>
-            <a asp-controller="Positions" asp-action="Details" asp-route-id="@position.Id" class="btn btn-success mb-2">View</a>
-            <span></span>
-            <a asp-controller="Positions" asp-action="Edit" asp-route-id="@position.Id" class="btn btn-primary mb-2">Edit</a>
-                <span></span>
-            <a asp-controller="Positions" asp-action="Delete" asp-route-id="@position.Id" class="btn btn-danger mb-2">Delete</a>
+            <form class="input-group-sm" asp-controller="Position" asp-action="All"></form>
+            <table>
+                <tr class="actions">
+                    <th><span class="fw-bold">Actions:</span></th>
+                    <td>
+                        <a asp-controller="Positions" asp-action="Details" asp-route-id="@position.Id" class="btn btn-primary mb-2">View</a>
+                        <a asp-controller="Positions" asp-action="Edit" asp-route-id="@position.Id" class="btn btn-warning mb-2">Edit</a>
+                        <a asp-controller="Positions" asp-action="Delete" asp-route-id="@position.Id" class="btn btn-danger mb-2">Delete</a>
+                    </td>
+                </tr>
+            </table>
         </div>
     }
 </div>

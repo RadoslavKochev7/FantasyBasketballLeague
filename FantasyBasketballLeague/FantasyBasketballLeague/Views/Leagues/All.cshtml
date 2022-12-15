@@ -4,17 +4,18 @@
     ViewBag.Title = "All Leagues";
 }
 
-<h2 class="text-center">@ViewBag.Title</h2>
-<hr />
+<h1 class="text-center" style="color:white">@ViewBag.Title</h1>
+<hr style="color:white" />
 
 <div class="text-center row">
     @foreach (var league in Model)
     {
-        <div class="card col-4" style="width: 20rem; margin:auto;">
+        <div class="card col-4" style="width: 18rem; margin:auto;">
             <div class="card-body">
 
                 <h5 class="card-title mt-1">@($"{league.Name}")</h5>
                 <p class="mb-0">Teams: @league.Count</p>
+
             </div>
 
             <form class="input-group-sm" asp-controller="League" asp-action="All">

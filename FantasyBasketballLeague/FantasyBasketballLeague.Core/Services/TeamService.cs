@@ -17,7 +17,7 @@ namespace FantasyBasketballLeague.Core.Services
             repo = _repo;
         }
 
-        public async Task AddAsync(TeamAddModel model)
+        public async Task<int> AddAsync(TeamAddModel model)
         {
             if (model is null)
              throw new ArgumentNullException("Model cannot be null");
@@ -42,6 +42,8 @@ namespace FantasyBasketballLeague.Core.Services
 
             await repo.AddAsync(team);
             await repo.SaveChangesAsync();
+
+            return team.Id;
         }
 
         public async Task DeleteAsync(int teamId)
@@ -159,7 +161,8 @@ namespace FantasyBasketballLeague.Core.Services
                         IsStarter = p.IsStarter == false ? "No" : "Yes",
                         Position = p.Position.Initials,
                         PositionId = p.PositionId,
-                        SeasonsPlayed = p.SeasonsPlayed
+                        SeasonsPlayed = p.SeasonsPlayed,
+                        Experience = p.ExperienceLevel.ToString(),
                     })
                     .OrderBy(p => p.JerseyNumber)
                     .ToList()
@@ -216,6 +219,11 @@ namespace FantasyBasketballLeague.Core.Services
              .ToListAsync();
 
             return teams;
+        }
+
+        public Task<IEnumerable<TeamsShortViewModel>> GetAllTeamsWithoutLeagues()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -35,7 +35,6 @@ namespace FantasyBasketballLeague.Core.Services
                 await repo.AddAsync(coach);
                 await repo.SaveChangesAsync();
                 return coach.Id;
-
             }
             catch (Exception ex)
             {

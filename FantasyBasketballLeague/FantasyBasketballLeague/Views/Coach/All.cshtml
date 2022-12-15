@@ -7,11 +7,15 @@
 <h1 class="text-center" style="color:white">@ViewBag.Title</h1>
 <hr style="color:white" />
 
+<input class="btn btn-success" value="Create" onclick="location.href='@Url.Action("Create","Coach")';" />
+<br />
+<br />
+
 <div class="text-center row">
     @foreach (var coach in Model)
     {
-        <div class="card col-4" style="width: 20rem; margin:.30rem; background-color:lightgrey">
-            <img class="card-img-top" style="width: 15rem;height:18rem; margin:auto;"
+        <div class="card col-4" style="width: 18rem; margin:.30rem; background-color:lightgrey">
+            <img class="card-img-top" style="width: 15rem;height:19rem; margin:auto;"
              src="@coach.ImageUrl" alt="Team logo Image">
             <div class="card-body">
 
@@ -23,13 +27,9 @@
                 <tr class="actions">
                     <th><span class="fw-bold">Actions:</span></th>
                     <td>
-                        <a asp-controller="Coach" asp-action="Details" asp-route-id="@coach.Id" class="btn btn-success">View</a>
-                        <a asp-controller="Coach" asp-action="Edit" asp-route-id="@coach.Id" class="btn btn-primary">Edit</a>
+                        <a asp-controller="Coach" asp-action="Details" asp-route-id="@coach.Id" class="btn btn-primary">View</a>
+                        <a asp-controller="Coach" asp-action="Edit" asp-route-id="@coach.Id" class="btn btn-warning">Edit</a>
                         <a asp-controller="Coach" asp-action="Delete" asp-route-id="@coach.Id" class="btn btn-danger">Delete</a>
-                        @if (coach.TeamId == null)
-                        {
-                            <a asp-controller="Coach" asp-action="Assign" asp-route-id="@coach.Id" class="btn btn-warning">Assign</a>
-                        }
                     </td>
                 </tr>
             </table>

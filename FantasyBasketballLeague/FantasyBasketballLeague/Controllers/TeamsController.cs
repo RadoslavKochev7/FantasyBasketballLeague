@@ -71,10 +71,10 @@ namespace FantasyBasketballLeague.Controllers
 
             try
             {
-                await teamService.AddAsync(model);
+                var id = await teamService.AddAsync(model);
                 notyfService.Success($"{model.Name} is Successfully created!");
 
-                return RedirectToAction(nameof(All));
+                return RedirectToAction(nameof(Details), new { id });
             }
             catch (Exception)
             {

@@ -5,12 +5,12 @@
     ViewBag.Title = "Edit Team";
 }
 
-<h2 class="text-center">@ViewBag.Title</h2>
-<hr />
+<h1 class="text-center" style="color:white">@ViewBag.Title</h1>
+<hr style="color:white" />
 
-<div class="text-center row">
-    <div class="row">
-        <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+<div class="text row">
+    <div class="row" style="color:white; font-size:large">
+        <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-4">
             <form asp-action="Edit" method="post">
                 <div class="mb-3">
                     <label asp-for="@Model.Name" class="form-label">Name</label>
@@ -25,7 +25,7 @@
                 <div class="mb-3">
                     <label asp-for="@Model.LeagueId" class="form-label">League</label>
                     <select asp-for="@Model.LeagueId" class="form-control">
-                        <option value="" disabled selected hidden>Please Choose...</option>
+                        <option value="" selected>Please Choose...</option>
                         @foreach (var league in Model.Leagues)
                         {
                             <option value="@league.Id">@league.Name</option>
@@ -36,7 +36,7 @@
                 <div class="mb-3">
                     <label asp-for="@Model.CoachId" class="form-label">Coach</label>
                     <select asp-for="@Model.CoachId" class="form-control">
-                        <option value="" disabled selected hidden>Please Choose...</option>
+                        <option value=""selected>Please Choose...</option>
                         @foreach (var coach in Model.Coaches)
                         {
                             <option value="@coach.Id">@($"{coach.FirstName} {coach.LastName}")</option>

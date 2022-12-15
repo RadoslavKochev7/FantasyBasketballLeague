@@ -43,8 +43,8 @@ namespace FantasyBasketballLeague.Tests
         {
             int playerId = 124;
 
-            Assert.ThrowsAsync<NullReferenceException>
-                (async () => await playerService.GetByIdAsync(playerId), message: "No such player.");
+            Assert.ThrowsAsync<InvalidOperationException>
+                (async () => await playerService.GetByIdAsync(playerId));
         }
 
         [Test]
@@ -109,19 +109,84 @@ namespace FantasyBasketballLeague.Tests
                 IsTeamCaptain = "false" 
             };
 
-            var model2 = new BasketballPlayerViewModel() { Id = 17, FirstName = null, LastName = "saas" };
+            var model2 = new BasketballPlayerViewModel() { Id = 17, FirstName = "firstname", LastName = null };
+            var model3 = new BasketballPlayerViewModel() { Id = 17, FirstName = "firstname", LastName = "last", JerseyNumber = null };
+            var model4 = new BasketballPlayerViewModel() { Id = 17, FirstName = "firstname", LastName = "last"};
 
-            Assert.ThrowsAsync<ArgumentNullException>
+            Assert.ThrowsAsync<ArgumentException>
                 (async () => await playerService.AddAsync(model1));
 
-            Assert.ThrowsAsync<ArgumentNullException>
+            Assert.ThrowsAsync<ArgumentException>
                (async () => await playerService.AddAsync(model2));
+
+            Assert.ThrowsAsync<ArgumentException>
+               (async () => await playerService.AddAsync(model3));
+
+            Assert.ThrowsAsync<ArgumentException>
+               (async () => await playerService.AddAsync(model4));
 
             Assert.ThrowsAsync<ArgumentNullException>
                (async () => await playerService.AddAsync(null));
         }
 
+        [Test]
+        public async Task Test_DeleteAsync_Positive()
+        {
+            var model = new BasketballPlayer()
+            {
+                Id = 17,
+                FirstName = "test",
+                LastName = "test",
+                JerseyNumber = "6",
+                IsStarter = true,
+                IsTeamCaptain = false,
+                SeasonsPlayed = 7,
+                TeamId = 6,
+                PositionId = 10,
+            };
+            await repo.AddAsync(model);
+            await repo.SaveChangesAsync();
 
+            var playersInDb = dbContext.BasketballPlayers.Count();
+            await playerService.DeleteAsync(model.Id);
+
+            var players = await playerService.GetAllPlayersAsync();
+
+            Assert.That(players.Count(), Is.LessThan(playersInDb));
+            Assert.That(!players.Any(p => p.Id == model.Id));
+            Assert.IsFalse(model.IsActive);
+        }
+
+        [Test]
+        public async Task Test_DeleteAsync_NotSuccessfullWithInvalidId()
+        {
+            var model = new TeamAddModel() { Id = 15, Name = "team", LogoUrl = "" };
+
+            var playersInDb = dbContext.BasketballPlayers.Count();
+            var players = await playerService.GetAllPlayersAsync();
+
+            await playerService.DeleteAsync(model.Id);
+
+            Assert.That(players.Count(), Is.EqualTo(playersInDb));
+        }
+
+        [Test]
+        public async Task Test_PlayerNameExistsMethod()
+        {
+            var player = new BasketballPlayerViewModel()
+            {
+                Id = 17,
+                FirstName = "firstName",
+                LastName = "saas",
+                JerseyNumber = "8",
+                IsStarter = "true",
+                IsTeamCaptain = "false"
+            };
+
+            await playerService.AddAsync(player);
+
+            Assert.IsTrue(await playerService.PlayerNameExists(player.FirstName, player.LastName));
+        }
 
         [TearDown]
         public void TearDown()

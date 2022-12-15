@@ -9,12 +9,15 @@ namespace FantasyBasketballLeague.Controllers
     {
         private readonly ILeagueService leagueService;
         private readonly INotyfService notyfService;
+        private readonly ITeamService teamService;
 
         public LeaguesController(ILeagueService _leagueService,
-                                 INotyfService _notyfService)
+                                 INotyfService _notyfService,
+                                 ITeamService _teamService)
         {
             leagueService = _leagueService;
             notyfService = _notyfService;
+            teamService = _teamService;
         }
 
         public IActionResult Create()
@@ -41,7 +44,6 @@ namespace FantasyBasketballLeague.Controllers
             {
                 return RedirectToAction("Error", "Home");
             }
-
         }
 
         public async Task<IActionResult> All()
@@ -88,6 +90,7 @@ namespace FantasyBasketballLeague.Controllers
             }
             catch (Exception)
             {
+                notyfService.Error($"Edit [{id}] failed");
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -125,6 +128,7 @@ namespace FantasyBasketballLeague.Controllers
             }
             catch (Exception)
             {
+                notyfService.Error($"Delete [{id}] failed");
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -132,23 +136,20 @@ namespace FantasyBasketballLeague.Controllers
         [HttpGet]
         public async Task<IActionResult> AddTeams()
         {
-            var model = await leagueService.GetAllTeamsWithoutLeague();
+            var model = await teamService.GetAllTeamsWithoutLeagues();
 
             return View(model);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> AddTeams(int id, LeagueAddTeamsModel model)
-        //{
-        //    if (model == null)
-        //        notyfService.Warning($"There are no teams without league");
+        [HttpPost]
+        public async Task<IActionResult> AddTeams(int id, LeagueAddTeamsModel model)
+        {
+            var teamIds = model.Teams.Select(t => t.Id).ToArray();
+            var result = await leagueService.AddTeams(teamIds, id);
+            var league = await leagueService.GetByIdAsync(id);
+            notyfService.Success($"[{result}] teams added to {league.Name}");
 
-        //    //var teamIds = model.Select(x => x.TeamId).ToArray();
-        //    //var result = await leagueService.AddTeams(teamIds, id);
-        //    //var league = await leagueService.GetByIdAsync(id);
-        //    //notyfService.Success($"{result} teams are added to {league.Name}");
-
-        //    return RedirectToAction(nameof(All));
-        //}
+            return RedirectToAction(nameof(Details), new { id });
+        }
     }
 }

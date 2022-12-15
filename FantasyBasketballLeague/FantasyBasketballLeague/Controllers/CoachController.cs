@@ -58,7 +58,8 @@ namespace FantasyBasketballLeague.Controllers
             }
             catch (Exception)
             {
-                return RedirectToAction("Error", "Home");
+                notyfService.Error("Create failed");
+                return RedirectToAction(nameof(All));
             }
            
         }
@@ -82,7 +83,9 @@ namespace FantasyBasketballLeague.Controllers
                 {
                     FirstName = coach.FirstName,
                     LastName = coach.LastName,
-                    ImageUrl = coach.ImageUrl
+                    ImageUrl = coach.ImageUrl,
+                    TeamId = coach.TeamId,
+                    Teams = await teamService.GetAllTeamsAsync()
                 };
 
                 return View(model);
@@ -135,7 +138,7 @@ namespace FantasyBasketballLeague.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Assign()
+        public async Task<IActionResult> Assign(int id)
         {
             var model = new CoachAssignToTeamModel()
             {
@@ -152,7 +155,7 @@ namespace FantasyBasketballLeague.Controllers
             {
                 var coach = await coachService.GetByIdAsync(id);
 
-                if (coach.TeamId != null)
+                if (coach.TeamId != 0)
                 {
                     notyfService.Warning($"Coach {coach.FirstName} {coach.LastName} already has a team assigned!");
                     return RedirectToAction(nameof(All));

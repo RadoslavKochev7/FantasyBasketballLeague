@@ -5,14 +5,24 @@
     ViewBag.Title = "Details page";
 }
 
-<h2 class="text-center">@ViewBag.Title</h2>
-<hr />
-<div class="card col-4" style="width: 20rem; margin:auto ">
+<h1 class="text-center" style="color:white">@ViewBag.Title</h1>
+<hr style="color:white" />
+
+@if (Model.LeagueId == null)
+{
+    <a asp-controller="Team" asp-action="JoinLeague" asp-route-id="@Model.Id" class="btn btn-primary">Join League</a>
+}
+@if (Model.CoachName == "No coach assigned")
+{
+    <a asp-controller="Coach" asp-action="Assign" asp-route-id="@Model.Id" class="btn btn-success">Assign Coach</a>
+}
+
+<div class="card col-4" style="width: 20rem; margin:auto">
     <img class="card-img-top" style="width: 19rem; margin:auto "
          src="@Model.LogoUrl" alt="Team Image">
     <div class="d-flex justify-content-center">
         <div class="card " style="width: 50rem;">
-            <div class="card-body">
+            <div class="card-body" style="background-color:lightgray">
                 <h3 class="card-title text-center">Team</h3>
                 <p class="card-text"><span class="fw-bold">Name: </span>@Model.Name</p>
                 <p class="card-text"><span class="fw-bold">Open Positions: </span>@Model.OpenPositions</p>
@@ -23,7 +33,7 @@
                         <th><span class="fw-bold">Actions:</span></th>
 
                         <td>
-                            <a asp-controller="Teams" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                            <a asp-controller="Teams" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
                             <a asp-controller="Teams" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
                         </td>
                     </tr>

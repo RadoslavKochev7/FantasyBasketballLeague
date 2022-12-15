@@ -5,13 +5,14 @@
     ViewBag.Title = "Coach details page";
 }
 
-<h2 class="text-center">@ViewBag.Title</h2>
-<hr />
+<h1 class="text-center" style="color:white">@ViewBag.Title</h1>
+<hr style="color:white" />
+
 <div class="card col-4" style="width: 20rem; margin:auto ">
     <img class="card-img-top" style="width: 19rem; margin:auto "
          src="@Model.ImageUrl" alt="Coach Image">
     <div class="d-flex justify-content-center">
-        <div class="card " style="width: 50rem;">
+        <div class="card " style="width: 50rem; background-color:lightgrey">
             <div class="card-body">
                 <h3 class="card-title text-center">Coach</h3>
                 <p class="card-text"><span class="fw-bold">First Name: </span>@Model.FirstName</p>
@@ -24,6 +25,10 @@
                         <td>
                             <a asp-controller="Coach" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
                             <a asp-controller="Coach" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+                            @if (Model.Team == null)
+                            {
+                                <a asp-controller="Coach" asp-action="Assign" asp-route-id="@Model.Id" class="btn btn-success">Assign</a>
+                            }
                         </td>
                     </tr>
                 </table>

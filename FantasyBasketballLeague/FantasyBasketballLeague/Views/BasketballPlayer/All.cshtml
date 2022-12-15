@@ -7,6 +7,8 @@
 <h1 class="text-center" style="color:white">@ViewBag.Title</h1>
 <hr style="color:white" />
 
+<input class="btn btn-success" value="Add Player" onclick="location.href='@Url.Action("Create","BasketballPlayer")';" />
+
 <div class="text-center row">
     @if (!Model.Any())
     {
@@ -17,7 +19,7 @@
         @foreach (var player in Model)
         {
             <div class="card col-4" style="width: 20rem; margin:.30rem; ">
-                <img class="card-img-top" style="width: 19rem; height: 23rem; margin:auto "
+                <img class="card-img-top" style="width: 19rem; height: 21rem; margin:auto "
              src="https://i.pinimg.com/originals/ad/ff/96/adff96743178917890a9309ec43ab4d0.png" alt="Image">
                 <div class="d-flex justify-content-center">
                     <div class="card " style="width: 50rem; background-color:lightgrey">
@@ -35,8 +37,8 @@
                                     <th><span class="fw-bold">Actions:</span></th>
 
                                     <td>
-                                        <a asp-controller="BasketballPlayer" asp-action="Details" asp-route-id="@player.Id" class="btn btn-success">View</a>
-                                        <a asp-controller="BasketballPlayer" asp-action="Edit" asp-route-id="@player.Id" class="btn btn-primary">Edit</a>
+                                        <a asp-controller="BasketballPlayer" asp-action="Details" asp-route-id="@player.Id" class="btn btn-primary">View</a>
+                                        <a asp-controller="BasketballPlayer" asp-action="Edit" asp-route-id="@player.Id" class="btn btn-warning">Edit</a>
                                         <a asp-controller="BasketballPlayer" asp-action="Delete" asp-route-id="@player.Id" class="btn btn-danger">Delete</a>
                                     </td>
                                 </tr>
@@ -45,7 +47,6 @@
                     </div>
                 </div>
             </div>
-
         }
     }
 </div>

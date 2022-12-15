@@ -1,11 +1,13 @@
 ﻿@model CoachAssignToTeamModel
 
 @{
-    ViewBag.Title = "Teams without coaches";
+    ViewBag.Title = "Teams looking for a coach";
 }
 
-<h2 class="text-center">@ViewBag.Title</h2>
-<hr />
+<h1 class="text-center" style="color:white">@ViewBag.Title</h1>
+<hr style="color:white" />
+<br />
+<br />
 
 <div class="text-center row">
     @if (!Model.Teams.Any())
@@ -16,8 +18,7 @@
     {
         @foreach (var team in Model.Teams)
         {
-            <form asp-action="Assign" method="post">
-                <div class="card col-4" style="width: 20rem;">
+                <div class="card col-4" style="width: 20rem; margin:0.30rem; background-color:lightgrey">
                     <img class="card-img-top" style="width: 18rem; height:20rem; margin:auto;"
                  src="@team.LogoUrl" alt="Team logo Image">
                     <div class="card-body">
@@ -26,13 +27,16 @@
                         <p class="mb-0">Open positions: @team.OpenPositions</p>
                         <p class="mb-0">League: @(team.League ?? "No league joined")</p>
                         <p class="mb-0">Coach: @(team.CoachName ?? "No coach assigned")</p>
-                    </div>
 
+                    </div>
+            <form asp-action="Assign" method="post">
                     <span>
                         <button class="btn btn-success" name="TeamId" type="submit" value="@team.Id">Assign</button>
                     </span>
+                </form>
+
+                    
                 </div>
-            </form>
         }
     }
 </div>
