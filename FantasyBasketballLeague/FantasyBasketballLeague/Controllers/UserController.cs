@@ -102,7 +102,7 @@ namespace FantasyBasketballLeague.Controllers
                     await signInManager.SignInAsync(user, isPersistent: false);
                     notyfService.Information("Welcome to Fantasy League!", 3);
 
-                    return RedirectToAction("All", "Teams");
+                    return RedirectToAction("Index", "Home");
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid login");
@@ -134,6 +134,27 @@ namespace FantasyBasketballLeague.Controllers
                 }
 
                 notyfService.Information($"You are already an {Administrator}!");
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> LeaveAdmin()
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var user = await userManager.FindByIdAsync(userId);
+
+            if (user != null)
+            {
+                if (await userManager.IsInRoleAsync(user, Administrator))
+                {
+                    await userManager.RemoveFromRoleAsync(user, Administrator);
+                    notyfService.Success($"Congratulations, you are no longer an {Administrator}!");
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                notyfService.Information($"You are not an {Administrator}!");
             }
 
             return RedirectToAction("Index", "Home");

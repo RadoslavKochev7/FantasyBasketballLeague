@@ -17,10 +17,10 @@ namespace FantasyBasketballLeague.Core.Services
             repo = _repo;
         }
 
-        public async Task<int> AddAsync(TeamAddModel model)
+        public async Task<int> AddAsync(TeamAddModel model, string userId = "")
         {
             if (model is null)
-             throw new ArgumentNullException("Model cannot be null");
+                throw new ArgumentNullException("Model cannot be null");
 
             if (string.IsNullOrEmpty(model.Name))
                 throw new ArgumentNullException("Name cannot be null or empty");
@@ -41,6 +41,14 @@ namespace FantasyBasketballLeague.Core.Services
             team.League = teamLeague ?? null;
 
             await repo.AddAsync(team);
+            await repo.SaveChangesAsync();
+
+            var userTeam = new UserTeam()
+            {
+                TeamId = team.Id,
+                UserId = userId,
+            };
+            await repo.AddAsync(userTeam);
             await repo.SaveChangesAsync();
 
             return team.Id;
@@ -69,7 +77,7 @@ namespace FantasyBasketballLeague.Core.Services
                 coach.TeamId = null;
                 coach.Team = null;
             }
-           
+
             team.Name = model.Name;
             team.LogoUrl = model.LogoUrl;
             team.LeagueId = model.LeagueId;
@@ -164,7 +172,7 @@ namespace FantasyBasketballLeague.Core.Services
                         SeasonsPlayed = p.SeasonsPlayed,
                         Experience = p.ExperienceLevel.ToString(),
                     })
-                    .OrderBy(p => p.JerseyNumber)
+                    .OrderBy(p => p.Id)
                     .ToList()
                 })
                 .OrderByDescending(t => t.Id);

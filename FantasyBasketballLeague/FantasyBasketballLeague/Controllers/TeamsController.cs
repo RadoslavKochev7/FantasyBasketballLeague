@@ -71,7 +71,8 @@ namespace FantasyBasketballLeague.Controllers
 
             try
             {
-                var id = await teamService.AddAsync(model);
+                var userId = GetUserId();
+                var id = await teamService.AddAsync(model, userId);
                 notyfService.Success($"{model.Name} is Successfully created!");
 
                 return RedirectToAction(nameof(Details), new { id });
@@ -86,16 +87,18 @@ namespace FantasyBasketballLeague.Controllers
 
         public async Task<IActionResult> Mine()
         {
-            var userId = GetUserId();
-
-            if (userId == null)
+            try
             {
-                return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+                var userId = GetUserId();
+                var myTeams = await teamService.GetMyTeams(userId);
+
+                return View(myTeams);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Error", "Home");
             }
 
-            var myTeams = await teamService.GetMyTeams(userId);
-
-            return View(myTeams);
         }
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
@@ -142,6 +145,7 @@ namespace FantasyBasketballLeague.Controllers
                     }
 
                     await teamService.Edit(id, model);
+                    notyfService.Success($"Edit for [{id}] Successfull");
                 }
                 return RedirectToAction(nameof(All), new { id });
             }
@@ -173,6 +177,7 @@ namespace FantasyBasketballLeague.Controllers
         }
 
         private string GetUserId()
-        => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        => User.FindFirstValue(ClaimTypes.NameIdentifier) 
+            ?? throw new NullReferenceException("User does not exist");
     }
 }

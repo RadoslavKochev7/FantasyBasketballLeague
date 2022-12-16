@@ -27,9 +27,9 @@
                         <th><span class="fw-bold">Actions:</span></th>
 
                         <td>
-                            <a asp-controller="BasketballPlayer" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                            <a asp-controller="BasketballPlayer" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
                             <a asp-controller="BasketballPlayer" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
-                            <a asp-controller="BasketballPlayer" asp-action="All" asp-route-id="" class="btn btn-secondary">Back</a>
+                            <a class="btn btn-primary" title="Go back to previuos page" href='javascript:history.go(-1)'>Back</a>
                         </td>
                     </tr>
                 </table>

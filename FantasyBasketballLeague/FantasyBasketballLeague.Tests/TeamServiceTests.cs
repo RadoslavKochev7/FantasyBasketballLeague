@@ -4,6 +4,7 @@ using FantasyBasketballLeague.Core.Services;
 using FantasyBasketballLeague.Infrastructure.Data;
 using FantasyBasketballLeague.Infrastructure.Data.Common;
 using FantasyBasketballLeague.Infrastructure.Data.Entities;
+using System.Security.Claims;
 
 namespace FantasyBasketballLeague.Tests
 {
@@ -189,7 +190,8 @@ namespace FantasyBasketballLeague.Tests
                 LeagueId = 3
             };
 
-            await teamService.AddAsync(model);
+            var userId = Guid.NewGuid().ToString();
+            await teamService.AddAsync(model, userId);
             var teamsWithoutcoaches = await teamService.GetAllTeamsWithoutCoaches();
 
             Assert.That(teamsWithoutcoaches.Any(x => x.Id == model.Id));
@@ -234,5 +236,6 @@ namespace FantasyBasketballLeague.Tests
             await repo.AddAsync(team);
             await repo.SaveChangesAsync();
         }
+
     }
 }
