@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using FantasyBasketballLeague.Core.Contracts;
 using FantasyBasketballLeague.Core.Models.BasketballPlayer;
+using FantasyBasketballLeague.Infrastructure.Data.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -77,10 +78,11 @@ namespace FantasyBasketballLeague.Controllers
             catch (Exception)
             {
                 notyfService.Error($"Create Team Failed");
-                return RedirectToAction("BasketballPlayer", "All");
+                return RedirectToAction("Error", "Home");
             }
         }
 
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             try
@@ -95,7 +97,7 @@ namespace FantasyBasketballLeague.Controllers
             }
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = RoleConstants.Administrator)]
         public async Task<IActionResult> All()
         {
             var players = await playerService.GetAllPlayersAsync();
@@ -175,7 +177,14 @@ namespace FantasyBasketballLeague.Controllers
                 await playerService.DeleteAsync(id);
                 notyfService.Success($"Player {player.FirstName} {player.LastName} successfully deleted");
 
-                return RedirectToAction(nameof(All));
+                if (User.IsInRole(RoleConstants.Administrator))
+                {
+                    return RedirectToAction(nameof(All));
+                }
+                else
+                {
+                    return RedirectToAction("Mine","Teams");
+                }
             }
             catch (Exception)
             {

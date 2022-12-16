@@ -13,21 +13,19 @@
             <div class="container-fluid">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                     <div class="container-fluid">
-                        <a class="navbar-brand" href="#">Fantasy Basketball League</a>
+                        <a class="navbar-brand" asp-area="Admin" asp-controller="Home" asp-action="Index">Fantasy Basketball League</a>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                                </li>
+                                    <a class="navbar-brand" asp-area="Admin" asp-controller="Home" asp-action="Index">Home</a>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Teams
                                     </a>
-                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
                                         <li>
                                             <a asp-area="" class="dropdown-item" asp-controller="Teams" asp-action="Create">Create</a>
                                             <a asp-area="" class="dropdown-item" asp-controller="Teams" asp-action="Mine">Mine</a>
@@ -36,6 +34,12 @@
                                         <li><a href="@Url.Action("All", "Teams")" class="dropdown-item"><span>All Teams</span></a></li>
                                         <li><a href="@Url.Action("Mine", "Teams")" class="dropdown-item"><span>My Teams</span></a></li>*@
                                     </ul>
+                                </li>
+                                <li>
+                                    <a asp-area="Admin" class="nav-link active" asp-controller="User" asp-action="CreateRole">Create Role</a>
+                                </li>
+                                <li>
+                                    <a asp-area="Admin" class="nav-link active" asp-controller="User" asp-action="ManageUsers">Manage Users</a>
                                 </li>
                             </ul>
                         </div>

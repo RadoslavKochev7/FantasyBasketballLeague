@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using FantasyBasketballLeague.Infrastructure.Data.Constants
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -29,13 +30,27 @@
                                     Teams
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-                                   <li>
-                                            <a asp-area="" class="dropdown-item" asp-controller="Teams" asp-action="Create">Create</a>
-                                            <a asp-area="" class="dropdown-item" asp-controller="Teams" asp-action="All">All Teams</a>
-                                            <a asp-area="" class="dropdown-item" asp-controller="Teams" asp-action="Mine">Mine</a>
-                                   </li>
+                                    <li>
+                                        <a asp-area="" class="dropdown-item" asp-controller="Teams" asp-action="Create">Create</a>
+                                        <a asp-area="" class="dropdown-item" asp-controller="Teams" asp-action="All">All Teams</a>
+                                        <a asp-area="" class="dropdown-item" asp-controller="Teams" asp-action="Mine">Mine</a>
+                                    </li>
                                 </ul>
                             </div>
+                            @if (User.IsInRole(RoleConstants.Administrator))
+                            {
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Positions
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
+                                        <li>
+                                            <a asp-area="" class="dropdown-item" asp-controller="Positions" asp-action="Create">Create</a>
+                                            <a asp-area="" class="dropdown-item" asp-controller="Positions" asp-action="All">All Teams</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
 
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -44,11 +59,10 @@
                                 <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
                                     <li><a href="@Url.Action("Create", "BasketballPlayer")" class="dropdown-item"><span>Create</span></a></li>
                                     <li><a href="@Url.Action("All", "BasketballPlayer")" class="dropdown-item"><span>All Players</span></a></li>
-                                    <li><a href="@Url.Action("Mine", "Teams")" class="dropdown-item"><span>My Players</span></a></li>
                                 </ul>
                             </div>
 
-                              <div class="dropdown">
+                            <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
                                     Coaches
                                 </button>
@@ -67,10 +81,10 @@
                                     <li><a href="@Url.Action("All", "Leagues")" class="dropdown-item"><span>All Leagues</span></a></li>
                                 </ul>
                             </div>
-                        
-                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="BecomeAdmin">Become Admin</a>
-                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="LeaveAdmin">Quit Admin</a>
-                      
+
+                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="BecomeAdmin">Become Admin</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="LeaveAdmin">Quit Admin</a>
+
                         }
                     </ul>
                     <partial name="_LoginPartial" />
