@@ -6,12 +6,10 @@ namespace FantasyBasketballLeague.Core.Models.League
     {
         public int LeagueId { get; set; }
 
-        public int TeamId { get; set; }
+        public string LeagueName { get; set; } = null!;
 
-        public string TeamName { get; set; } = null!;
+        public string[] TeamNames { get; set; } = null!;
 
-        public bool IsSelected { get; set; } = false;
-
-        public List<TeamsShortViewModel> Teams { get; set; } = new List<TeamsShortViewModel>();
+        //public List<TeamsShortViewModel> Teams { get; set; } = new List<TeamsShortViewModel>();
     }
 }

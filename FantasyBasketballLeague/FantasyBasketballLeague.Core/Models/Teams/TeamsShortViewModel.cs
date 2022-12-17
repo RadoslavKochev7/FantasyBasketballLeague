@@ -15,8 +15,6 @@ namespace FantasyBasketballLeague.Core.Models.Teams
         [StringLength(FirstNameMaxLength, MinimumLength = FirstNameMinLength)]
         public string? CoachName { get; set; }
 
-        public int? CoachId { get; set; }
-
         [Required]
         [Display(Name = "Logo Url")]
         public string LogoUrl { get; set; } = null!;

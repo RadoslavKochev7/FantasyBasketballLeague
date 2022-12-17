@@ -229,9 +229,16 @@ namespace FantasyBasketballLeague.Core.Services
             return teams;
         }
 
-        public Task<IEnumerable<TeamsShortViewModel>> GetAllTeamsWithoutLeagues()
+        public async Task<IEnumerable<TeamsShortViewModel>> GetAllTeamsWithoutLeagues()
         {
-            throw new NotImplementedException();
+            return await repo.All<Team>(t => t.IsActive)
+                 .Where(t => t.LeagueId == null)
+                 .Select(t => new TeamsShortViewModel()
+                 {
+                     Id = t.Id,
+                     Name = t.Name
+                 })
+                 .ToListAsync();
         }
     }
 }

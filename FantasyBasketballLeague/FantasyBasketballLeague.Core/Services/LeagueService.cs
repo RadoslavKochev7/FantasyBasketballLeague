@@ -38,10 +38,9 @@ namespace FantasyBasketballLeague.Core.Services
 
         public async Task<int> AddTeams(int[] teamIds, int leagueId)
         {
-            var countAddedTeams = 0;
             var league = await repo.GetByIdAsync<League>(leagueId);
 
-            if (league == null)
+            if (league == null || teamIds.Length == 0)
             {
                 return 0;
             }
@@ -50,10 +49,14 @@ namespace FantasyBasketballLeague.Core.Services
             foreach (var id in teamIds)
             {
                 var team = await repo.GetByIdAsync<Team>(id);
+                team.LeagueId = leagueId;
                 teams.Add(team);
             }
+            int countAddedTeams = teams.Count;
 
             league.Teams.ToList().AddRange(teams);
+            await repo.SaveChangesAsync();
+
             return countAddedTeams;
         }
 
@@ -116,17 +119,6 @@ namespace FantasyBasketballLeague.Core.Services
 
                  })
                  .FirstAsync() ?? throw new InvalidOperationException();
-        }
-
-        public async Task RemoveTeam(int teamId, int leagueId)
-        {
-            var league = await repo.GetByIdAsync<League>(leagueId);
-            var team = await repo.GetByIdAsync<Team>(teamId);
-
-            if (team != null && league != null && league.Teams.Any(t => t.Id == team.Id))
-                league.Teams.Remove(team);
-
-            await repo.SaveChangesAsync();
         }
     }
 }

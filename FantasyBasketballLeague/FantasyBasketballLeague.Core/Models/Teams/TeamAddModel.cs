@@ -22,8 +22,6 @@ namespace FantasyBasketballLeague.Core.Models.Teams
         [StringLength(LeagueNameMaxLength, MinimumLength = LeagueNameMinLength)]
         public string? League { get; set; }
 
-        public int OpenPositions { get; set; }
-
         public int? LeagueId { get; set; }
 
         [Required]

@@ -1,93 +1,35 @@
 ﻿@model LeagueAddTeamsModel
-
 @{
-    ViewBag.Title = "List of teams without leagues";
+    ViewData["Title"] = "Teams Without Leagues";
+    var items = (List<SelectListItem>)ViewBag.AddTeams;
 }
-<head>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-</head>
 
-<h1 class="text-center" style="color:white">@ViewBag.Title</h1>
-<hr style="color:white" />
-
-<div class="text-center row">
-    <div class="row-">
-        <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-            <form asp-action="AddTeams" method="post">
-                <div class="mb-4">
-                    <label asp-for="@Model.TeamId" class="form-label">Teams</label>
-                    @if (!Model.Teams.Any())
-                    {
-                        <h2>There are no teams without league.</h2>
-                        <p>Create one via the button below &#x2B07</p>
-                        <input class="btn btn-success" value="Create Team" onclick="location.href='@Url.Action("Create","Teams")';" />
-                    }
-                    else
-                    {
-                        <div class="container-child fields">
-                            <h1 class="header">All Document Fields</h1>
-                            @using (Html.BeginForm("Details", "Leagues", FormMethod.Post))
-                            {
-                                <div id="list1" class="dropdown-check-list">
-                                    <span class="anchor">Select Fields</span>
-                                    <ul class="items" id="items">
-                                        <br />
-                                        <input type="text" id="searchInput" class="searchInput" onkeyup="search()" placeholder="Search for a field.." title="Type in a field name">
-                                        <br />
-                                        <br />
-                                        @for (int i = 0; i < Model.Teams.Count(); i++)
-                                        {
-                                            <li>
-                                                @Html.CheckBoxFor(m => m.IsSelected, new { id = string.Format("checkboxForField{0}", i + 1),
-                                    placeholder = Model.Teams[i].Name, title =  Model.Teams[i].Name})
-
-                                                @Html.DisplayFor(m => m.Teams[i].Name)
-                                                @* @Html.HiddenFor(m => m.AllFields[i].Value)
-                                    @Html.HiddenFor(m => m.AllFields[i].Text)*@
-                                            </li>
-                                        }
-                                    </ul>
-                                </div>
-                                <br />
-
-                                <br />
-                                <input id="submit-btn" class="submit-btn" type="submit" value="Update The Configuration" />
-                                <br />
-
-                                <br />
-                            }
-                        </div>
-                        <div id="list1" class="dropdown-check-list">
-                            <span class="anchor">Select Fields</span>
-                            <ul class="items" id="items">
-                                <br />
-                                <input type="text" id="searchInput" class="searchInput" onkeyup="search()" placeholder="Search for a field.." title="Type in a field name">
-                                <br />
-                                <br />
-
-                            </ul>
-                        </div>
-                        @* <table>
-                    <select class="select" multiple data-mdb-filter="true">
-
-                    @foreach (var team in Model)
-                    {
-                    <option value="@team.TeamId">@team.TeamName</option>
-                    }
+<div class="row" style="color:white">
+    <div class="col-4">
+        <form id="roles" method="post">
+            <input type="hidden" name="LeagueId" value="@Model.LeagueId" />
+            <input type="hidden" name="League" value="@Model.LeagueName" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-floating">
+                <h3>League: @Html.DisplayFor(m => m.LeagueName)</h3>
+            </div>
+            <div class="form-floating">
+                <div class="form-group">
+                    <label>Teams</label>
+                    <select asp-for="TeamNames" asp-items="@items" class="form-control">
                     </select>
-                    </table>
-
-                    <span>
-                    <button class="btn btn-success" name="TeamId" type="submit" value="@Model.Select(t => t.TeamId)">Save</button>
-                    </span>*@
-                    }
                 </div>
-            </form>
-        </div>
+            </div>
+            <div class="row">&nbsp;</div>
+            <div class="row">
+                <div class="col-4">
+                    <button id="login-submit" type="submit" class="btn btn-success btn-block">Submit</button>
+                </div>
+                <div class="col-2">
+                    <a class="btn btn-primary" title="Go back to previuos page" href='javascript:history.go(-1)'>Back</a>
+                </div>
+                <!-- /.col -->
+            </div>
+        </form>
     </div>
 </div>
-
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    }
