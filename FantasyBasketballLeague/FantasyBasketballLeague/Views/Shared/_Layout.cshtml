@@ -1,5 +1,4 @@
 ﻿@using FantasyBasketballLeague.Infrastructure.Data.Constants
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -13,82 +12,103 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Fantasy Basketball League</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        @if (User?.Identity?.IsAuthenticated ?? false)
-                        {
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Teams
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-                                    <li>
-                                        <a asp-area="" class="dropdown-item" asp-controller="Teams" asp-action="Create">Create</a>
-                                        <a asp-area="" class="dropdown-item" asp-controller="Teams" asp-action="All">All Teams</a>
-                                        <a asp-area="" class="dropdown-item" asp-controller="Teams" asp-action="Mine">Mine</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            @if (User.IsInRole(RoleConstants.Administrator))
-                            {
-                                <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Positions
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Fantasy Basketball League</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Teams
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
                                         <li>
-                                            <a asp-area="" class="dropdown-item" asp-controller="Positions" asp-action="Create">Create</a>
-                                            <a asp-area="" class="dropdown-item" asp-controller="Positions" asp-action="All">All Teams</a>
+                                            <a asp-area="" class="dropdown-item" asp-controller="Teams" asp-action="Create">Create</a>
+                                            <a asp-area="" class="dropdown-item" asp-controller="Teams" asp-action="Mine">Mine</a>
+                                            @if (User.IsInRole(RoleConstants.Administrator))
+                                            {
+                                                <a asp-area="" class="dropdown-item" asp-controller="Teams" asp-action="All">All Teams</a>
+                                            }
                                         </li>
                                     </ul>
-                                </div>
-                            }
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Coaches
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+                                        <li>
+                                            <a asp-area="" class="dropdown-item" asp-controller="Coach" asp-action="Create">Create</a>
+                                            <a asp-area="" class="dropdown-item" asp-controller="Coach" asp-action="All">All Coaches</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Leagues
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+                                        <li>
+                                            <a asp-area="" class="dropdown-item" asp-controller="Leagues" asp-action="Create">Create</a>
+                                            <a asp-area="" class="dropdown-item" asp-controller="Leagues" asp-action="All">All Leagues</a>
+                                        </li>
+                                    </ul>
+                                </li>
 
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Players
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-                                    <li><a href="@Url.Action("Create", "BasketballPlayer")" class="dropdown-item"><span>Create</span></a></li>
-                                    <li><a href="@Url.Action("All", "BasketballPlayer")" class="dropdown-item"><span>All Players</span></a></li>
-                                </ul>
-                            </div>
-
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Coaches
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-                                    <li><a href="@Url.Action("Create", "Coach")" class="dropdown-item"><span>Create</span></a></li>
-                                    <li><a href="@Url.Action("All", "Coach")" class="dropdown-item"><span>All Coaches</span></a></li>
-                                </ul>
-                            </div>
-
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Leagues
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-                                    <li><a href="@Url.Action("Create", "Leagues")" class="dropdown-item"><span>Create</span></a></li>
-                                    <li><a href="@Url.Action("All", "Leagues")" class="dropdown-item"><span>All Leagues</span></a></li>
-                                </ul>
-                            </div>
-
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="BecomeAdmin">Become Admin</a>
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="LeaveAdmin">Quit Admin</a>
-
-                        }
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Players
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+                                        <li>
+                                            <a asp-area="" class="dropdown-item" asp-controller="BasketballPlayer" asp-action="Create">Create</a>
+                                            @if (User.IsInRole(RoleConstants.Administrator))
+                                            {
+                                                <a asp-area="" class="dropdown-item" asp-controller="BasketballPlayer" asp-action="All">All Players</a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-area="" class="dropdown-item" asp-controller="Teams" asp-action="Mine">My Players</a>
+                                            }
+                                        </li>
+                                    </ul>
+                                </li>
+                                @if (User.IsInRole(RoleConstants.Administrator))
+                                {
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Positions
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+                                            <li>
+                                                <a asp-area="" class="dropdown-item" asp-controller="Positions" asp-action="Create">Create</a>
+                                                <a asp-area="" class="dropdown-item" asp-controller="Positions" asp-action="All">All Positions</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a asp-area="Admin" class="nav-link active" asp-controller="User" asp-action="CreateRole">Create Role</a>
+                                    </li>
+                                    <li>
+                                        <a asp-area="Admin" class="nav-link active" asp-controller="User" asp-action="ManageUsers">Manage Users</a>
+                                    </li>
+                                }
+                                <li>
+                                    <a asp-area="" class="nav-link active" asp-controller="User" asp-action="Become">Become Admin</a>
+                                </li>
+                                <li>
+                                    <a asp-area="" class="nav-link active" asp-controller="User" asp-action="LeaveAdmin">Quit Admin</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <partial name="_LoginPartial" />
             </div>
         </nav>
     </header>
@@ -99,8 +119,8 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container" style="color:lightgray" sty>
-            &copy; @DateTime.UtcNow.Year - FantasyBasketballLeague
+        <div class="container" style="color:lightgray">
+            &copy; @DateTime.UtcNow.Year - Fantasy Basketball League
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -110,3 +130,4 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+

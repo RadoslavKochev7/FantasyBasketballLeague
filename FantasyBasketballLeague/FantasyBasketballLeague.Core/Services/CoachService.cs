@@ -84,7 +84,7 @@ namespace FantasyBasketballLeague.Core.Services
                     LastName = c.LastName,
                     ImageUrl = c.ImageUrl,
                     TeamId = c.TeamId ?? 0,
-                    Team = c.TeamId != 0 ? c.Team.Name : "No team assigned"
+                    TeamName = c.TeamId != 0 ? c.Team.Name : "No team assigned"
                 })
                 .OrderByDescending(t => t.Id)
                 .ToListAsync();
@@ -102,7 +102,7 @@ namespace FantasyBasketballLeague.Core.Services
                     LastName = c.LastName,
                     ImageUrl = c.ImageUrl,
                     TeamId = c.TeamId ?? 0,
-                    Team = c.TeamId != 0 ? c.Team.Name : "No team assigned"
+                    TeamName = c.TeamId != 0 ? c.Team.Name : "No team assigned"
                 })
                 .FirstAsync() ?? throw new InvalidOperationException("Coach cannot be null");
         }

@@ -1,4 +1,5 @@
 ﻿@using FantasyBasketballLeague.Core.Models.Teams
+@using FantasyBasketballLeague.Infrastructure.Data.Constants
 @model TeamViewModel
 
 @{
@@ -10,9 +11,9 @@
 
 @if (Model.LeagueId == null)
 {
-    <a asp-controller="Team" asp-action="JoinLeague" asp-route-id="@Model.Id" class="btn btn-primary">Join League</a>
+    <a asp-controller="Leagues" asp-action="All" asp-route-id="@Model.Id" class="btn btn-primary">Join League</a>
 }
-@if (Model.CoachName == "No coach assigned")
+@if (Model.CoachName == "No coach assigned" && User.IsInRole(RoleConstants.Administrator))
 {
     <a asp-controller="Coach" asp-action="Assign" asp-route-id="@Model.Id" class="btn btn-success">Assign Coach</a>
 }

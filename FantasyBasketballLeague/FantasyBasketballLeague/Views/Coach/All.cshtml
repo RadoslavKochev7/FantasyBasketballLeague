@@ -1,4 +1,5 @@
-﻿@model IEnumerable<CoachDetailsModel>
+﻿@using FantasyBasketballLeague.Infrastructure.Data.Constants
+@model IEnumerable<CoachDetailsModel>
 
 @{
     ViewBag.Title = "All Coaches";
@@ -20,7 +21,7 @@
             <div class="card-body">
 
                 <h5 class="card-title mt-1">@($"{coach.FirstName} {coach.LastName}")</h5>
-                <p class="mb-0">Team: @(coach.Team ?? "No team assigned")</p>
+                <p class="mb-0">Team: @(coach.TeamName ?? "No team assigned")</p>
             </div>
 
             <table>
@@ -29,7 +30,10 @@
                     <td>
                         <a asp-controller="Coach" asp-action="Details" asp-route-id="@coach.Id" class="btn btn-primary">View</a>
                         <a asp-controller="Coach" asp-action="Edit" asp-route-id="@coach.Id" class="btn btn-warning">Edit</a>
-                        <a asp-controller="Coach" asp-action="Delete" asp-route-id="@coach.Id" class="btn btn-danger">Delete</a>
+                        @if (User.IsInRole(RoleConstants.Administrator))
+                        {
+                            <a asp-controller="Coach" asp-action="Delete" asp-route-id="@coach.Id" class="btn btn-danger">Delete</a>
+                        }
                     </td>
                 </tr>
             </table>

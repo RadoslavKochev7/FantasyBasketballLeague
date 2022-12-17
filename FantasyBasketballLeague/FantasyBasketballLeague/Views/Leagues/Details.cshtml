@@ -1,4 +1,5 @@
 ﻿@using FantasyBasketballLeague.Core.Models.League
+@using FantasyBasketballLeague.Infrastructure.Data.Constants
 @model LeagueViewModel
 
 @{
@@ -20,9 +21,12 @@
                         <th><span class="fw-bold">Actions:</span></th>
 
                         <td>
-                            <a asp-controller="Leagues" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-                            <a asp-controller="Leagues" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
-                            <a asp-controller="Leagues" asp-action="AddTeams" asp-route-id="@Model.Id" class="btn btn-success btn-xs">Add Teams</a>
+                            <a asp-controller="Leagues" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+                            @if (User.IsInRole(RoleConstants.Administrator))
+                            {
+                                <a asp-controller="Leagues" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+                                <a asp-controller="Leagues" asp-action="AddTeams" asp-route-id="@Model.Id" class="btn btn-success btn-xs">Add Teams</a>
+                            }
                         </td>
                     </tr>
                 </table>
@@ -43,7 +47,7 @@
     {
         @foreach (var team in Model.Teams)
         {
-            <div class="card col-4" style="width: 20rem; margin:.30rem; ">
+            <div class="card col-4" style="width: 20rem; margin:.30rem; background-color:lightgrey">
                 <img class="card-img-top" style="width: 18rem; height:20rem; margin:auto"
              src="@team.LogoUrl" alt="Team logo Image">
                 <div class="card-body">
@@ -52,15 +56,18 @@
                     <p class="mb-0">Coach: @(team.CoachName ?? "No coach assigned")</p>
 
                 </div>
-                <table>
-                    <tr class="actions">
-                        <th><span class="fw-bold">Actions:</span></th>
-                        <td>
-                            <a asp-controller="Teams" asp-action="Details" asp-route-id="@team.Id" class="btn btn-success mb-2">View</a>
-                            <a asp-controller="Teams" asp-action="Edit" asp-route-id="@team.Id" class="btn btn-primary mb-2">Edit</a>
-                            <a asp-controller="Teams" asp-action="Delete" asp-route-id="@team.Id" class="btn btn-danger mb-2">Delete</a>
-                        </td>
-                </table>
+                @if (User.IsInRole(RoleConstants.Administrator))
+                {
+                    <table>
+                        <tr class="actions">
+                            <th><span class="fw-bold">Actions:</span></th>
+                            <td>
+                                <a asp-controller="Teams" asp-action="Details" asp-route-id="@team.Id" class="btn btn-primary mb-2">View</a>
+                                <a asp-controller="Teams" asp-action="Edit" asp-route-id="@team.Id" class="btn btn-warning mb-2">Edit</a>
+                                <a asp-controller="Teams" asp-action="Delete" asp-route-id="@team.Id" class="btn btn-danger mb-2">Delete</a>
+                            </td>
+                    </table>
+                }
             </div>
         }
     }

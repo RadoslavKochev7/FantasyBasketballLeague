@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using FantasyBasketballLeague.Core.Contracts;
 using FantasyBasketballLeague.Core.Models.Coach;
+using FantasyBasketballLeague.Infrastructure.Data.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -65,7 +66,6 @@ namespace FantasyBasketballLeague.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> All()
         {
             var coaches = await coachService.GetAllCoachesAsync();
@@ -119,6 +119,7 @@ namespace FantasyBasketballLeague.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = RoleConstants.Administrator)]
         public async Task<IActionResult> Delete(int id)
         {
             try
@@ -138,6 +139,7 @@ namespace FantasyBasketballLeague.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = RoleConstants.Administrator)]
         public async Task<IActionResult> Assign(int id)
         {
             var model = new CoachAssignToTeamModel()

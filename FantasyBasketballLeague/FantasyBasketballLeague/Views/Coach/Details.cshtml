@@ -1,4 +1,5 @@
 ﻿@using FantasyBasketballLeague.Core.Models.Coach
+@using FantasyBasketballLeague.Infrastructure.Data.Constants
 @model CoachDetailsModel
 
 @{
@@ -17,17 +18,21 @@
                 <h3 class="card-title text-center">Coach</h3>
                 <p class="card-text"><span class="fw-bold">First Name: </span>@Model.FirstName</p>
                 <p class="card-text"><span class="fw-bold">Last Name: </span>@Model.LastName</p>
-                <p class="card-text"><span class="fw-bold">Team: </span>@(Model.Team ?? "Free Agent")</p>
+                <p class="card-text"><span class="fw-bold">Team: </span>@(Model.TeamName ?? "Free Agent")</p>
                 <table>
                     <tr class="actions">
                         <th><span class="fw-bold">Actions:</span></th>
 
                         <td>
-                            <a asp-controller="Coach" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-                            <a asp-controller="Coach" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
-                            @if (Model.Team == null)
+                            <a asp-controller="Coach" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+                            @if (User.IsInRole(RoleConstants.Administrator))
                             {
-                                <a asp-controller="Coach" asp-action="Assign" asp-route-id="@Model.Id" class="btn btn-success">Assign</a>
+                                <a asp-controller="Coach" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+
+                                if (Model.TeamName == null)
+                                {
+                                    <a asp-controller="Coach" asp-action="Assign" asp-route-id="@Model.Id" class="btn btn-success">Assign</a>
+                                }
                             }
                         </td>
                     </tr>

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<LeagueViewModel>
+﻿@using FantasyBasketballLeague.Infrastructure.Data.Constants
+@model IEnumerable<LeagueViewModel>
 
 @{
     ViewBag.Title = "All Leagues";
@@ -6,11 +7,14 @@
 
 <h1 class="text-center" style="color:white">@ViewBag.Title</h1>
 <hr style="color:white" />
+<input class="btn btn-success" value="Create" onclick="location.href='@Url.Action("Create","Leagues")';" />
+<br />
+<br />
 
 <div class="text-center row">
     @foreach (var league in Model)
     {
-        <div class="card col-4" style="width: 18rem; margin:auto;">
+        <div class="card col-4" style="width: 18rem; margin:auto; background-color:lightgrey">
             <div class="card-body">
 
                 <h5 class="card-title mt-1">@($"{league.Name}")</h5>
@@ -24,9 +28,12 @@
                 <tr class="actions">
                     <th><span class="fw-bold">Actions:</span></th>
                     <td>
-                        <a asp-controller="Leagues" asp-action="Details" asp-route-id="@league.Id" class="btn btn-success">View</a>
-                        <a asp-controller="Leagues" asp-action="Edit" asp-route-id="@league.Id" class="btn btn-primary">Edit</a>
-                        <a asp-controller="Leagues" asp-action="Delete" asp-route-id="@league.Id" class="btn btn-danger">Delete</a>
+                        <a asp-controller="Leagues" asp-action="Details" asp-route-id="@league.Id" class="btn btn-primary">View</a>
+                        <a asp-controller="Leagues" asp-action="Edit" asp-route-id="@league.Id" class="btn btn-warning">Edit</a>
+                        @if (User.IsInRole(RoleConstants.Administrator))
+                        {
+                            <a asp-controller="Leagues" asp-action="Delete" asp-route-id="@league.Id" class="btn btn-danger">Delete</a>
+                        }
                     </td>
                 </tr>
             </table>

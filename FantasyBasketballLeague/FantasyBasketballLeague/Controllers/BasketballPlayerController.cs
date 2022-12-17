@@ -1,9 +1,11 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using FantasyBasketballLeague.Core.Contracts;
 using FantasyBasketballLeague.Core.Models.BasketballPlayer;
+using FantasyBasketballLeague.Core.Models.Teams;
 using FantasyBasketballLeague.Infrastructure.Data.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FantasyBasketballLeague.Controllers
 {
@@ -31,7 +33,7 @@ namespace FantasyBasketballLeague.Controllers
             var model = new BasketballPlayerViewModel()
             {
                 Positions = await positionService.GetAllPositionsAsync(),
-                Teams = await teamService.GetAllTeamsAsync()
+                Teams = await GetTeams()
             };
 
             return View(model);
@@ -43,21 +45,21 @@ namespace FantasyBasketballLeague.Controllers
 
             if (await playerService.PlayerNameExists(model.FirstName, model.LastName))
             {
-                ModelState.AddModelError(nameof(model.Id), $"There is already a player with name {model.FirstName} {model.LastName}.");
+                ModelState.AddModelError(string.Empty, $"There is already a player with name {model.FirstName} {model.LastName}.");
                 notyfService.Error($"There is already a player with name {model.FirstName} {model.LastName}", 10);
             }
 
             var team = await teamService.GetByIdAsync(model.TeamId);
             if (team == null)
             {
-                notyfService.Error($"There' no team with id {model.TeamId}");
-                ModelState.AddModelError(nameof(team), "Invalid team");
+                notyfService.Error($"There's no team with id {model.TeamId}");
+                ModelState.AddModelError(string.Empty, "Invalid team");
             }
 
             if (team?.OpenPositions == 0)
             {
                 notyfService.Warning($"There are no more open positions in team - {team.Name}");
-                ModelState.AddModelError(nameof(team), "No more open positions");
+                ModelState.AddModelError(string.Empty, "No more open positions");
             }
 
             if (!ModelState.IsValid)
@@ -77,7 +79,7 @@ namespace FantasyBasketballLeague.Controllers
             }
             catch (Exception)
             {
-                notyfService.Error($"Create Team Failed");
+                notyfService.Error("Team Create Failed");
                 return RedirectToAction("Error", "Home");
             }
         }
@@ -136,7 +138,6 @@ namespace FantasyBasketballLeague.Controllers
                 notyfService.Error($"Edit for {id} Failed");
                 return RedirectToAction("Error", "Home");
             }
-            
         }
 
         [HttpPost]
@@ -166,7 +167,6 @@ namespace FantasyBasketballLeague.Controllers
             }
         }
 
-
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
@@ -183,7 +183,7 @@ namespace FantasyBasketballLeague.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Mine","Teams");
+                    return RedirectToAction("Mine", "Teams");
                 }
             }
             catch (Exception)
@@ -191,6 +191,23 @@ namespace FantasyBasketballLeague.Controllers
                 notyfService.Error($"Delete for {id} Failed");
                 return RedirectToAction("Error", "Home");
             }
+        }
+
+        private async Task<IEnumerable<TeamViewModel>> GetTeams()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //var myTeams = await teamService.GetMyTeams(userId);
+            //myTeams.Select(t => new TeamViewModel()
+            //{
+            //    Id = t.Id,
+            //    Name = t.Name,
+            //});
+
+            var teams = User.IsInRole(RoleConstants.Administrator) ?
+                await teamService.GetAllTeamsAsync() :
+                await teamService.GetMyTeams(userId);
+
+            return teams;
         }
     }
 }

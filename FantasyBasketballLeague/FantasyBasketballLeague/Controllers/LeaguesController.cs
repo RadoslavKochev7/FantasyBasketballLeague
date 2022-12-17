@@ -117,6 +117,7 @@ namespace FantasyBasketballLeague.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = RoleConstants.Administrator)]
         public async Task<IActionResult> Delete(int id)
         {
             try
@@ -141,6 +142,7 @@ namespace FantasyBasketballLeague.Controllers
         }
        
         [HttpGet]
+        [Authorize(Roles = RoleConstants.Administrator)]
         public async Task<IActionResult> AddTeams(int id)
         {
             var league = await leagueService.GetByIdAsync(id);

@@ -21,5 +21,10 @@ namespace FantasyBasketballLeague.Core.Models.Coach
 
         [Display(Name = "Image URL")]
         public string ImageUrl { get; set; }
+
+        [StringLength(TeamNameMaxLength, MinimumLength = TeamNameMinLength)]
+        public string TeamName { get; set; }
+
+        public int? TeamId { get; set; }
     }
 }

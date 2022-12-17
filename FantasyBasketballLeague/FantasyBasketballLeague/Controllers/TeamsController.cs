@@ -1,6 +1,8 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using FantasyBasketballLeague.Core.Contracts;
 using FantasyBasketballLeague.Core.Models.Teams;
+using FantasyBasketballLeague.Infrastructure.Data.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -19,6 +21,7 @@ namespace FantasyBasketballLeague.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = RoleConstants.Administrator)]
         public async Task<IActionResult> All()
         {
             var model = await teamService.GetAllTeamsAsync();
@@ -29,15 +32,16 @@ namespace FantasyBasketballLeague.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var team = await teamService.GetByIdAsync(id);
-
-            if (team == null)
+            try
             {
-                notyfService.Warning($"There's no team with Id {id}");
-                return RedirectToAction(nameof(All));
+                var team = await teamService.GetByIdAsync(id);
+                return View(team);
             }
-
-            return View(team);
+            catch (Exception)
+            {
+                notyfService.Warning("Action failed");
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         [HttpGet]
@@ -57,7 +61,7 @@ namespace FantasyBasketballLeague.Controllers
         {
             if (await teamService.TeamExists(model.Name))
             {
-                ModelState.AddModelError(nameof(model.Id), "");
+                ModelState.AddModelError(nameof(model.Name), "");
                 notyfService.Warning($"There is already a team with name {model.Name}.", 10);
             }
 
@@ -82,9 +86,9 @@ namespace FantasyBasketballLeague.Controllers
                 notyfService.Error($"Create Team Failed");
                 return RedirectToAction("Error", "Home");
             }
-           
         }
 
+        [HttpGet]
         public async Task<IActionResult> Mine()
         {
             try
@@ -147,7 +151,7 @@ namespace FantasyBasketballLeague.Controllers
                     await teamService.Edit(id, model);
                     notyfService.Success($"Edit for [{id}] Successfull");
                 }
-                return RedirectToAction(nameof(All), new { id });
+                return RedirectToAction(nameof(Details), new { id });
             }
             catch (Exception)
             {
@@ -156,8 +160,8 @@ namespace FantasyBasketballLeague.Controllers
             }
         }
 
-
         [HttpGet]
+        [Authorize(Roles = RoleConstants.Administrator)]
         public async Task<IActionResult> Delete(int id)
         {
             try
