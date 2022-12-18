@@ -159,6 +159,7 @@ namespace FantasyBasketballLeague.Core.Services
                     Name = u.Team.Name,
                     LogoUrl = u.Team.LogoUrl,
                     Players = u.Team.Players
+                    .Where(p => p.IsActive)
                     .Select(p => new Models.BasketballPlayer.BasketballPlayerDetailsModel()
                     {
                         Id = p.Id,
