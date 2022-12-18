@@ -41,7 +41,11 @@
 <div class="text-center row">
     @if (!Model.Teams.Any())
     {
-        <h3>There are no teams added.</h3>
+        <h2 style="color:white">There are no teams added.</h2>
+        <div>
+            <input class="btn btn-success" value="Create" onclick="location.href='@Url.Action("Create","Leagues")';" />
+
+        </div>
     }
     else
     {

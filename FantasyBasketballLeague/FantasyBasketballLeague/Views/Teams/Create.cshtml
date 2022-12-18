@@ -45,7 +45,7 @@
                     <span asp-validation-for="CoachId" class="text-danger"></span>
                 </div>
                 <input class="btn btn-primary" type="submit" value="Save" />
-                <input class="btn btn-secondary" value="Cancel" onclick="location.href='@Url.Action("All","Teams")';" />
+                <a class="btn btn-secondary" title="Go back to previuos page" href='javascript:history.go(-1)'>Cancel</a>
             </form>
         </div>
     </div>
